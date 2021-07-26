@@ -1,0 +1,68 @@
+{
+    "development": {
+        "apiURL": "http://locahost:3000",
+        "seperateUsername": true,
+        "sendConfirmationEmail": true,
+        "senderEmail": {
+            "type": "OAuth2",
+            "user": "94prajesh@gmail.com",
+            "clientId": "781039973521-1089rmqoic19ldi4octjuibg1k2925qt.apps.googleusercontent.com",
+            "clientSecret": "jn_vXBmu3qKn00zBJT0lsXQr",
+            "refreshToken": "1/oPlWRhr524EwG71gXjiNh134Bg8aA-GJdCIQgIxadd9K11ljlZCV1xHKtbKVfmzS",
+            "accessToken": "ya29.GltqBxebJ5OxgoSJG9MOlUmVi5Cdj0lXctcdBW_aclsf-N-xCB68PP_F8Gjv8545R65-ov49uthLmes5rop4kPCbQgEHVuxbZv--06o4Bul_6d-DXYDXnIiHpcaF"
+        },
+        "authentication": {
+            "preventPasswordHistory": 3,
+            "maxFailedAttemp": 5,
+            "autoUnlockAfter": 180,
+            "hashSalt": "!==qwerty//poiu",
+            "maxPasswordLife": 90,
+            "tokenLife": 20
+        },
+        "tokenSecret": "My Secret Key"
+    },
+    "test":{
+        "apiURL": "http://locahost:3000",
+        "seperateUsername": false,
+        "sendConfirmationEmail": false,
+        "senderEmail": {
+            "type": "OAuth2",
+            "user": "94prajesh@gmail.com",
+            "clientId": "781039973521-1089rmqoic19ldi4octjuibg1k2925qt.apps.googleusercontent.com",
+            "clientSecret": "jn_vXBmu3qKn00zBJT0lsXQr",
+            "refreshToken": "1/oPlWRhr524EwG71gXjiNh134Bg8aA-GJdCIQgIxadd9K11ljlZCV1xHKtbKVfmzS",
+            "accessToken": "ya29.GltqBxebJ5OxgoSJG9MOlUmVi5Cdj0lXctcdBW_aclsf-N-xCB68PP_F8Gjv8545R65-ov49uthLmes5rop4kPCbQgEHVuxbZv--06o4Bul_6d-DXYDXnIiHpcaF"
+        },
+        "authentication": {
+            "preventPasswordHistory": 3,
+            "maxFailedAttemp": 5,
+            "autoUnlockAfter": 180,
+            "hashSalt": "!==qwerty//poiu",
+            "maxPasswordLife": 90,
+            "tokenLife": 20
+        },
+        "tokenSecret": "My Secret Key"
+    },
+    "production": {
+        "apiURL": "http://locahost:3000",
+        "seperateUsername": false,
+        "sendConfirmationEmail": false,
+        "senderEmail": {
+            "type": "OAuth2",
+            "user": "94prajesh@gmail.com",
+            "clientId": "781039973521-1089rmqoic19ldi4octjuibg1k2925qt.apps.googleusercontent.com",
+            "clientSecret": "jn_vXBmu3qKn00zBJT0lsXQr",
+            "refreshToken": "1/oPlWRhr524EwG71gXjiNh134Bg8aA-GJdCIQgIxadd9K11ljlZCV1xHKtbKVfmzS",
+            "accessToken": "ya29.GltqBxebJ5OxgoSJG9MOlUmVi5Cdj0lXctcdBW_aclsf-N-xCB68PP_F8Gjv8545R65-ov49uthLmes5rop4kPCbQgEHVuxbZv--06o4Bul_6d-DXYDXnIiHpcaF"
+        },
+        "authentication": {
+            "preventPasswordHistory": 3,
+            "maxFailedAttemp": 5,
+            "autoUnlockAfter": 180,
+            "hashSalt": "!==qwerty//poiu",
+            "maxPasswordLife": 90,
+            "tokenLife": 20
+        },
+        "tokenSecret": "My Secret Key"
+    }
+}
