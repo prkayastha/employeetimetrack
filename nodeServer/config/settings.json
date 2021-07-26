@@ -3,6 +3,7 @@
         "apiURL": "http://locahost:3000",
         "seperateUsername": true,
         "sendConfirmationEmail": true,
+        "checkActive": false,
         "senderEmail": {
             "type": "OAuth2",
             "user": "94prajesh@gmail.com",
@@ -25,6 +26,7 @@
         "apiURL": "http://locahost:3000",
         "seperateUsername": false,
         "sendConfirmationEmail": false,
+        "checkActive": false,
         "senderEmail": {
             "type": "OAuth2",
             "user": "94prajesh@gmail.com",
@@ -47,6 +49,7 @@
         "apiURL": "http://locahost:3000",
         "seperateUsername": false,
         "sendConfirmationEmail": false,
+        "checkActive": false,
         "senderEmail": {
             "type": "OAuth2",
             "user": "94prajesh@gmail.com",

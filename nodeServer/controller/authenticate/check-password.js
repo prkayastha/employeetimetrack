@@ -46,6 +46,11 @@ const check = function (username, password) {
             error.statusCode = 403;
             throw error;
         }
+        if (settings.checkActive && !retrivedUser.active) {
+            const error = new UsernamePasswordNotMatchError(strings.error.user.userNotActive);
+            error.statusCode = 401;
+            throw error;
+        }
         const payload = {
             id: retrivedUser.id,
             username: retrivedUser.username,

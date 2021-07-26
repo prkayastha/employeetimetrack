@@ -21,7 +21,8 @@ const messages = {
             userNotFoundById: 'Cannot find user registered to our system with id {0}',
             updateActivation: 'Cannot activate user with email \'{0}\'',
             updateDelete: 'Cannot delete user with id {0}',
-            updateFailure: 'Cannot update user with id {0}'
+            updateFailure: 'Cannot update user with id {0}',
+            userNotActive: 'User is not active. Please contact your administrator'
         },
         password: {
             confirmationError: 'Re-confirm the passwords. Password do not match.',
