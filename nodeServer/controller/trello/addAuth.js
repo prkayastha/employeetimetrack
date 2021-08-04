@@ -5,7 +5,10 @@ const add = async function (userId, auth) {
     const row = {
         UserId: userId,
         authenticationkey: auth.oauth_token,
-        verificationKey: auth.oauth_verifier
+        verificationKey: auth.oauth_verifier,
+        tokenSecret: auth.tokenSecret,
+        accessToken: auth.accessToken,
+        accessTokenSecret: auth.accessTokenSecret
     };
 
     try {

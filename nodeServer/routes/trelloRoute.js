@@ -6,12 +6,19 @@ const trelloAuth = require('../controller/trello/trelloAutho'),
 
 const trello = require('../controller/trello');
 const ErrorResponse = require('../prototypes/responses/global.error');
-
-router.post('/api/oauth/requestToken', (req, res) => {
+router.post('/api/oauth/requestToken', async (req, res) => {
     const userId = req.body.userId;
-    var callback = function (error, token, tokenSecret, results) {
+    var callback = async function (error, token, tokenSecret, results) {
         if (!error) {
             //store to db and then send url
+            const auth = {
+                oauth_token: token,
+                verificationkey: null,
+                tokenSecret,
+                accessToken: null,
+                accessTokenSecret: null
+            };
+            const result = await trello.add(userId, auth);
             const response = {
                 code: 200,
                 url: `${trelloAuth.trelloAuthUrls.authorizeURL}?oauth_token=${token}&name=${appConfig.appName}&expiration=never`
@@ -32,14 +39,21 @@ router.post('/api/oauth/requestToken', (req, res) => {
 
 router.get('/oauth/callbackUrl/:userId', async (req, res) => {
     if (!isAccessDenied(req)) {
-
-        const data = {
-            ...req.query
-        };
-
         try {
+            const secret = await trello.getTokenSecret(req.params.userId);
+            const data = {
+                ...req.query,
+                tokenSecret: secret.tokenSecret,
+                UserId: req.params.userId
+            };
             let result = await trello.add(req.params.userId, data);
-            if (!!result) {
+            let accessToken = await trelloAuth.getAccessToken(data);
+            if (!!accessToken) {
+                const auth = {
+                    accessToken: accessToken.accessToken,
+                    accessTokenSecret: accessToken.accessTokenSecret
+                };
+                result = await trello.add(req.params.userId, auth);
                 res.render('authSuccess');
             }
         } catch (error) {
@@ -54,6 +68,11 @@ router.get('/oauth/callbackUrl/:userId', async (req, res) => {
         res.send(error);
         res.end();
     }
+});
+
+router.get('/api/getboards', async (req, res) => {
+    let result = await trello.getBoard(1);
+    res.send(result);
 });
 
 function isAccessDenied(req) {

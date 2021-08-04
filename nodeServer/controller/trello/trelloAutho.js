@@ -7,19 +7,13 @@ var trelloAuthUrls = module.exports.trelloAuthUrls = {
     authorizeURL: "https://trello.com/1/OAuthAuthorizeToken",
 };
 
-/* var cacheRequestTokenSecretPair = module.exports.cacheRequestTokenSecretPair = function (token, secret) {
-    return db.cacheToken(token, secret)
-};
-
-var cacheAccessTokenSecretPair = function (tokenSecret, accessToken, accessTokenSecret) {
-
-    if (oauthTokenSecrPair) {
-        oauthTokenSecrPair.accToken = accessToken,
-            oauthTokenSecrPair.accTokenSecret = accessTokenSecret
-    }
-}; */
-
-var getOAuthAccessToken = function (token, tokenSecret, verifier) {
+var getOAuthAccessToken = function (userId, token, tokenSecret, verifier) {
+    oauth = new OAuth(trelloAuthUrls.requestURL,
+        trelloAuthUrls.accessURL,
+        appConfig.appkey,
+        appConfig.appSecret,
+        "1.0",
+        `${appConfig.callbackUrl}/${userId}`, "HMAC-SHA1");
     var OAuthaccessTokenPromise = new Promise(function (resolve, reject) {
         oauth.getOAuthAccessToken(token, tokenSecret, verifier, function (error, accessToken, accessTokenSecret, results) {
             if (!error) {
@@ -36,9 +30,9 @@ var getOAuthAccessToken = function (token, tokenSecret, verifier) {
 
     return OAuthaccessTokenPromise;
 };
-    
+
 module.exports.getRequestToken = function (userId, callback) {
-    oauth = module.exports.oauth = new OAuth(trelloAuthUrls.requestURL,
+    oauth = new OAuth(trelloAuthUrls.requestURL,
         trelloAuthUrls.accessURL,
         appConfig.appkey,
         appConfig.appSecret,
@@ -47,21 +41,18 @@ module.exports.getRequestToken = function (userId, callback) {
     oauth.getOAuthRequestToken(callback);
 };
 
-module.exports.getAccessToken = function (query) {   
+module.exports.getAccessToken = function (query) {
     var getAccessTokenPromise = new Promise(function (resolve, reject) {
-        db.getCachedTokenByReqToken(query.oauth_token).then(function (result) {
-            var token = query.oauth_token;
-            var tokenSecret = result.reqTokenSecret;
-            var verifier = query.oauth_verifier;
-            getOAuthAccessToken(token, tokenSecret, verifier).then(function (result) {
-                if (!result.error) {
-                    resolve(result)
-                } else {
-                    reject(result);
-                }
-            });
+        var token = query.oauth_token;
+        var tokenSecret = query.tokenSecret;
+        var verifier = query.oauth_verifier;
+        getOAuthAccessToken(query.UserId, token, tokenSecret, verifier).then(function (result) {
+            if (!result.error) {
+                resolve(result)
+            } else {
+                reject(result);
+            }
         });
-
     });
 
     return getAccessTokenPromise;
