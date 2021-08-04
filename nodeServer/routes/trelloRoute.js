@@ -85,6 +85,21 @@ router.get('/api/getboards', async (req, res) => {
     }
 });
 
+router.post('/api/board/list', async (req, res) => {
+    const jwtToken = req.headers.authorization.split(" ")[1];
+    const data = authHelper.data(jwtToken);
+    try {
+        const boardId = req.body.id;
+        let result = await trello.getList(data.id, boardId);
+        const response = {
+            collection: JSON.parse(result)
+        }
+        res.send(response);
+    } catch (error) {
+        res.send(error)
+    }
+});
+
 function isAccessDenied(req) {
     const query = req.query;
 
