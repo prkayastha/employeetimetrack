@@ -1,11 +1,12 @@
 const express = require('express'),
-    router = express.Router();
-
-const trelloAuth = require('../controller/trello/trelloAutho'),
+    router = express.Router(),
+    trelloAuth = require('../controller/trello/trelloAutho'),
     appConfig = require('../config/appConfig');
 
 const trello = require('../controller/trello');
 const ErrorResponse = require('../prototypes/responses/global.error');
+
+const authHelper = require('../controller/authenticate/token');
 router.post('/api/oauth/requestToken', async (req, res) => {
     const userId = req.body.userId;
     var callback = async function (error, token, tokenSecret, results) {
@@ -58,7 +59,7 @@ router.get('/oauth/callbackUrl/:userId', async (req, res) => {
             }
         } catch (error) {
             res.status(error.statusCode);
-            res.send({message: error.message, statusCode: error.statusCode});
+            res.send({ message: error.message, statusCode: error.statusCode });
             res.end();
         }
     } else {
@@ -71,8 +72,17 @@ router.get('/oauth/callbackUrl/:userId', async (req, res) => {
 });
 
 router.get('/api/getboards', async (req, res) => {
-    let result = await trello.getBoard(1);
-    res.send(result);
+    const jwtToken = req.headers.authorization.split(" ")[1];
+    const data = authHelper.data(jwtToken);
+    try {
+        let result = await trello.getBoard(data.id);
+        const response = {
+            collection: JSON.parse(result)
+        }
+        res.send(response);
+    } catch (error) {
+        res.send(error)
+    }
 });
 
 function isAccessDenied(req) {

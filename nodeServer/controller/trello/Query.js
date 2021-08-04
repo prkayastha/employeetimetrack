@@ -38,7 +38,7 @@ Query.prototype.getUserTrelloBoards = function (tokenInfo) {
     var userBoardsPromise = new Promise(function (resolve, reject) {
         oauth.get(
             /*api to get a user's boards https://api.trello.com/1/members/me/boards*/
-            `${self.uri}/1/members/me/boards`,
+            `${self.uri}/1/members/me/boards?fields=name,url,id`,
             tokenInfo.accToken,
             tokenInfo.accTokenSecret,
             function (err, data, response) {
