@@ -36,15 +36,14 @@ var getOAuthAccessToken = function (token, tokenSecret, verifier) {
 
     return OAuthaccessTokenPromise;
 };
-
-oauth = module.exports.oauth = new OAuth(trelloAuthUrls.requestURL,
-    trelloAuthUrls.accessURL,
-    appConfig.appkey,
-    appConfig.appSecret,
-    "1.0",
-    appConfig.callbackUrl, "HMAC-SHA1");
     
-module.exports.getRequestToken = function (callback) {
+module.exports.getRequestToken = function (userId, callback) {
+    oauth = module.exports.oauth = new OAuth(trelloAuthUrls.requestURL,
+        trelloAuthUrls.accessURL,
+        appConfig.appkey,
+        appConfig.appSecret,
+        "1.0",
+        `${appConfig.callbackUrl}/${userId}`, "HMAC-SHA1");
     oauth.getOAuthRequestToken(callback);
 };
 

@@ -4,7 +4,8 @@ const express = require('express'),
 const trelloAuth = require('../controller/trello/trelloAutho'),
     appConfig = require('../config/appConfig');
 
-router.get('/api/oauth/requestToken', (req, res) => {
+router.post('/api/oauth/requestToken', (req, res) => {
+    const userId = req.body.userId;
     var callback = function (error, token, tokenSecret, results) {
         if (!error) {
             //store to db and then send url
@@ -19,14 +20,14 @@ router.get('/api/oauth/requestToken', (req, res) => {
                 code: error.code,
                 url: `Cannot authenticate to trello`
             }
-            res.code(response.code).send(response);
+            res.send(response);
         }
     };
 
-    trelloAuth.getRequestToken(callback);
+    trelloAuth.getRequestToken(userId, callback);
 });
 
-router.get('/oauth/callbackUrl', (req, res) => {
+router.get('/oauth/callbackUrl/:userId', (req, res) => {
     if (!isAccessDenied(req)) {
         res.render('authSuccess');
         /* trelloAuth.getAccessToken(url.parse(req.url, true).query).then(function (tokenResult) {
