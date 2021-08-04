@@ -24,7 +24,7 @@ const noAuthRoute = [
     '/password/reset',
     '/password/change',
     '/trello/api/oauth/requestToken',
-    '/trello/oauth/callbackUrl'
+    /\/trello\/oauth\/callbackUrl\/*/
 ];
 
 // view engine setup

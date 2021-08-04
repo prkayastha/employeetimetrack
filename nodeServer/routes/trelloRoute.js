@@ -4,6 +4,9 @@ const express = require('express'),
 const trelloAuth = require('../controller/trello/trelloAutho'),
     appConfig = require('../config/appConfig');
 
+const trello = require('../controller/trello');
+const ErrorResponse = require('../prototypes/responses/global.error');
+
 router.post('/api/oauth/requestToken', (req, res) => {
     const userId = req.body.userId;
     var callback = function (error, token, tokenSecret, results) {
@@ -27,52 +30,28 @@ router.post('/api/oauth/requestToken', (req, res) => {
     trelloAuth.getRequestToken(userId, callback);
 });
 
-router.get('/oauth/callbackUrl/:userId', (req, res) => {
+router.get('/oauth/callbackUrl/:userId', async (req, res) => {
     if (!isAccessDenied(req)) {
-        res.render('authSuccess');
-        /* trelloAuth.getAccessToken(url.parse(req.url, true).query).then(function (tokenResult) {
-            if (!tokenResult.error) {
-                
-                trelloQuery.getUserInfo(tokenResult).then(function (userInfoResult) {
-                    tokenResult.userId = JSON.parse(userInfoResult).id
-                    var cacheTokenPromise = db.updateCachedToken(tokenResult);
-                    var updateUserInfoPromise = db.updateUserInfo(userInfoResult);
-                    Promise.all([cacheTokenPromise, updateUserInfoPromise]).then(function (allResult) {
-                        console.log(allResult);
-                        var err = _.find(allResult, function (item) {
-                            return item.err !== undefined;
-                        })
-                        if (!err) {
-                            var retunObj = {
-                                accessToken: allResult[0].accToken,
-                                username: allResult[1].username
-                            }
-                            //TODO: send returnObject as return data
-                            res.writeHead(302, {
-                                'Location': `/user/authorized/${retunObj.accessToken}`
-                            });
-                            res.end();
-                        } else {
-                            //TODO: include login unseccessful message as return object
-                            res.writeHead(302, {
-                                'Location': `/signin`
-                            });
-                            res.end();
-                        }
-                    });
-                }) 
-            } else {
-                //TODO: redirect the user to login state with error message
-                res.writeHead(302, {
-                    'Location': `/signin`
-                });
-                res.end();
+
+        const data = {
+            ...req.query
+        };
+
+        try {
+            let result = await trello.add(req.params.userId, data);
+            if (!!result) {
+                res.render('authSuccess');
             }
-        })*/
+        } catch (error) {
+            res.status(error.statusCode);
+            res.send({message: error.message, statusCode: error.statusCode});
+            res.end();
+        }
     } else {
-        res.writeHead(302, {
-            'Location': `/signin`
-        });
+        error = new ErrorResponse('Cannot authenticate with trello');
+        error.statusCode = 400;
+        error.name = 'TrelloAuthInsertError';
+        res.send(error);
         res.end();
     }
 });
@@ -81,7 +60,7 @@ function isAccessDenied(req) {
     const query = req.query;
 
     if ("oauth_token" in query
-    && "oauth_verifier" in query) {
+        && "oauth_verifier" in query) {
         return false;
     }
     return true;

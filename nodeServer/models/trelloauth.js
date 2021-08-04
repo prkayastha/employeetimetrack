@@ -2,11 +2,6 @@
 
 module.exports = (sequelize, DataTypes) => {
     const TrelloAuth = sequelize.define('TrelloAuths', {
-        userId: {
-            primaryKey: true,
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
         authenticationkey: {
             type: DataTypes.STRING,
             allowNull: false
@@ -14,7 +9,19 @@ module.exports = (sequelize, DataTypes) => {
         verificationKey: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        UserId: {
+            type: DataTypes.INTEGER,
+            primaryKey: true
         }
-    },{});
+    },{
+        version: false,
+        freezeTableName: true
+    });
+    TrelloAuth.associate = function(models) {
+        models.TrelloAuths.belongsTo(models.Users, {
+            primaryKey: true
+        });
+    }
     return TrelloAuth;
 };
