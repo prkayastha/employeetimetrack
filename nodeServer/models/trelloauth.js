@@ -4,11 +4,23 @@ module.exports = (sequelize, DataTypes) => {
     const TrelloAuth = sequelize.define('TrelloAuths', {
         authenticationkey: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         verificationKey: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
+        },
+        tokenSecret: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        accessToken: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        accessTokenSecret: {
+            type: DataTypes.STRING,
+            allowNull: true
         },
         UserId: {
             type: DataTypes.INTEGER,
