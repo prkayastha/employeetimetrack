@@ -37,6 +37,14 @@ const handle = function(res, error) {
             };
             break;
         }
+        case (error.name === 'InvalidRequest'): {
+            response = {
+                statusCode: 400,
+                message: 'Invalid Request',
+                error: error.errors
+            };
+            break;
+        }
         case (error instanceof OptimisticLockError): {
             response = {
                 statusCode: error.statusCode || 423,

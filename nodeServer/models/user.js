@@ -1,6 +1,14 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('Users', {
+    firstname: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    lastname: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
     username: {
       allowNull: false,
       type: DataTypes.STRING

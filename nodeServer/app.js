@@ -23,6 +23,7 @@ const noAuthRoute = [
     '/auth/check',
     '/password/reset',
     '/password/change',
+    '/user/register',
     '/trello/api/oauth/requestToken',
     /\/trello\/oauth\/callbackUrl\/*/
 ];
