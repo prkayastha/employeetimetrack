@@ -11,6 +11,7 @@ var users = require('./routes/users');
 var passwords = require('./routes/password');
 var auth = require('./routes/authenticate');
 var token = require('./controller/authenticate/token');
+const trello = require('./routes/trelloRoute');
 const errorHandler = require('./controller/errorHandler');
 
 var app = express();
@@ -18,9 +19,13 @@ var app = express();
 var db = require('./models');
 
 const noAuthRoute = [
+    '/',
     '/auth/check',
     '/password/reset',
-    '/password/change'
+    '/password/change',
+    '/user/register',
+    '/trello/api/oauth/requestToken',
+    /\/trello\/oauth\/callbackUrl\/*/
 ];
 
 // view engine setup
@@ -42,6 +47,13 @@ app.use('/', routes);
 app.use('/user', users);
 app.use('/password', passwords);
 app.use('/auth', auth);
+app.use('/trello', trello);
+
+/* resource apis */
+/*app.post('/api/trello/userInfo', trello.getUserInfo);
+app.post('/api/trello/boards', trello.getTrelloBoardsByUser);
+app.post('/api/trello/boardLists', trello.getTrelloBoardLists);
+app.post('/api/trello/boardListCards', trello.getCardsInList);*/
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

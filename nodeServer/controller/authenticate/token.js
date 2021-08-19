@@ -17,7 +17,12 @@ const generate = function (user) {
  */
 const checkToken = ejwt({ secret: settings.tokenSecret });
 
+const data = function(token) {
+    return jwt.verify(token, settings.tokenSecret);
+}
+
 module.exports = {
     generate,
-    checkToken
+    checkToken,
+    data
 };

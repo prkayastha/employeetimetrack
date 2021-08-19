@@ -1,5 +1,7 @@
 const models = require('../../models');
 const UsernamePasswordNotMatchError = require('../../prototypes/responses/password/username-password-error');
+const stringUtils = require('../../utils/string-formatter');
+const strings = require('../../resources/string/resources');
 
 /**
  * Gets password for the username from password table

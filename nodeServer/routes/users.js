@@ -10,6 +10,39 @@ const User = require('../prototypes/users/users');
 
 const errorHandler = require('../controller/errorHandler');
 
+const userValidator = require('../validators/user');
+const {validationResult} = require('express-validator');
+
+router.post('/register',
+  userValidator.register,
+  async (req, res) => {
+    /* const passwordString = req.body.password || 'test';
+    const user = new User();
+    user.setData(req.body, settings.seperateUsername);
+    userOperation.add(user, passwordString).then(userResponse => {
+      res.send(userResponse);
+    }).catch(error => {
+      errorHandler(res, error);
+    }); */
+    const reqValidation = validationResult(req);
+
+    if (!reqValidation.isEmpty()) {
+      return errorHandler(res, {errors: reqValidation.array(), name: 'InvalidRequest'})
+    }
+
+    const passwordString = req.body.password || 'test';
+    const user = new User();
+    user.setData(req.body, settings.seperateUsername);
+    user.active = true;
+    user.Roles = [{ id: 3 }];
+    try {
+      addedUser = await userOperation.add(user, passwordString);
+      res.send(addedUser);
+    } catch (error) {
+      errorHandler(res, error);
+    }
+  });
+
 /* Post user information */
 router.post('/add', function (req, res) {
   const passwordString = req.body.password || 'test';
@@ -23,7 +56,7 @@ router.post('/add', function (req, res) {
 });
 
 /* update user information */
-router.put('/update/:userId', function(req, res) {
+router.put('/update/:userId', function (req, res) {
   const userId = req.params.userId;
   const user = new User();
   user.setData(req.body, settings.seperateUsername);
@@ -38,7 +71,7 @@ router.put('/update/:userId', function(req, res) {
 });
 
 /* Delete user by Id */
-router.delete('/delete/:userId', function(req, res){
+router.delete('/delete/:userId', function (req, res) {
   const userId = req.params.userId;
   userOperation.deleteUser(userId).then(userResponse => {
     res.send(userResponse);
@@ -48,7 +81,7 @@ router.delete('/delete/:userId', function(req, res){
 });
 
 /* Activate user */
-router.get('/activate/:hash', function(req, res){
+router.get('/activate/:hash', function (req, res) {
   const hashString = req.params.hash;
   const userEmail = req.query.email;
 
@@ -60,7 +93,7 @@ router.get('/activate/:hash', function(req, res){
 });
 
 /* list all the users */
-router.get('/list', function(req, res) {
+router.get('/list', function (req, res) {
   const offset = req.query.offset || 0;
   const limit = req.query.limit || 0;
   const orderBy = req.query.orderBy || [];
@@ -74,7 +107,7 @@ router.get('/list', function(req, res) {
 });
 
 /* get users by id */
-router.get('/:userId', function(req, res){
+router.get('/:userId', function (req, res) {
   const userId = req.params.userId;
   userOperation.get(userId).then(userResponse => {
     res.send(userResponse);
