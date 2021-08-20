@@ -2,7 +2,13 @@ const db = require('../../models')
 const randomstring = require('randomstring');
 const ResetLinkError = require('../../prototypes/responses/authorization/resetlink.error');
 const strings = require('../../resources/string/resources');
+const stringUtils = require('../../utils/string-formatter');
 
+const nodemailer = require('nodemailer');
+const mailerSetting = require('../../config/appConfig').mailerSetting;
+
+const env = process.env.NODE_ENV || 'development';
+const settings = require('../../config/settings.json')[env];
 /**
  * Generates reset link that is saved to node-cache. Additionally check the limits for
  * recursion.
@@ -38,12 +44,14 @@ const generateLink = function (userId, count) {
  * @param {number} userId user id from user table
  * @returns {Promise<string>} Promise that resolves reset link
  */
-const generateLinkLim = function (userId) {
-    return generateLink(userId, 0).then((link) => {
-        return Promise.resolve({
+const generateLinkLim = function (user) {
+    return generateLink(user.id, 0).then((link) => {
+        const data = {
             'link': link,
-            'userId': userId
-        });
+            'userId': user.id
+        };
+        sendResetLink({...data, email: user.email});
+        return Promise.resolve(data);
     }).catch(error => {
         return Promise.reject(new ResetLinkError(error.message));
     })
@@ -78,6 +86,35 @@ function generate() {
         charset: 'alphanumeric',
         capitalization: 'lowercase'
     });
+}
+
+function sendResetLink(data) {
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: mailerSetting
+    });
+
+    const resetLink = settings.appUrl+'/'+data.link;
+    const body = strings.password.resetLinkEmail;
+    const formattedBody = stringUtils.format(body, resetLink);
+
+    transporter.sendMail(
+        {
+            from: mailerSetting.user,
+            to: data.email,
+            subject: 'Employee Time Track App: Reset Password',
+            html: formattedBody
+        },
+        function (err, info) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log(info);
+            }
+        }
+    );
 }
 
 module.exports = {

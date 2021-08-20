@@ -10,7 +10,9 @@ const messages = {
         updateSuccess: 'User with id {0} has been updated in the system'
     },
     password: {
-        changeSuccess: 'Password has been changed.'
+        changeSuccess: 'Password has been changed.',
+        resetLinkEmail: '<div><h3>Employee Time Tracking App</h3></div><div><p>We recieved a password reset request for you account. The password reset link is <div>{0}</div></p>\
+        <p>If you have not requested for password reset. Ignore this email.</p><p>Yours Sincere,<br>The Team</p></div>'
     },
     error: {
         user: {

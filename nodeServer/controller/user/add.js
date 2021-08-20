@@ -3,6 +3,7 @@
 const nodemailer = require('nodemailer');
 const env = process.env.NODE_ENV || 'development';
 const settings = require('../../config/settings.json')[env];
+const emailSetting = require('../../config/appConfig').mailerSetting;
 
 const models = require('../../models');
 
@@ -94,7 +95,7 @@ const sendConfirmationEmail = function (createdUser) {
         host: 'smtp.gmail.com',
         port: 465,
         secure: true,
-        auth: settings.senderEmail
+        auth: emailSetting
     });
 
     let body = messages.user.confirmEmail;
@@ -104,7 +105,7 @@ const sendConfirmationEmail = function (createdUser) {
 
     transporter.sendMail(
         {
-            from: settings.senderEmail.user,
+            from: emailSetting.user,
             to: createdUser.email,
             subject: 'Confirmation',
             html: body

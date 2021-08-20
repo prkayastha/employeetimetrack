@@ -68,7 +68,7 @@ router.post('/reset', function(req, res){
     const username = req.body.username;
 
     userOperation.getByUsername(username).then(user => {
-        return passwordreset.reset.generateLinkLim(user.id);
+        return passwordreset.reset.generateLinkLim(user);
     }).then((linkResponse) => {
         res.send(linkResponse);
     }).catch(error => {
