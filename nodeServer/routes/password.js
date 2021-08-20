@@ -41,6 +41,7 @@ router.post('/change', function(req, res){
                 reject(error);
             }
         }).then(user => {
+            changePassword.id = user.id;
             return passwordreset.checkUsernamePasswordOnly(user.username, changePassword.oldPassword)
         }).then(result => {
             return userOperation.changePassword(changePassword)
