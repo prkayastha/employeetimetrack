@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken');
 const userOperation = require('../controller/user');
 const passwordreset = require('../controller/authenticate/index');
 const ChangePassword = require('../prototypes/password/changePassword');
+const auth = require('../controller/authenticate');
 
 const errorHandler = require('../controller/errorHandler');
 
@@ -70,8 +71,29 @@ router.post('/reset', function(req, res){
     }).then((linkResponse) => {
         res.send(linkResponse);
     }).catch(error => {
-        errorHandler(res, error);
+        error = new Error("Cannot generate password reset link");
+        error.name = 'UserNotFound';
+        errorHandler(res, );
     });
+});
+
+/**
+ * Method: Post
+ * Path: /check/token
+ * Route to check the reset token for password
+ */
+router.post('/check/token', async(req, res) => {
+    const token = req.body.token;
+
+    try {
+        const result = await auth.reset.checkLink(token);
+        res.status(200);
+        result.valid = true;
+        result.statusCode = 200;
+        res.send(result);
+    } catch (error) {
+        errorHandler(res, error);
+    }
 });
 
 module.exports = router;

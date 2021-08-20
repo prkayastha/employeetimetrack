@@ -21,11 +21,10 @@ var db = require('./models');
 const noAuthRoute = [
     '/',
     '/auth/check',
-    '/password/reset',
-    '/password/change',
     '/user/register',
     '/trello/api/oauth/requestToken',
-    /\/trello\/oauth\/callbackUrl\/*/
+    /\/trello\/oauth\/callbackUrl\/*/,
+    /\/password\/*/
 ];
 
 // view engine setup
