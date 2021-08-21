@@ -34,6 +34,9 @@ const messages = {
             accountLocked: 'Your account has been locked. Please contact adminstrator.',
             unauthorizedlink: 'The link is incorrect. Please check the link again.',
             oldPasswordNotMatch: 'The old password is not correct'
+        },
+        authorization: {
+            unauthorize: 'The user is not authorized by roles'
         }
     }
 }

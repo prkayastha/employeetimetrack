@@ -11,7 +11,8 @@ const User = require('../prototypes/users/users');
 const errorHandler = require('../controller/errorHandler');
 
 const userValidator = require('../validators/user');
-const {validationResult} = require('express-validator');
+const { validationResult } = require('express-validator');
+const authorize = require('../controller/authorize');
 
 router.post('/register',
   userValidator.register,
@@ -27,7 +28,7 @@ router.post('/register',
     const reqValidation = validationResult(req);
 
     if (!reqValidation.isEmpty()) {
-      return errorHandler(res, {errors: reqValidation.array(), name: 'InvalidRequest'})
+      return errorHandler(res, { errors: reqValidation.array(), name: 'InvalidRequest' })
     }
 
     const passwordString = req.body.password || 'test';
@@ -93,21 +94,23 @@ router.get('/activate/:hash', function (req, res) {
 });
 
 /* list all the users */
-router.post('/list', function (req, res) {
-  const offset = req.body.offset || 0;
-  const limit = req.body.limit || 10;
-  const order = [[
-    req.body.orderBy,
-    req.body.order
-  ]];
-  const searchQuery = req.body.search || '';
+router.post('/list',
+  authorize.allow([authorize.ROLES.ADMIN, authorize.ROLES.MANAGER]),
+  function (req, res) {
+    const offset = req.body.offset || 0;
+    const limit = req.body.limit || 10;
+    const order = [[
+      req.body.orderBy,
+      req.body.order
+    ]];
+    const searchQuery = req.body.search || '';
 
-  userOperation.list(offset, limit, order, searchQuery).then(users => {
-    res.send(users);
-  }).catch(error => {
-    errorHandler(res, error);
+    userOperation.list(offset, limit, order, searchQuery).then(users => {
+      res.send(users);
+    }).catch(error => {
+      errorHandler(res, error);
+    });
   });
-});
 
 /* get users by id */
 router.get('/:userId', function (req, res) {
