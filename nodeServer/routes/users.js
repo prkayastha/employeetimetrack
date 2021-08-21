@@ -93,13 +93,16 @@ router.get('/activate/:hash', function (req, res) {
 });
 
 /* list all the users */
-router.get('/list', function (req, res) {
-  const offset = req.query.offset || 0;
-  const limit = req.query.limit || 0;
-  const orderBy = req.query.orderBy || [];
-  const searchQuery = req.query.searchString || '';
+router.post('/list', function (req, res) {
+  const offset = req.body.offset || 0;
+  const limit = req.body.limit || 10;
+  const order = [[
+    req.body.orderBy,
+    req.body.order
+  ]];
+  const searchQuery = req.body.search || '';
 
-  userOperation.list(offset, limit, orderBy, searchQuery).then(users => {
+  userOperation.list(offset, limit, order, searchQuery).then(users => {
     res.send(users);
   }).catch(error => {
     errorHandler(res, error);
