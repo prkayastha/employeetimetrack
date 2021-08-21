@@ -36,7 +36,8 @@ const messages = {
             oldPasswordNotMatch: 'The old password is not correct'
         },
         authorization: {
-            unauthorize: 'The user is not authorized by roles'
+            unauthorize: 'The user is not authorized by roles',
+            unauthorizeForOp: 'The user is not authorized to perform operation'
         }
     }
 }

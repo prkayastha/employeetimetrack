@@ -12,19 +12,11 @@ const errorHandler = require('../controller/errorHandler');
 
 const userValidator = require('../validators/user');
 const { validationResult } = require('express-validator');
-const authorize = require('../controller/authorize');
+const { allow, ROLES } = require('../controller/authorize');
 
 router.post('/register',
   userValidator.register,
   async (req, res) => {
-    /* const passwordString = req.body.password || 'test';
-    const user = new User();
-    user.setData(req.body, settings.seperateUsername);
-    userOperation.add(user, passwordString).then(userResponse => {
-      res.send(userResponse);
-    }).catch(error => {
-      errorHandler(res, error);
-    }); */
     const reqValidation = validationResult(req);
 
     if (!reqValidation.isEmpty()) {
@@ -95,7 +87,7 @@ router.get('/activate/:hash', function (req, res) {
 
 /* list all the users */
 router.post('/list',
-  authorize.allow([authorize.ROLES.ADMIN, authorize.ROLES.MANAGER]),
+  allow([ROLES.ADMIN, ROLES.MANAGER]),
   function (req, res) {
     const offset = req.body.offset || 0;
     const limit = req.body.limit || 10;
@@ -113,13 +105,17 @@ router.post('/list',
   });
 
 /* get users by id */
-router.get('/:userId', function (req, res) {
-  const userId = req.params.userId;
-  userOperation.get(userId).then(userResponse => {
-    res.send(userResponse);
-  }).catch(error => {
-    errorHandler(res, error);
+router.get('/:userId',
+function (req, res) {
+    const userId = req.params.userId;
+
+    const jwtPayload = jwtDecoder(req);
+
+    userOperation.get(userId, jwtPayload).then(userResponse => {
+      res.send(userResponse);
+    }).catch(error => {
+      errorHandler(res, error);
+    });
   });
-});
 
 module.exports = router;
