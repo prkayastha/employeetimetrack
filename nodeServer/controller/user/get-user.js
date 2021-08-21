@@ -59,7 +59,12 @@ function getUser(userId) {
             throw error;
         }
 
-        return Promise.resolve(user);
+        const userCp = { ... user.dataValues};
+        userCp.roles = userCp.roles.map(role => {
+            return {id: role.id, role: role.role}
+        });
+
+        return Promise.resolve(userCp);
     });
 }
 

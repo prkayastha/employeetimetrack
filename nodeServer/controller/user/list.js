@@ -31,7 +31,7 @@ const list = function (offset, limit, orders, searchString) {
 
     const listQuery = {
         include: [
-            { model: models.Roles }
+            { model: models.Roles, as: 'roles' }
         ],
         offset: +offsetRows,
         limit: +limitRows,
@@ -43,6 +43,11 @@ const list = function (offset, limit, orders, searchString) {
     }
 
     return models.Users.findAll(listQuery).then(users => {
+        users = users.map(user => {
+            const dataCp = {...user.dataValues};
+            dataCp.roles = dataCp.roles.map(role => ({id: role.id, role: role.role}));
+            return dataCp;
+        });
         return Promise.resolve(users);
     });
 };

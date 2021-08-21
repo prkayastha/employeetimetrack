@@ -133,7 +133,7 @@ function getOperatorInfo(operatorId) {
     return models.Users.findOne({
         attributes: ['id'],
         include: [
-            { model: models.Roles }
+            { model: models.Roles, as: 'roles' }
         ],
         where: whereCondition
     });

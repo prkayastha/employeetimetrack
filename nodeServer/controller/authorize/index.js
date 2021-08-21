@@ -61,7 +61,7 @@ const getUserRoles = async (userId) => {
     try {
         let currentUser = await user.get(userId);
         if (!!currentUser) {
-            return currentUser.Roles.map(roles => roles.role);
+            return currentUser.roles.map(roles => roles.role);
         }
     } catch (error) {
         return [];
