@@ -15,7 +15,7 @@ const getUser = function (username) {
     const whereCondition = { username: username, deleted: false };
     return models.Users.findOne({
         include: [
-            { model: models.Roles }
+            { model: models.Roles, as: 'roles' }
         ],
         where: whereCondition
     }).then(user => {

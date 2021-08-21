@@ -27,7 +27,7 @@ router.post('/register',
     const user = new User();
     user.setData(req.body, settings.seperateUsername);
     user.active = true;
-    user.Roles = [{ id: 3 }];
+    user.roles = [{ id: 3 }];
     try {
       addedUser = await userOperation.add(user, passwordString);
       res.send(addedUser);
@@ -49,7 +49,9 @@ router.post('/add', function (req, res) {
 });
 
 /* update user information */
-router.put('/update/:userId', function (req, res) {
+router.put('/update/:userId', 
+allow([ROLES.ADMIN, ROLES.MANAGER]),
+function (req, res) {
   const userId = req.params.userId;
   const user = new User();
   user.setData(req.body, settings.seperateUsername);

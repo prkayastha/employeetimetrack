@@ -16,7 +16,7 @@ class Users {
 		this.createdAt = null;
 		this.updatedAt = null;
 		this.version = 0;
-		this.Roles = null;
+		this.roles = null;
 		this.firstname = null;
 		this.lastname = null;
 	}

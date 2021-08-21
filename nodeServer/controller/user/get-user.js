@@ -11,10 +11,15 @@ const UnauthorizedError = require('../../prototypes/responses/authorization/unau
  * @param {number} userId user id of user to be retrived
  */
 const getUserById = function (userId, queryUser) {
+
+    if (!queryUser) {
+        return getUser(userId);
+    }
+
     let queryUserInfoCache = null;
     return getUser(queryUser.id).then(queryUserInfo => {
         queryUserInfoCache = queryUserInfo;
-        const roles = queryUserInfo.Roles.map(role => role.role);
+        const roles = queryUserInfo.roles.map(role => role.role);
         const role = roles.pop();
 
         if (role === 'EMPLOYEE' && userId != queryUser.id) {
@@ -24,8 +29,8 @@ const getUserById = function (userId, queryUser) {
 
         return getUser(userId)
     }).then((retrivedUser) => {
-        const retrivedUserRole = retrivedUser.Roles.map(role => role.role).pop();
-        const queryUserRole = queryUserInfoCache.Roles.map(role => role.role).pop();
+        const retrivedUserRole = retrivedUser.roles.map(role => role.role).pop();
+        const queryUserRole = queryUserInfoCache.roles.map(role => role.role).pop();
 
         if (
             (queryUserRole === 'MANAGER' && retrivedUserRole === 'ADMIN') ||
@@ -43,7 +48,7 @@ function getUser(userId) {
     const whereCondition = { id: userId, deleted: false };
     return models.Users.findOne({
         include: [
-            { model: models.Roles }
+            { model: models.Roles, as: 'roles' }
         ],
         where: whereCondition
     }).then(user => {

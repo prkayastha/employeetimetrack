@@ -34,7 +34,7 @@ const add = function (user, passwordString) {
                 }).then(passwordObject => {
                     return models.Password.create(passwordObject, { transaction: t })
                 }).then(function (result) {
-                    return addRoles(user.Roles, result.UserId, t)
+                    return addRoles(user.roles, result.UserId, t)
                 }.bind(response));
             }
         })

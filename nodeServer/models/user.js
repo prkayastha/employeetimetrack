@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function (models) {
     // associations can be defined here
     models.Users.hasMany(models.Password);
-    models.Users.belongsToMany(models.Roles, {through: 'UserRole'})
+    models.Users.belongsToMany(models.Roles, {through: 'UserRole', as: 'roles'})
   };
   return User;
 };
