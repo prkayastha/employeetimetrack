@@ -64,14 +64,16 @@ router.put('/update/:userId', function (req, res) {
 });
 
 /* Delete user by Id */
-router.delete('/delete/:userId', function (req, res) {
-  const userId = req.params.userId;
-  userOperation.deleteUser(userId).then(userResponse => {
-    res.send(userResponse);
-  }).catch(error => {
-    errorHandler(res, error);
+router.delete('/delete/:userId',
+  allow([ROLES.ADMIN]),
+  function (req, res) {
+    const userId = req.params.userId;
+    userOperation.deleteUser(userId).then(userResponse => {
+      res.send(userResponse);
+    }).catch(error => {
+      errorHandler(res, error);
+    });
   });
-});
 
 /* Activate user */
 router.get('/activate/:hash', function (req, res) {
@@ -106,7 +108,7 @@ router.post('/list',
 
 /* get users by id */
 router.get('/:userId',
-function (req, res) {
+  function (req, res) {
     const userId = req.params.userId;
 
     const jwtPayload = jwtDecoder(req);
