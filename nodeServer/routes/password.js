@@ -72,9 +72,8 @@ router.post('/reset', function(req, res){
     }).then((linkResponse) => {
         res.send(linkResponse);
     }).catch(error => {
-        error = new Error("Cannot generate password reset link");
-        error.name = 'UserNotFound';
-        errorHandler(res, );
+        error.message = "Cannot generate password reset link";
+        errorHandler(res, error);
     });
 });
 

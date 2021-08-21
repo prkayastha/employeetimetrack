@@ -20,8 +20,8 @@ const getUser = function (username) {
         where: whereCondition
     }).then(user => {
         if (!user) {
-            const message = stringResources.error.user.userNotFoundById;
-            const error = new UserNotFoundError(stringUtils.format(message, userId));
+            const message = stringResources.error.user.userNotFoundByUsername;
+            const error = new UserNotFoundError(stringUtils.format(message, username));
             error.statusCode = 400;
             throw error;
         }
