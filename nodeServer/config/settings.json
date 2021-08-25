@@ -33,7 +33,7 @@
     },
     "production": {
         "apiURL": "http://3.144.106.114:3000",
-        "appUrl": "http://3.144.106.114:4200",
+        "appUrl": "http://localhost:4200",
         "seperateUsername": false,
         "sendConfirmationEmail": false,
         "checkActive": false,

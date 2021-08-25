@@ -55,6 +55,8 @@ const check = function (username, password) {
             id: retrivedUser.id,
             username: retrivedUser.username,
             email: retrivedUser.email,
+            roleId: retrivedUser.roleId,
+            role: retrivedUser.role,
             createdAt: retrivedUser.createdAt
         };
         const token = tokenUtils.generate(payload);
