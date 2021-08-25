@@ -60,7 +60,7 @@ export class AccountService {
     }
     
     forgotPassword(email: string) {
-        return this.http.post(`${baseUrl}/forgot-password`, { email });
+        return this.http.post(`${baseUrl}/password/reset`, { email });
     }
     
     validateResetToken(token: string) {
