@@ -7,7 +7,7 @@ import { map, finalize } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { Account } from '@app/_models';
 
-const baseUrl = `${environment.apiUrl}/accounts`;
+const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -52,7 +52,7 @@ export class AccountService {
     }
 
     register(account: Account) {
-        return this.http.post(`${baseUrl}/register`, account);
+        return this.http.post(`${baseUrl}/user/register`, account);
     }
 
     verifyEmail(token: string) {
