@@ -27,10 +27,10 @@ export class AccountService {
     }
 
     login(email: string, password: string) {
-        return this.http.post<any>(`${baseUrl}/authenticate`, { email, password }, { withCredentials: true })
+        return this.http.post<any>(`${baseUrl}/auth/check`, { username: email, password })
             .pipe(map(account => {
                 this.accountSubject.next(account);
-                this.startRefreshTokenTimer();
+                // this.startRefreshTokenTimer();
                 return account;
             }));
     }
