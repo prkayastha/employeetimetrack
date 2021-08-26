@@ -31,8 +31,14 @@ router.delete('/delete/:id', (req, res) => {
 
 });
 
-router.get('/:id', (req, res) => {
-
+router.get('/:id', async (req, res) => {
+    const jwtPayload = jwtUtil(req);
+    try {
+        const project = await operations.get(jwtPayload, req.params.id);
+        res.status(200).send(project);
+    } catch (error) {
+        errorHandler(res, error);
+    }
 });
 
 module.exports = router;
