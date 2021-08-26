@@ -38,6 +38,10 @@ const messages = {
         authorization: {
             unauthorize: 'The user is not authorized by roles',
             unauthorizeForOp: 'The user is not authorized to perform operation'
+        },
+        project: {
+            create: 'Failed to create project',
+            update: 'Failed to update project'
         }
     }
 }

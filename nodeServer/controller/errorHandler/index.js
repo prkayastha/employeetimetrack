@@ -7,11 +7,12 @@ const UsernamePasswordNotMatchError = require('../../prototypes/responses/passwo
 const ResetLinkError = require('../../prototypes/responses/authorization/resetlink.error');
 
 const OptimisticLockError = require('../../prototypes/responses/optimistic-lock-error');
+const ProjectCreateUpdateError = require('../../prototypes/responses/project/project-create.error');
 
 /**
  * function to handle the errors
  * @param {res} res Node response object
- * @param {UserAddError | Error} error error to be handled
+ * @param {Error} error error to be handled
  */
 const handle = function(res, error) {
     console.log(error);
@@ -23,7 +24,8 @@ const handle = function(res, error) {
             || error instanceof PasswordNotMatch
             || error instanceof PasswordRepeat
             || error instanceof UsernamePasswordNotMatchError
-            || error instanceof ResetLinkError): {
+            || error instanceof ResetLinkError
+            || error instanceof ProjectCreateUpdateError): {
             response = {
                 statusCode: error.statusCode || 500,
                 message: error.message
