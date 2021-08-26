@@ -1,11 +1,12 @@
-﻿import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
-import { environment } from '@environments/environment';
-import { Account } from '@app/_models';
+import { environment } from '../environments/environment';
+import { Account } from '../_models';
+import { offset } from 'highcharts';
 
 const baseUrl = `${environment.apiUrl}`;
 
@@ -39,7 +40,7 @@ export class AccountService {
         this.http.post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true }).subscribe();
         this.stopRefreshTokenTimer();
         this.accountSubject.next(null);
-        this.router.navigate(['/account/login']);
+        this.router.navigate(['/']);
     }
 
     refreshToken() {
@@ -72,7 +73,7 @@ export class AccountService {
     }
 
     getAll() {
-        return this.http.get<Account[]>(baseUrl);
+        return this.http.get<Account[]>(`${baseUrl}/user/list`);
     }
 
     getById(id: string) {
