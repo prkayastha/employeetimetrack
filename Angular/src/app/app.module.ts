@@ -1,38 +1,51 @@
-﻿import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
-// used to create fake backend
-import { fakeBackendProvider } from './_helpers';
-
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LocalStorageService, NgxLocalStorageModule } from 'ngx-localstorage';
 import { AppRoutingModule } from './app-routing.module';
-import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers';
-import { AccountService } from './_services';
 import { AppComponent } from './app.component';
+import { DefaultModule } from './layouts/default/default.module';
+import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
+import { ForgotPasswordComponent } from './modules/forgot-password/forgot-password.component';
+import { LoginComponent } from './modules/login/login.component';
+import { RegisterComponent } from './modules/register/register.component';
+import { ResetPasswordComponent } from './modules/reset-password/reset-password.component';
+import { UpdateUserComponent } from './modules/update-user/update-user.component';
+import { VerifyEmailComponent } from './modules/verify-email/verify-email.component';
 import { AlertComponent } from './_components';
-import { HomeComponent } from './home';
+import { JwtInterceptor } from './_helpers';
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        AppRoutingModule
-    ],
-    declarations: [
-        AppComponent,
-        AlertComponent,
-        HomeComponent
-    ],
-    providers: [
-        { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-
-        // provider used to create fake backend
-        fakeBackendProvider
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RegisterComponent,
+    AlertComponent,
+    ResetPasswordComponent,
+    ForgotPasswordComponent,
+    VerifyEmailComponent,
+    EmployeeListComponent,
+    UpdateUserComponent,
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    DefaultModule,
+    ReactiveFormsModule,
+    NgxLocalStorageModule.forRoot()
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    LocalStorageService
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

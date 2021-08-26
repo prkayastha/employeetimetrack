@@ -1,13 +1,13 @@
-﻿import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
-import { environment } from '@environments/environment';
-import { Account } from '@app/_models';
+import { environment } from '../environments/environment';
+import { Account, UserDetails } from '../_models';
 
-const baseUrl = `${environment.apiUrl}/accounts`;
+const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -16,7 +16,8 @@ export class AccountService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private user: UserDetails
     ) {
         this.accountSubject = new BehaviorSubject<Account>(null);
         this.account = this.accountSubject.asObservable();
@@ -27,10 +28,11 @@ export class AccountService {
     }
 
     login(email: string, password: string) {
-        return this.http.post<any>(`${baseUrl}/authenticate`, { email, password }, { withCredentials: true })
+        return this.http.post<any>(`${baseUrl}/auth/check`, { username: email, password })
             .pipe(map(account => {
                 this.accountSubject.next(account);
-                this.startRefreshTokenTimer();
+                this.user.setDetails(account);
+                // this.startRefreshTokenTimer();
                 return account;
             }));
     }
@@ -39,7 +41,8 @@ export class AccountService {
         this.http.post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true }).subscribe();
         this.stopRefreshTokenTimer();
         this.accountSubject.next(null);
-        this.router.navigate(['/account/login']);
+        this.user.clearDetails();
+        this.router.navigate(['/']);
     }
 
     refreshToken() {
@@ -52,7 +55,7 @@ export class AccountService {
     }
 
     register(account: Account) {
-        return this.http.post(`${baseUrl}/register`, account);
+        return this.http.post(`${baseUrl}/user/register`, account);
     }
 
     verifyEmail(token: string) {
@@ -60,19 +63,26 @@ export class AccountService {
     }
     
     forgotPassword(email: string) {
-        return this.http.post(`${baseUrl}/forgot-password`, { email });
+        return this.http.post(`${baseUrl}/password/reset`, { username: email });
     }
     
     validateResetToken(token: string) {
-        return this.http.post(`${baseUrl}/validate-reset-token`, { token });
+        return this.http.post(`${baseUrl}/password/check/token`, { token });
     }
     
     resetPassword(token: string, password: string, confirmPassword: string) {
-        return this.http.post(`${baseUrl}/reset-password`, { token, password, confirmPassword });
+        return this.http.post(`${baseUrl}/password/change`, { reset: token, password, confirmPassword });
     }
 
     getAll() {
-        return this.http.get<Account[]>(baseUrl);
+        const option = {
+            offset: 0,
+            limit: 10,
+            orderBy: 'id',
+            order: 'ASC',
+            search: ''
+        }
+        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
     }
 
     getById(id: string) {

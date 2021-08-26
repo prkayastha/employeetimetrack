@@ -1,26 +1,45 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { DefaultComponent } from './layouts/default/default.component';
+import { DashboardComponent } from './modules/dashboard/dashboard.component';
+import { PostsComponent } from './modules/posts/posts.component';
+import { LoginComponent } from './modules/login/login.component';
+import { RegisterComponent } from './modules/register/register.component';
+import { VerifyEmailComponent } from './modules/verify-email/verify-email.component';
+import { ForgotPasswordComponent } from './modules/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './modules/reset-password/reset-password.component';
+import { LayoutComponent } from './modules/layout/layout.component';
+import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
 
-import { HomeComponent } from './home';
-import { AuthGuard } from './_helpers';
-import { Role } from './_models';
 
-const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
-const adminModule = () => import('./admin/admin.module').then(x => x.AdminModule);
-const profileModule = () => import('./profile/profile.module').then(x => x.ProfileModule);
+
 
 const routes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-    { path: 'account', loadChildren: accountModule },
-    { path: 'profile', loadChildren: profileModule, canActivate: [AuthGuard] },
-    { path: 'admin', loadChildren: adminModule, canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
-
-    // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+ { path: '',component:LoginComponent},
+  {path:'register',component:RegisterComponent},
+  {path:'forget-password',component:ForgotPasswordComponent},
+  {path:'reset-password',component:ResetPasswordComponent},
+  {path:'verify-email',component:VerifyEmailComponent},
+  
+  {
+    path: 'home',
+    component: DefaultComponent,
+    children: [{
+      path: 'dashboard',
+      component: DashboardComponent
+    }, {
+      path: 'posts',
+      component: PostsComponent
+    },{
+      path:'employee-list',
+      component:EmployeeListComponent
+    }]
+  } 
+ 
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }
