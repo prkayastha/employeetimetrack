@@ -13,6 +13,7 @@ var auth = require('./routes/authenticate');
 var token = require('./controller/authenticate/token');
 const trello = require('./routes/trelloRoute');
 const project = require('./routes/project');
+const task = require('./routes/task');
 const errorHandler = require('./controller/errorHandler');
 var app = express();
 
@@ -48,6 +49,7 @@ app.use('/password', passwords);
 app.use('/auth', auth);
 app.use('/trello', trello);
 app.use('/project', project);
+app.use('/task', task);
 
 /* resource apis */
 /*app.post('/api/trello/userInfo', trello.getUserInfo);
