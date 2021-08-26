@@ -30,7 +30,7 @@ module.exports = async function (operationInfo, projectInfo) {
             const responseProject = await models.Project.bulkCreate(
                 [projectObj],
                 {
-                    updateOnDuplicate: ['projectName', 'projectOwnerUserId', 'version']
+                    updateOnDuplicate: ['projectName', 'projectOwnerUserId', 'isDelete', 'version']
                 }
             );
             return responseProject[0];

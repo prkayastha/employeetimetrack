@@ -5,6 +5,9 @@ module.exports = (sequelize, DataTypes) => {
         projectName: {
             allowNull: false,
             type: DataTypes.STRING
+        },
+        isDelete: {
+            type: DataTypes.BOOLEAN
         }
     }, {
         version: true
