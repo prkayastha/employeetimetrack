@@ -73,7 +73,14 @@ export class AccountService {
     }
 
     getAll() {
-        return this.http.get<Account[]>(`${baseUrl}/user/list`);
+        const option = {
+            offset: 0,
+            limit: 10,
+            orderBy: 'id',
+            order: 'ASC',
+            search: ''
+        }
+        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
     }
 
     getById(id: string) {

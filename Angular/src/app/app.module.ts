@@ -14,6 +14,7 @@ import { AlertComponent } from './_components';
 import { VerifyEmailComponent } from './modules/verify-email/verify-email.component';
 import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
 import { UpdateUserComponent } from './modules/update-user/update-user.component';
+import { JwtInterceptor } from './_helpers';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,13 @@ import { UpdateUserComponent } from './modules/update-user/update-user.component
     DefaultModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
