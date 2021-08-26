@@ -8,6 +8,8 @@ const ResetLinkError = require('../../prototypes/responses/authorization/resetli
 
 const OptimisticLockError = require('../../prototypes/responses/optimistic-lock-error');
 const ProjectCreateUpdateError = require('../../prototypes/responses/project/project-create.error');
+const ProjectDeleteError = require('../../prototypes/responses/project/project-delete.error');
+const ProjectNotFoundError = require('../../prototypes/responses/project/project-not-found.error');
 
 /**
  * function to handle the errors
@@ -25,7 +27,9 @@ const handle = function(res, error) {
             || error instanceof PasswordRepeat
             || error instanceof UsernamePasswordNotMatchError
             || error instanceof ResetLinkError
-            || error instanceof ProjectCreateUpdateError): {
+            || error instanceof ProjectCreateUpdateError
+            || error instanceof ProjectDeleteError
+            || error instanceof ProjectNotFoundError): {
             response = {
                 statusCode: error.statusCode || 500,
                 message: error.message
