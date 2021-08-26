@@ -5,8 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
 import { environment } from '../environments/environment';
-import { Account } from '../_models';
-import { offset } from 'highcharts';
+import { Account, UserDetails } from '../_models';
 
 const baseUrl = `${environment.apiUrl}`;
 
@@ -17,7 +16,8 @@ export class AccountService {
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private user: UserDetails
     ) {
         this.accountSubject = new BehaviorSubject<Account>(null);
         this.account = this.accountSubject.asObservable();
@@ -31,6 +31,7 @@ export class AccountService {
         return this.http.post<any>(`${baseUrl}/auth/check`, { username: email, password })
             .pipe(map(account => {
                 this.accountSubject.next(account);
+                this.user.setDetails(account);
                 // this.startRefreshTokenTimer();
                 return account;
             }));
@@ -40,6 +41,7 @@ export class AccountService {
         this.http.post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true }).subscribe();
         this.stopRefreshTokenTimer();
         this.accountSubject.next(null);
+        this.user.clearDetails();
         this.router.navigate(['/']);
     }
 
