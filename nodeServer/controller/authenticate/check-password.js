@@ -53,6 +53,7 @@ const check = function (username, password) {
         }
         const payload = {
             id: retrivedUser.id,
+            fullName: `${retrivedUser.firstname} ${retrivedUser.lastname}`,
             username: retrivedUser.username,
             email: retrivedUser.email,
             roleId: retrivedUser.roleId,

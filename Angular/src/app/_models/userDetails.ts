@@ -3,6 +3,7 @@ import { LocalStorageService } from "ngx-localstorage";
 
 export interface LoginResponse {
     id: number;
+    fullName: string;
     username: string;
     email: string;
     roleId: number;
@@ -12,6 +13,7 @@ export interface LoginResponse {
 }
 
 const USERID: string = 'USERID';
+const FULLNAME: string = 'FULLNAME';
 const USERNAME: string = 'USERNAME';
 const EMAIL: string = 'EMAIL';
 const ROLEID: string = 'ROLEID';
@@ -93,5 +95,13 @@ export class UserDetails {
 
     get token() {
         return this._localStorage.get(TOKEN);
+    }
+
+    set fullName(fullName: string) {
+        this._localStorage.set(FULLNAME, fullName)
+    }
+
+    get fullName() {
+        return this._localStorage.get(FULLNAME);
     }
 }
