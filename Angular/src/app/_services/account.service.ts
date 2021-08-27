@@ -5,7 +5,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
 import { environment } from '../environments/environment';
-import { Account, UserDetails } from '../_models';
+import { Account } from '../_models';
+import { offset } from 'highcharts';
 
 const baseUrl = `${environment.apiUrl}`;
 
@@ -16,8 +17,7 @@ export class AccountService {
 
     constructor(
         private router: Router,
-        private http: HttpClient,
-        private user: UserDetails
+        private http: HttpClient
     ) {
         this.accountSubject = new BehaviorSubject<Account>(null);
         this.account = this.accountSubject.asObservable();
@@ -31,7 +31,6 @@ export class AccountService {
         return this.http.post<any>(`${baseUrl}/auth/check`, { username: email, password })
             .pipe(map(account => {
                 this.accountSubject.next(account);
-                this.user.setDetails(account);
                 // this.startRefreshTokenTimer();
                 return account;
             }));
@@ -41,7 +40,6 @@ export class AccountService {
         this.http.post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true }).subscribe();
         this.stopRefreshTokenTimer();
         this.accountSubject.next(null);
-        this.user.clearDetails();
         this.router.navigate(['/']);
     }
 
@@ -76,11 +74,11 @@ export class AccountService {
 
     getAll() {
         const option = {
-            offset: 0,
-            limit: 10,
-            orderBy: 'id',
-            order: 'ASC',
-            search: ''
+           offset:0,
+           limit:10,
+           orderBy:"id",
+           order:"Desc",
+           search:null,
         }
         return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
     }
@@ -94,7 +92,9 @@ export class AccountService {
     }
     
     update(id, params) {
-        return this.http.put(`${baseUrl}/${id}`, params)
+        const url = `${baseUrl}/user/update/${id}`;
+        console.log('updating user with id ',  url);
+        return this.http.put(url, params)
             .pipe(map((account: any) => {
                 // update the current account if it was updated
                 if (account.id === this.accountValue.id) {
@@ -107,7 +107,7 @@ export class AccountService {
     }
     
     delete(id: string) {
-        return this.http.delete(`${baseUrl}/${id}`)
+        return this.http.delete(`${baseUrl}/user/delete/${id}`)
             .pipe(finalize(() => {
                 // auto logout if the logged in account was deleted
                 if (id === this.accountValue.id)
@@ -121,7 +121,7 @@ export class AccountService {
 
     private startRefreshTokenTimer() {
         // parse json object from base64 encoded jwt token
-        const jwtToken = JSON.parse(atob(this.accountValue.jwtToken.split('.')[1]));
+        const jwtToken = JSON.parse(atob(this.accountValue.token.split('.')[1]));
 
         // set a timeout to refresh the token a minute before it expires
         const expires = new Date(jwtToken.exp * 1000);
