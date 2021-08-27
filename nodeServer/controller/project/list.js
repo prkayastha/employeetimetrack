@@ -33,6 +33,13 @@ module.exports = async function (operatorInfo, options) {
     ];
     listQuery.attributes = ['id', 'projectName']
 
-    let list = await models.Project.findAll(listQuery);
-    return list;
+    const cpListQuery = {
+        where: listQuery.where
+    }
+
+    const list = models.Project.findAll(listQuery);
+    const count = models.Project.count(cpListQuery)
+
+    const [resultCount, resultList] = await Promise.all([count, list])
+    return {count: resultCount, collection: resultList};
 }
