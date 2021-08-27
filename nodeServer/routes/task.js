@@ -20,8 +20,22 @@ router.post('/upsert', async (req, res) => {
     }
 });
 
-router.post('/list', (req, res) => {
-
+router.post('/:id', async (req, res) => {
+    const jwtPayload = jwtDecode(req);
+    const projectId = req.params.id;
+    const options = {
+        offset: req.body.offset || 0,
+        limit: req.body.limit || 10,
+        orderBy: req.body.orderBy || 'id',
+        order: req.body.order || 'asc',
+        search: req.body.search || ''
+    };
+    try {
+        const list = await operations.list(jwtPayload, options, projectId);
+        res.send(list);
+    } catch (error) {
+        errorHandler(res, error);
+    }
 });
 
 router.delete('/delete/:id', async (req, res) => {
@@ -35,8 +49,8 @@ router.delete('/delete/:id', async (req, res) => {
     }
 });
 
-router.get('/:id', (req, res) => {
+/* router.get('/:id', (req, res) => {
 
-});
+}); */
 
 module.exports = router;

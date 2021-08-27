@@ -7,8 +7,8 @@ const UnauthorizedError = require('../../prototypes/responses/authorization/unau
 const OptimisticLockError = require('../../prototypes/responses/optimistic-lock-error');
 const TaskNotFountError = require('../../prototypes/responses/task/task-not-found.error');
 
-module.exports = async function (operationInfo, taskInfo) {
-    const canAdd = await canAddTask(operationInfo, taskInfo.projectId);
+module.exports = async function (operatorInfo, taskInfo) {
+    const canAdd = await canAddTask(operatorInfo, taskInfo.projectId);
     const operation = !taskInfo.id ? 'add' : 'update';
 
     if (!canAdd) {
@@ -41,8 +41,8 @@ module.exports = async function (operationInfo, taskInfo) {
     }
 };
 
-async function canAddTask(operationInfo, projectId) {
-    const userId = operationInfo.id;
+async function canAddTask(operatorInfo, projectId) {
+    const userId = operatorInfo.id;
     const query = 'SELECT `userroles`.`UserId`, `userroles`.`RoleId`, `roles`.`role` \
     FROM `user_management`.`userroles` `userroles` INNER JOIN `user_management`.`roles` \
     `roles` ON `userroles`.`RoleId` = `roles`.`id` WHERE `userroles`.`UserId` = :userId LIMIT 1';
@@ -58,8 +58,8 @@ async function canAddTask(operationInfo, projectId) {
     if (row[0].role === 'ADMIN') {
         return true;
     } else if (row[0].role === 'MANAGER') {
-        const projectInfo = await models.Project.findOne({ attribute: ['id', 'projectName'], where: { id: projectId } });
-        if (projectInfo.projectOwnerUserId == operationInfo.id) {
+        const projectInfo = await models.Project.findOne({ attribute: ['id', 'projectName', 'projectOwnerUserId'], where: { id: projectId } });
+        if (projectInfo.projectOwnerUserId == operatorInfo.id) {
             return true;
         }
         return false;
