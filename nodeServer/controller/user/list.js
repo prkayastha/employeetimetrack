@@ -42,13 +42,19 @@ const list = function (offset, limit, orders, searchString) {
         listQuery.order = orders;
     }
 
-    return models.Users.findAll(listQuery).then(users => {
-        users = users.map(user => {
+    const cpListQuery = {
+        where: listQuery.where
+    };
+    const countUser = models.Users.count(cpListQuery);
+    const userCollection = models.Users.findAll(listQuery)
+    
+    return Promise.all([countUser, userCollection]).then(([count, collection]) => {
+        collection = collection.map(user => {
             const dataCp = {...user.dataValues};
             dataCp.roles = dataCp.roles.map(role => ({id: role.id, role: role.role}));
             return dataCp;
         });
-        return Promise.resolve(users);
+        return Promise.resolve({count, collection});
     });
 };
 
