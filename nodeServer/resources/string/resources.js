@@ -42,6 +42,11 @@ const messages = {
         project: {
             create: 'Failed to create project',
             update: 'Failed to update project'
+        },
+        task: {
+            create: 'Failed to create task',
+            update: 'Failed to update task',
+            notFound: 'Cannot find task with id {0}'
         }
     }
 }
