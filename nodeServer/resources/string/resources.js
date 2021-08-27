@@ -14,6 +14,9 @@ const messages = {
         resetLinkEmail: '<div><h3>Employee Time Tracking App</h3></div><div><p>We recieved a password reset request for you account. The password reset link is <div>{0}</div></p>\
         <p>If you have not requested for password reset. Ignore this email.</p><p>Yours Sincere,<br>The Team</p></div>'
     },
+    task: {
+        deleteSuccess: 'Task with id {0} has been successfully delete from the system'
+    },
     error: {
         user: {
             multipleEmail: 'User exists in the system.',
@@ -46,7 +49,7 @@ const messages = {
         task: {
             create: 'Failed to create task',
             update: 'Failed to update task',
-            notFound: 'Cannot find task with id {0}'
+            notFound: 'Cannot find task with id {0}',
         }
     }
 }

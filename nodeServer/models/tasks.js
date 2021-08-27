@@ -4,6 +4,10 @@ module.exports = (sequelize, DataTypes) => {
         taskDescription: {
             allowNull: false,
             type: DataTypes.STRING
+        },
+        isDelete: {
+            default: false,
+            type: DataTypes.BOOLEAN
         }
     }, {});
     Task.associate = function (models) {

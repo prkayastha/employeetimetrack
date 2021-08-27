@@ -10,6 +10,7 @@ const OptimisticLockError = require('../../prototypes/responses/optimistic-lock-
 const ProjectCreateUpdateError = require('../../prototypes/responses/project/project-create.error');
 const ProjectDeleteError = require('../../prototypes/responses/project/project-delete.error');
 const ProjectNotFoundError = require('../../prototypes/responses/project/project-not-found.error');
+const TaskNotFoundError = require('../../prototypes/responses/task/task-not-found.error');
 
 /**
  * function to handle the errors
@@ -29,7 +30,8 @@ const handle = function(res, error) {
             || error instanceof ResetLinkError
             || error instanceof ProjectCreateUpdateError
             || error instanceof ProjectDeleteError
-            || error instanceof ProjectNotFoundError): {
+            || error instanceof ProjectNotFoundError
+            || error instanceof TaskNotFoundError): {
             response = {
                 statusCode: error.statusCode || 500,
                 message: error.message
