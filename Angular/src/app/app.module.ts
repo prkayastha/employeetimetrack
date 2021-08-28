@@ -22,6 +22,7 @@ import { UpdateProjectComponent } from './modules/project/update-project/update-
 import { TaskListComponent } from './modules/task/task-list/task-list.component';
 import { UpdateTaskComponent } from './modules/task/update-task/update-task.component';
 import { CreateTaskComponent } from './modules/task/create-task/create-task.component';
+import { NgxLocalStorageModule, LocalStorageService } from 'ngx-localstorage';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,6 @@ import { CreateTaskComponent } from './modules/task/create-task/create-task.comp
     TaskListComponent,
     UpdateTaskComponent,
     CreateTaskComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -49,11 +49,13 @@ import { CreateTaskComponent } from './modules/task/create-task/create-task.comp
     AppRoutingModule,
     BrowserAnimationsModule,
     DefaultModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxLocalStorageModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    LocalStorageService
 
   ],
   bootstrap: [AppComponent],
