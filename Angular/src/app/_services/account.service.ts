@@ -79,7 +79,7 @@ export class AccountService {
     getAll(): Observable<any> {
         const option = {
            offset:0,
-           limit:5,
+           limit:100,
            orderBy:"id",
            order:"Desc",
            search:null,
@@ -122,12 +122,12 @@ export class AccountService {
     getAllProject() {
         const option = {
            offset:0,
-           limit:5,
+           limit:100,
            orderBy:"id",
            order:"Desc",
            search:null,
         }
-        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
+        return this.http.post<any[]>(`${baseUrl}/project/list`, option);
     }
     // Create Project
     createProject(params) {

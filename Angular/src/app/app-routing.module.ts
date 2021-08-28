@@ -12,31 +12,40 @@ import { EmployeeListComponent } from './modules/employee-list/employee-list.com
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { UpdateUserComponent } from './modules/update-user/update-user.component';
 import { AuthGuard } from './_helpers';
+import { ProjectListComponent } from './modules/project/project-list/project-list.component';
 
 
 const routes: Routes = [
- { path: '',component:LoginComponent},
-  {path:'register',component:RegisterComponent},
-  {path:'forget-password',component:ForgotPasswordComponent},
-  {path:'reset-password',component:ResetPasswordComponent},
-  {path:'verify-email',component:VerifyEmailComponent},
-  
-  
+  { path: '', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'forget-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'verify-email', component: VerifyEmailComponent },
+
+
   {
     path: 'home',
     component: DefaultComponent, canActivate: [AuthGuard],
-    children: [{
-      path: 'dashboard',
-      component: DashboardComponent,canActivate: [AuthGuard]
-    }, {
-      path:'employee-list',
-      component:EmployeeListComponent,canActivate: [AuthGuard]
-    },
-    {path:'update/:userId',component:UpdateUserComponent,canActivate:[AuthGuard]},
-    {path:'workdiary',component:WorkdiaryComponent,canActivate: [AuthGuard]},
-  ]
-  } 
- 
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      }, {
+        path: 'employee-list',
+        component: EmployeeListComponent
+      },
+      {
+        path: 'update/:userId', component: UpdateUserComponent
+      },
+      {
+        path: 'workdiary', component: WorkdiaryComponent
+      },
+      { 
+        path: 'projects', component: ProjectListComponent 
+      }
+    ]
+  }
+
 ];
 
 @NgModule({
