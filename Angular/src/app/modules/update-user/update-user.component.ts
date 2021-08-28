@@ -27,7 +27,7 @@ export class UpdateUserComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-      this.id = this.route.snapshot.params['id'];
+      this.id = this.route.snapshot.params['userId'];
       this.isAddMode = !this.id;
 
       this.form = this.formBuilder.group({
@@ -63,14 +63,10 @@ export class UpdateUserComponent implements OnInit {
       }
 
       this.loading = true;
-      if (this.isAddMode) {
-          this.createAccount();
-      } else {
-          this.updateAccount();
-      }
+        this.updateAccount();
   }
 
-  private createAccount() {
+ /** private createAccount() {
       this.accountService.create(this.form.value)
           .pipe(first())
           .subscribe({
@@ -83,7 +79,7 @@ export class UpdateUserComponent implements OnInit {
                   this.loading = false;
               }
           });
-  }
+  } */
 
   private updateAccount() {
       this.accountService.update(this.id, this.form.value)
@@ -91,7 +87,7 @@ export class UpdateUserComponent implements OnInit {
           .subscribe({
               next: () => {
                   this.alertService.success('Update successful', { keepAfterRouteChange: true });
-                  this.router.navigate(['../../'], { relativeTo: this.route });
+                  this.router.navigate(['employee-list'], { relativeTo: this.route });
               },
               error: error => {
                   this.alertService.error(error);

@@ -4,21 +4,22 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../environments/environment';
 import { AccountService } from '../_services';
-import { UserDetails } from '../_models';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    constructor(private accountService: AccountService, private user: UserDetails) { }
+    constructor(private accountService: AccountService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // add auth header with jwt if account is logged in and request is to the api url
-        const isLoggedIn = this.user.isLoggedIn();
+        const account = this.accountService.accountValue;
+        const isLoggedIn = !!account && !!account.token;
         const isApiUrl = request.url.startsWith(environment.apiUrl);
         if (isLoggedIn && isApiUrl) {
             request = request.clone({
-                setHeaders: { Authorization: `Bearer ${this.user.token}` }
+                setHeaders: { Authorization: `Bearer ${account.token}` }
             });
         }
+
         return next.handle(request);
     }
 }

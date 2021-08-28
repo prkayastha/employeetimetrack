@@ -10,6 +10,10 @@ import { ForgotPasswordComponent } from './modules/forgot-password/forgot-passwo
 import { ResetPasswordComponent } from './modules/reset-password/reset-password.component';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
+import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
+import { ProjectsComponent } from './modules/projects/projects.component';
+import { UpdateUserComponent } from './modules/update-user/update-user.component';
+import { AuthGuard } from './_helpers';
 
 
 
@@ -21,19 +25,23 @@ const routes: Routes = [
   {path:'reset-password',component:ResetPasswordComponent},
   {path:'verify-email',component:VerifyEmailComponent},
   
+  
   {
     path: 'home',
-    component: DefaultComponent,
+    component: DefaultComponent, canActivate: [AuthGuard],
     children: [{
       path: 'dashboard',
-      component: DashboardComponent
+      component: DashboardComponent,canActivate: [AuthGuard]
     }, {
       path: 'posts',
-      component: PostsComponent
+      component: PostsComponent,canActivate: [AuthGuard]
     },{
       path:'employee-list',
-      component:EmployeeListComponent
-    }]
+      component:EmployeeListComponent,canActivate: [AuthGuard]
+    },
+    {path:'update/:userId',component:UpdateUserComponent,canActivate:[AuthGuard]},
+    {path:'workdiary',component:WorkdiaryComponent,canActivate: [AuthGuard]},
+    {path:'projects',component:ProjectsComponent,canActivate: [AuthGuard]},]
   } 
  
 ];
