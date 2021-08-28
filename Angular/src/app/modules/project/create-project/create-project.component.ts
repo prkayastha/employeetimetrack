@@ -3,15 +3,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService } from '../../_services';
-import { MustMatch } from '../../_helpers';
+import { AccountService, AlertService } from '../../../_services';
+import { MustMatch } from '../../../_helpers';
 
 @Component({
-  selector: 'app-update-user',
-  templateUrl: './update-user.component.html',
-  styleUrls: ['./update-user.component.scss']
+  selector: 'app-create-project',
+  templateUrl: './create-project.component.html',
+  styleUrls: ['./create-project.component.scss']
 })
-export class UpdateUserComponent implements OnInit {
+export class CreateProjectComponent implements OnInit {
   form: FormGroup;
   id: string;
   isAddMode: boolean;
@@ -31,15 +31,9 @@ export class UpdateUserComponent implements OnInit {
     this.isAddMode = !this.id;
 
     this.form = this.formBuilder.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        role: ['', Validators.required],
-        password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
-        confirmPassword: ['']
-    }, {
-        validator: MustMatch('password', 'confirmPassword')
-    });
+        project_id:['', Validators.required],
+        projectName: ['', Validators.required],
+    }, );
 
     /** if (!this.isAddMode) {
         this.accountService.getById(this.id)
@@ -64,14 +58,14 @@ onSubmit() {
 
     this.loading = true;
     if (this.isAddMode) {
-        this.updateAccount();
+        this.createProject();
     } else {
-        this.updateAccount();
+        this.createProject();
     }
 }
 
-private createAccount() {
-    this.accountService.create(this.form.value)
+private createProject() {
+    this.accountService.createProject(this.form.value)
         .pipe(first())
         .subscribe({
             next: () => {
@@ -99,5 +93,5 @@ private updateAccount() {
             }
         });
 }
-  
+
 }

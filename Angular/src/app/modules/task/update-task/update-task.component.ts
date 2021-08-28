@@ -3,16 +3,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService } from '../../_services';
-import { MustMatch } from '../../_helpers';
-
+import { AccountService, AlertService } from '../../../_services';
+import { MustMatch } from '../../../_helpers';
 @Component({
-  selector: 'app-update-user',
-  templateUrl: './update-user.component.html',
-  styleUrls: ['./update-user.component.scss']
+  selector: 'app-update-task',
+  templateUrl: './update-task.component.html',
+  styleUrls: ['./update-task.component.scss']
 })
-export class UpdateUserComponent implements OnInit {
-  form: FormGroup;
+export class UpdateTaskComponent implements OnInit {
+    form: FormGroup;
   id: string;
   isAddMode: boolean;
   loading = false;
@@ -31,15 +30,9 @@ export class UpdateUserComponent implements OnInit {
     this.isAddMode = !this.id;
 
     this.form = this.formBuilder.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        role: ['', Validators.required],
-        password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
-        confirmPassword: ['']
-    }, {
-        validator: MustMatch('password', 'confirmPassword')
-    });
+        task_id:['',Validators.required],
+        taskName: ['', Validators.required],
+    }, );
 
     /** if (!this.isAddMode) {
         this.accountService.getById(this.id)
@@ -64,14 +57,14 @@ onSubmit() {
 
     this.loading = true;
     if (this.isAddMode) {
-        this.updateAccount();
+        this.updateTask();
     } else {
-        this.updateAccount();
+        this.updateTask();
     }
 }
 
-private createAccount() {
-    this.accountService.create(this.form.value)
+private createTask() {
+    this.accountService.createTask(this.form.value)
         .pipe(first())
         .subscribe({
             next: () => {
@@ -85,8 +78,8 @@ private createAccount() {
         });
 }
 
-private updateAccount() {
-    this.accountService.update(this.id, this.form.value)
+private updateTask() {
+    this.accountService.updateTask(this.id, this.form.value)
         .pipe(first())
         .subscribe({
             next: () => {
@@ -99,5 +92,6 @@ private updateAccount() {
             }
         });
 }
-  
+
+
 }
