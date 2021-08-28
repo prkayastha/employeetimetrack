@@ -13,6 +13,7 @@ const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
+    
     private accountSubject: BehaviorSubject<Account>;
     public account: Observable<Account>;
 
@@ -195,6 +196,12 @@ export class AccountService {
                 }
                 return account;
             }));
+    }
+
+    getUser(userId: number): Observable<any> {
+        return this.http.get(
+            `${baseUrl}/user/${userId}`
+        )
     }
 
 
