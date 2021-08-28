@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { AccountService } from '../../../_services';
 import { Account, Role } from '../../../_models';
+import { UserDetails } from 'src/app/_models/userDetails';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -11,7 +12,8 @@ export class SidebarComponent implements OnInit{
   Role=Role;
   account=Account;
 
-  constructor(private accountService:AccountService) { 
+  constructor(private accountService:AccountService,private user:UserDetails) { 
+    console.log(user.role);
     //this.accountService.account.subscribe(x=>this.account=x);
   }
 
