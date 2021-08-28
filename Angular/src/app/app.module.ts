@@ -15,8 +15,13 @@ import { VerifyEmailComponent } from './modules/verify-email/verify-email.compon
 import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
 import { UpdateUserComponent } from './modules/update-user/update-user.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
-import { ProjectsComponent } from './modules/projects/projects.component';
 import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers';
+import { ProjectListComponent } from './modules/project/project-list/project-list.component';
+import { CreateProjectComponent } from './modules/project/create-project/create-project.component';
+import { UpdateProjectComponent } from './modules/project/update-project/update-project.component';
+import { TaskListComponent } from './modules/task/task-list/task-list.component';
+import { UpdateTaskComponent } from './modules/task/update-task/update-task.component';
+import { CreateTaskComponent } from './modules/task/create-task/create-task.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +35,13 @@ import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers';
     EmployeeListComponent,
     UpdateUserComponent,
     WorkdiaryComponent,
-    ProjectsComponent,
+    ProjectListComponent,
+    CreateProjectComponent,
+    UpdateProjectComponent,
+    TaskListComponent,
+    UpdateTaskComponent,
+    CreateTaskComponent,
+
   ],
   imports: [
     BrowserModule,

@@ -75,7 +75,7 @@ export class AccountService {
     getAll(): Observable<any> {
         const option = {
            offset:0,
-           limit:10,
+           limit:5,
            orderBy:"id",
            order:"Desc",
            search:null,
@@ -88,13 +88,11 @@ export class AccountService {
     }
     
     create(params) {
-        return this.http.post(baseUrl, params);
+        return this.http.put('${baseUrl}',params);
     }
     
     update(id, params) {
-        const url = `${baseUrl}/user/update/${id}`;
-        console.log('updating user with id ',  url);
-        return this.http.put(url, params)
+        return this.http.put(`${baseUrl}/user/update/${id}`, params)
             .pipe(map((account: any) => {
                 // update the current account if it was updated
                 if (account.id === this.accountValue.id) {
@@ -114,6 +112,88 @@ export class AccountService {
                     this.logout();
             }));
     }
+
+
+    //Projct List
+    getAllProject() {
+        const option = {
+           offset:0,
+           limit:5,
+           orderBy:"id",
+           order:"Desc",
+           search:null,
+        }
+        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
+    }
+    // Create Project
+    createProject(params) {
+        return this.http.put('${baseUrl}/Project/upsert ',params);
+    }
+
+    //delete Project
+    deleteProject(id: string) {
+        return this.http.delete(`${baseUrl}/user/delete/${id}`)
+            .pipe(finalize(() => {
+                // auto logout if the logged in account was deleted
+                if (id === this.accountValue.id)
+                    this.logout();
+            }));
+    }
+
+    //update Project
+    updateProject(id, params) {
+        return this.http.put(`${baseUrl}/user/update/${id}`, params)
+            .pipe(map((account: any) => {
+                // update the current account if it was updated
+                if (account.id === this.accountValue.id) {
+                    // publish updated account to subscribers
+                    account = { ...this.accountValue, ...account };
+                    this.accountSubject.next(account);
+                }
+                return account;
+            }));
+    }
+
+    // Task List
+    getAllTask() {
+        const option = {
+           offset:0,
+           limit:5,
+           orderBy:"id",
+           order:"Desc",
+           search:null,
+        }
+        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
+    }
+     // Create Task
+     createTask(params) {
+        return this.http.put('${baseUrl}',params);
+    }
+
+    //delete Task
+    deleteTask(id: string) {
+        return this.http.delete(`${baseUrl}/user/delete/${id}`)
+            .pipe(finalize(() => {
+                // auto logout if the logged in account was deleted
+                if (id === this.accountValue.id)
+                    this.logout();
+            }));
+    }
+
+    //update Task
+    updateTask(id, params) {
+        return this.http.put(`${baseUrl}/user/update/${id}`, params)
+            .pipe(map((account: any) => {
+                // update the current account if it was updated
+                if (account.id === this.accountValue.id) {
+                    // publish updated account to subscribers
+                    account = { ...this.accountValue, ...account };
+                    this.accountSubject.next(account);
+                }
+                return account;
+            }));
+    }
+
 
     // helper methods
 
