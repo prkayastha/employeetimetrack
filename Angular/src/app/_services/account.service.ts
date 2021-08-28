@@ -72,7 +72,7 @@ export class AccountService {
         return this.http.post(`${baseUrl}/password/change`, { reset: token, password, confirmPassword });
     }
 
-    getAll() {
+    getAll(): Observable<any> {
         const option = {
            offset:0,
            limit:10,
