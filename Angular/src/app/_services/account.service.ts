@@ -7,17 +7,20 @@ import { map, finalize } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Account } from '../_models';
 import { offset } from 'highcharts';
+import { UserDetails } from '../_models/userDetails';
 
 const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
+    
     private accountSubject: BehaviorSubject<Account>;
     public account: Observable<Account>;
 
     constructor(
         private router: Router,
-        private http: HttpClient
+        private http: HttpClient,
+        private user: UserDetails
     ) {
         this.accountSubject = new BehaviorSubject<Account>(null);
         this.account = this.accountSubject.asObservable();
@@ -31,6 +34,7 @@ export class AccountService {
         return this.http.post<any>(`${baseUrl}/auth/check`, { username: email, password })
             .pipe(map(account => {
                 this.accountSubject.next(account);
+                this.user.setDetails(account);
                 // this.startRefreshTokenTimer();
                 return account;
             }));
@@ -72,10 +76,10 @@ export class AccountService {
         return this.http.post(`${baseUrl}/password/change`, { reset: token, password, confirmPassword });
     }
 
-    getAll() {
+    getAll(): Observable<any> {
         const option = {
            offset:0,
-           limit:5,
+           limit:100,
            orderBy:"id",
            order:"Desc",
            search:null,
@@ -118,12 +122,12 @@ export class AccountService {
     getAllProject() {
         const option = {
            offset:0,
-           limit:5,
+           limit:100,
            orderBy:"id",
            order:"Desc",
            search:null,
         }
-        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
+        return this.http.post<any[]>(`${baseUrl}/project/list`, option);
     }
     // Create Project
     createProject(params) {
@@ -192,6 +196,12 @@ export class AccountService {
                 }
                 return account;
             }));
+    }
+
+    getUser(userId: number): Observable<any> {
+        return this.http.get(
+            `${baseUrl}/user/${userId}`
+        )
     }
 
 

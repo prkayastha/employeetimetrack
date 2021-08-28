@@ -29,9 +29,9 @@
         <div class="form-group col">
             <label>Role</label>
             <select formControlName="role" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.role.errors }">
-                <option value=""></option>
-                <option value="User">User</option>
-                <option value="Admin">Admin</option>
+                <option [value]="1">Admin</option>
+                <option [value]="2">Manager</option>
+                <option [value]="3">Employee</option>
             </select>
             <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
                 <div *ngIf="f.role.errors.required">Role is required</div>
