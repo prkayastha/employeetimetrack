@@ -1,41 +1,46 @@
 const NodeCache = require("node-cache");
+const TimerOps = require('../controller/timer');
 
 /**
  * Time to Live for the cache.
  */
-const timeInMin = 5 *60;
-const timeToCheck = 600;
+const timeInMin = 5 * 60;
+const timeToCheck = 10 * 60;
 
 /**
  * Install node cache used for reset link
  */
 const myCache = new NodeCache({
-	stdTTL: timeInMin * 60,
+	stdTTL: timeInMin,
 	checkperiod: timeToCheck,
 	useClones: false,
 	deleteOnExpire: true
 });
 
-myCache.on('expired', (key, value) => {
-	//TODO: Insert in db if expired
-	console.log('Task Cache Expired', 'Insert into DB');
+myCache.on('del', (key, value) => {
+	const category = key.slice(-1);
+	if (category === 'B') {
+		const mainTaskId = key.slice(0, -1);
+		const mainTask = get(mainTaskId);
+		if (!!mainTask) {
+			delete['']
+			mainTask.breaks.push(value);
+		}
+	} else {
+		TimerOps.insert(value);
+	}
 });
 
-setInterval(() => {
-	console.log(myCache.data);
-}, 5000);
-
+myCache.on('expired', (key, value) => {
+	//TODO: Insert in db if expired
+	myCache.del(key);
+});
 
 /**
  * Get the task cache
  * @param {string} key cache key stored in node cache
  */
 const get = (key) => {
-	const cachedTimeStamp = myCache.getTtl(key);
-	const currentTimeStamp = Date.now();
-	if (currentTimeStamp >= cachedTimeStamp) {
-		throw Error('Cache expired');
-	}
 	return myCache.get(key, (err, value) => {
 		if (!!err) {
 			console.error("In Time Cache: Key not found. Requested key -> " + key);
@@ -50,31 +55,90 @@ const get = (key) => {
  */
 const set = (value, userId) => {
 	let cacheId = null;
+	let isBreak = false;
 	if (value.action === 'start') {
 		cacheId = `U${userId}T${value.taskId}`;
 	} else if (value.action === 'pause') {
+		isBreak = true;
 		cacheId = `U${userId}T${value.taskId}B`;
 	}
+	const currentTimeStamp = new Date();
 
-	if (!myCache.has(cacheId)) {
+	if (!myCache.has(cacheId) && !isBreak) {
 		const taskCache = new TaskCache();
 		taskCache.id = cacheId;
 		taskCache.taskId = value.taskId;
 		taskCache.userId = userId;
-		taskCache.startedTime = new Date();
-		taskCache.endTime = new Date();
+		taskCache.startedTime = currentTimeStamp;
+		taskCache.endTime = currentTimeStamp;
 		myCache.set(taskCache.id, taskCache, timeInMin, (err, value) => {
 			if (!!err) {
 				console.error(err);
 			}
 		});
 		return taskCache;
+	} else if (!myCache.has(cacheId) && isBreak) {
+		const cachedTask = get(cacheId.slice(0,-1));
+		if (!cachedTask) {
+			throw Error('Task not started yet');
+		}
+		const taskCache = new TaskCache();
+		taskCache.id = cacheId;
+		taskCache.taskId = value.taskId;
+		taskCache.userId = userId;
+		taskCache.startedTime = currentTimeStamp;
+		taskCache.endTime = currentTimeStamp;
+		myCache.set(taskCache.id, taskCache, timeInMin, (err, value) => {
+			if (!!err) {
+				console.error(err);
+			}
+		});
+
+		cachedTask.endTime = currentTimeStamp;
+		myCache.ttl(cacheId.slice(0,-1), timeInMin);
+
+		return taskCache;
 	} else {
 		const cachedData = get(cacheId);
-		cachedData.endTime = new Date();
+		cachedData.endTime = currentTimeStamp;
 		myCache.ttl(cacheId, timeInMin);
+
+		if (isBreak) {
+			const mainTask = get(cacheId.slice(0,-1));
+			mainTask.endTime = currentTimeStamp;
+			myCache.ttl(cacheId, timeInMin);
+		} else {
+			const breakTask = get(cacheId+'B');
+			if (!!breakTask) {
+				breakTask.endTime = currentTimeStamp;
+				myCache.del(cacheId+'B');
+			}
+		}
 		return cachedData;
 	}
+}
+
+const remove = (value, userId) => {
+	const cacheId = `U${userId}T${value.taskId}`;
+	const cacheIdForBreak = `U${userId}T${value.taskId}B`;
+	const returnData = [];
+	const currentTimeStamp = new Date();
+
+	if (myCache.has(cacheIdForBreak)) {
+		const cachedDataBreak = get(cacheIdForBreak);
+		cachedDataBreak.endTime = currentTimeStamp;
+		returnData.push(Object.assign({}, cachedDataBreak));
+		myCache.del(cacheIdForBreak);
+	}
+
+	if (myCache.has(cacheId)) {
+		const cachedData = get(cacheId);
+		cachedData.endTime = currentTimeStamp;
+		returnData.push(Object.assign({}, cachedData));
+		myCache.del(cacheId);
+	}
+
+	return returnData.reverse();
 }
 
 /**
@@ -92,6 +156,7 @@ class TaskCache {
 		this.userId = 0;
 		this.startedTime = null
 		this.endTime = null;
+		this.breaks = [];
 	}
 }
 
@@ -102,5 +167,6 @@ class TaskCache {
  */
 module.exports = {
 	get,
-	set
+	set,
+	remove
 };
