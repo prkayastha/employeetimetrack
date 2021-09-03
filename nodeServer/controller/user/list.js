@@ -2,13 +2,14 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 const models = require('../../models');
+const getUserRole = require('./getUserRole');
 
 /**
  * function to list all the users
  * @param {Object} options list options
  */
 const list = async function (options, operatorInfo) {
-    const operatorRole =await getOperatorRole(operatorInfo);
+    const operatorRole =await getUserRole(operatorInfo.id);
 
     const whereCondition = {
         deleted: false
@@ -62,20 +63,5 @@ const list = async function (options, operatorInfo) {
         return Promise.resolve({ count, collection });
     });
 };
-
-async function getOperatorRole(operatorInfo) {
-    const query = 'SELECT `role`.* FROM UserRoles `userRole` INNER JOIN Roles `role` ON\
-    `userRole`.`RoleId` = `role`.`id` WHERE `userRole`.`userId` = :userId;';
-
-    const result = await models.sequelize.query(
-        query,
-        {
-            type: Sequelize.QueryTypes.SELECT,
-            replacements: { userId: operatorInfo.id }
-        }
-    );
-
-    return result[0];
-}
 
 module.exports = list;

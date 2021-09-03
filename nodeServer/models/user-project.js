@@ -13,5 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false,
         version: false
     });
+    UserProject.associate = function (models) {
+        models.UserProject.belongsTo(models.Project);
+    }
     return UserProject;
 };
