@@ -48,7 +48,18 @@ function getUser(userId) {
     const whereCondition = { id: userId, deleted: false };
     return models.Users.findOne({
         include: [
-            { model: models.Roles, as: 'roles' }
+            { 
+                model: models.Roles, 
+                as: 'roles',
+                required: false
+            },
+            { 
+                model: models.Project, 
+                required: false,
+                as: 'projects',
+                attributes: ['id', 'projectName'],
+                where: { isDelete: false }
+            }
         ],
         where: whereCondition
     }).then(user => {
@@ -59,10 +70,11 @@ function getUser(userId) {
             throw error;
         }
 
-        const userCp = { ... user.dataValues};
+        const userCp = { ...user.dataValues };
         userCp.roles = userCp.roles.map(role => {
-            return {id: role.id, role: role.role}
+            return { id: role.id, role: role.role }
         });
+        userCp.projects = userCp.projects.map(project => ({id: project.id, name: project.projectName}));
 
         return Promise.resolve(userCp);
     });
