@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
             firstname: ['', Validators.required],
             lastname: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(6)]],
+            password: ['', [Validators.required, Validators.minLength(8)]],
             confirmPassword: ['', Validators.required],
             acceptTerms: [false, Validators.requiredTrue]
         }, {
@@ -53,7 +53,7 @@ export class RegisterComponent implements OnInit {
             .pipe(first())
             .subscribe({
                 next: () => {
-                    this.alertService.success('Registration successful, please check your email for verification instructions', { keepAfterRouteChange: true });
+                    this.alertService.success('Registration successful, you can now login with your email', { keepAfterRouteChange: true });
                     this.router.navigate(['/'], { relativeTo: this.route });
                 },
                 error: error => {
