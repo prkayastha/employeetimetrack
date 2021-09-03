@@ -93,6 +93,8 @@ router.get('/activate/:hash', function (req, res) {
 router.post('/list',
   allow([ROLES.ADMIN, ROLES.MANAGER]),
   function (req, res) {
+    const jwtPayload = jwtDecoder(req);
+
     const offset = req.body.offset || 0;
     const limit = req.body.limit || 10;
     const order = [[
@@ -100,8 +102,14 @@ router.post('/list',
       req.body.order
     ]];
     const searchQuery = req.body.search || '';
+    const options = {
+      offset,
+      limit,
+      orders: order,
+      searchQuery
+    };
 
-    userOperation.list(offset, limit, order, searchQuery).then(users => {
+    userOperation.list(options, jwtPayload).then(users => {
       res.send(users);
     }).catch(error => {
       errorHandler(res, error);

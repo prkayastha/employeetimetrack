@@ -66,6 +66,19 @@ async function canAccessProject(operatorInfo, projectId) {
         return false;
     } else {
         //TODO: employee can access the project only if s/he is assigned to it.
+        const query = 'SELECT * FROM UserProjects `userProject` where `userProject`.`UserId` = :userId AND `userProject`.`ProjectId` = :projectId LIMIT 1';
+
+        const roleRow = await models.sequelize.query(
+            query,
+            {
+                type: models.Sequelize.QueryTypes.SELECT,
+                replacements: { userId: operatorInfo.id, projectId }
+            }
+        );
+
+        if (roleRow.length < 1) {
+            return false;
+        }
         return true;
     }
 }
