@@ -5,19 +5,16 @@ const models = require('../../models');
 
 /**
  * function to list all the users
- * @param {number} offset offset of the row
- * @param {number} limit limit of the rows to be returned
- * @param {<Array>[]} orders list of arrays to be order by. eg [['username', 'asc'], ['email', 'asc']]
- * @param {string} searchString search value
+ * @param {Object} options list options
  */
-const list = function (offset, limit, orders, searchString) {
+const list = function (options) {
     const whereCondition = {
         deleted: false
     };
-    const offsetRows = offset || 0;
-    const limitRows = limit || 10;
+    const offsetRows = options.offset || 0;
+    const limitRows = options.limit || 10;
     
-    searchString = searchString.trim()+'%';
+    let searchString = options.searchQuery.trim()+'%';
     if (searchString != null && searchString.trim() !== '') {
         whereCondition[Op.or] = [
             {
@@ -38,8 +35,8 @@ const list = function (offset, limit, orders, searchString) {
         where: whereCondition
     };
 
-    if (orders != null && orders.length > 0) {
-        listQuery.order = orders;
+    if (options.orders != null && options.orders.length > 0) {
+        listQuery.order = options.orders;
     }
 
     const cpListQuery = {

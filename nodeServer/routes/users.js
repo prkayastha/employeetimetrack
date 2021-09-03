@@ -100,8 +100,14 @@ router.post('/list',
       req.body.order
     ]];
     const searchQuery = req.body.search || '';
+    const options = {
+      offset,
+      limit,
+      orders: order,
+      searchQuery
+    };
 
-    userOperation.list(offset, limit, order, searchQuery).then(users => {
+    userOperation.list(options).then(users => {
       res.send(users);
     }).catch(error => {
       errorHandler(res, error);
