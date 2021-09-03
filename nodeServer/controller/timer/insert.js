@@ -16,6 +16,6 @@ module.exports = async function (timer) {
         timerId: result.id
     }));
 
-    const breakResult = await models.Timer.bulkCreate(breaksInsert);
+    const breakResult = await models.Break.bulkCreate(breaksInsert);
     return breakResult; 
 }
