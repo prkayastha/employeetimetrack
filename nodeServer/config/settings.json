@@ -5,6 +5,7 @@
         "seperateUsername": false,
         "sendConfirmationEmail": false,
         "checkActive": false,
+        "passwordPattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-@$!%*?&])[A-Za-z\\d@$!%*?&-]{8,}",
         "authentication": {
             "preventPasswordHistory": 3,
             "maxFailedAttemp": 5,
@@ -21,6 +22,7 @@
         "seperateUsername": false,
         "sendConfirmationEmail": false,
         "checkActive": false,
+        "passwordPattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-@$!%*?&])[A-Za-z\\d@$!%*?&-]{8,}",
         "authentication": {
             "preventPasswordHistory": 3,
             "maxFailedAttemp": 5,
@@ -37,6 +39,7 @@
         "seperateUsername": false,
         "sendConfirmationEmail": false,
         "checkActive": false,
+        "passwordPattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-@$!%*?&])[A-Za-z\\d@$!%*?&-]{8,}",
         "authentication": {
             "preventPasswordHistory": 3,
             "maxFailedAttemp": 5,
