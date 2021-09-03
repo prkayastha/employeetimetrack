@@ -9,7 +9,7 @@ const settings = require('../../config/settings.json')[env];
 const UnauthorizedError = require('../../prototypes/responses/authorization/unauthorized');
 const UserNotFoundError = require('../../prototypes/responses/user/error.user.not.found');
 const OptimisticLockError = require('../../prototypes/responses/optimistic-lock-error');
-const { sequelize } = require('../../models');
+const { sequelize, Sequelize } = require('../../models');
 
 /**
  * function to update user by id. Attribute that are to be updated must be passed. All the other attributes are ignored.
@@ -77,8 +77,8 @@ const update = function (operatorInfo, userId, infoToUpdate) {
                     throw error;
                 }
 
-                if (!!infoToUpdate.Roles) {
-                    return updateRoles(infoToUpdate.roles, userId);
+                if (!!infoToUpdate.roles) {
+                    return updateRoles(infoToUpdate.roles.filter(role => role != 1), userId);
                 }
 
                 return true;
@@ -86,7 +86,22 @@ const update = function (operatorInfo, userId, infoToUpdate) {
         } else if (cacheOperatorRole === 'MANAGER') {
             promise = models.Users.update(updateData, {
                 where: whereCondition
+            }).then(result => {
+                if (result < 0) {
+                    const message = stringResources.error.user.updateFailure;
+                    const error = new UserUpdateError(stringUtils.format(message, userId));
+                    error.statusCode = 400;
+                    throw error;
+                }
+
+                if (!!infoToUpdate.projects) {
+                    return updateProject(infoToUpdate.projects, userId, operatorInfo.id);
+                }
+
+                return true;
             });
+
+
         }
 
         return promise.then(result => {
@@ -126,6 +141,43 @@ function updateRoles(roles, userId) {
         return result[1];
     });
 
+}
+
+function updateProject(projects, userId, projectOwnerId) {
+    const delQuery = 'DELETE `userProject` FROM UserProjects `userProject` INNER JOIN Projects `project`\
+    ON `userProject`.`ProjectId` = `project`.`Id` WHERE `userProject`.UserId = ? AND `project`.projectOwnerUserId = ?;';
+
+    let userProjectRows = projects.map(project => ({ ProjectId: project, UserId: +userId }));
+
+    return sequelize.transaction(async (t) => {
+        const delOperation = sequelize.query(
+            delQuery,
+            {
+                replacements: [userId, projectOwnerId],
+                type: Sequelize.QueryTypes.DELETE,
+                transaction: t
+            }
+        );
+
+        const getProjectOwner = await models.Project.findAll({
+            attributes: ['id'],
+            where: { projectOwnerUserId: projectOwnerId },
+            transaction: t
+        });
+
+        userProjectRows = userProjectRows.filter(row => !!getProjectOwner.find(project => project.id == row.ProjectId));
+
+        const insertOperation = models.UserProject.bulkCreate(
+            userProjectRows,
+            { transaction: t }
+        );
+
+        return delOperation.then(_ => {
+            return insertOperation;
+        });
+    }).then(result => {
+        return result[1];
+    });
 }
 
 function getOperatorInfo(operatorId) {
