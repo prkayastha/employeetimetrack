@@ -23,7 +23,7 @@ myCache.on('del', (key, value) => {
 		const mainTaskId = key.slice(0, -1);
 		const mainTask = get(mainTaskId);
 		if (!!mainTask) {
-			delete['']
+			delete value['breaks'];
 			mainTask.breaks.push(value);
 		}
 	} else {
