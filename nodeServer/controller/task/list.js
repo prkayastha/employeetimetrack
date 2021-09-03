@@ -24,6 +24,9 @@ module.exports = async function (operatorInfo, options, projectId) {
     const queryOptions = {
         offset: +options.offset,
         limit: +options.limit,
+        attributes: {
+            include: [[Sequelize.fn('duration', Sequelize.col(`id`), operatorInfo.id),'timeDuration']]
+        },
         order: [[options.orderBy, options.order]],
         where: whereObj 
     };
