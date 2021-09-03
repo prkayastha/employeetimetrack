@@ -38,7 +38,7 @@ module.exports = async function (operatorInfo, taskId) {
 async function canDeleteTask(operationInfo, projectId) {
     const userId = operationInfo.id;
     const query = 'SELECT `userroles`.`UserId`, `userroles`.`RoleId`, `roles`.`role` \
-    FROM `user_management`.`userroles` `userroles` INNER JOIN `user_management`.`roles` \
+    FROM `user_management`.`UserRoles` `userroles` INNER JOIN `user_management`.`Roles` \
     `roles` ON `userroles`.`RoleId` = `roles`.`id` WHERE `userroles`.`UserId` = :userId LIMIT 1';
 
     let row = await models.sequelize.query(
