@@ -46,7 +46,7 @@ router.delete('/delete/:id',async (req, res) => {
 
 router.get('/getAll', async (req, res) => {
     const options = {
-        limit: 0,
+        limit: null,
         offset: 0,
         orderBy: 'projectName',
         order: 'ASC',
