@@ -39,6 +39,7 @@ build/Release
 
 # Dependency directories
 nodeServer/node_modules/
+nodeServer/public/*
 angularServer/node_modules/
 node_modules/
 jspm_packages/
