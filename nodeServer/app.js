@@ -26,7 +26,8 @@ const noAuthRoute = [
     '/user/register',
     '/trello/api/oauth/requestToken',
     /\/trello\/oauth\/callbackUrl\/*/,
-    /\/password\/*/
+    /\/password\/*/,
+    /\/public\/*/
 ];
 
 // view engine setup
@@ -38,7 +39,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/capture', express.static(path.join(__dirname, 'public/captures')));
 app.use(cors());
 
 db.sync();
@@ -52,12 +53,6 @@ app.use('/trello', trello);
 app.use('/project', project);
 app.use('/task', task);
 app.use('/time', time);
-
-/* resource apis */
-/*app.post('/api/trello/userInfo', trello.getUserInfo);
-app.post('/api/trello/boards', trello.getTrelloBoardsByUser);
-app.post('/api/trello/boardLists', trello.getTrelloBoardLists);
-app.post('/api/trello/boardListCards', trello.getCardsInList);*/
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

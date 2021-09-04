@@ -1,6 +1,6 @@
 {
     "development": {
-        "apiURL": "http://locahost:3000",
+        "apiURL": "http://localhost:3000",
         "appUrl": "http://localhost:4200",
         "seperateUsername": false,
         "sendConfirmationEmail": false,
@@ -17,7 +17,7 @@
         "tokenSecret": "My Secret Key"
     },
     "test":{
-        "apiURL": "http://locahost:3000",
+        "apiURL": "http://localhost:3000",
         "appUrl": "http://localhost:4200",
         "seperateUsername": false,
         "sendConfirmationEmail": false,
