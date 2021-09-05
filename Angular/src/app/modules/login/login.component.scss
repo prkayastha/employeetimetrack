@@ -1,0 +1,54 @@
+.container-fluid {
+    display: flex;
+    justify-content: center;
+
+    .content {
+        display: relative;
+        width: 30%;
+
+        .mt-5{
+            margin-top: 8rem !important;
+        }
+    }
+}
+
+.card {
+
+    .card-body {
+        padding: 3rem;
+    }
+
+    h3 {
+        color: #007bff;
+    }
+
+    .login-description {
+        margin-top: 20px;
+        
+        h5 {
+            font-size: 1.5rem;
+        }
+    
+        p {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+    }
+}
+
+.link-grp {
+    height: 28px;
+    a {
+        &:first-child {
+            position: absolute;
+            left: 0;
+            padding-left: 3rem;
+        }
+        &:last-child {
+            position: absolute;
+            right: 0;
+            padding-right: 3rem;
+        }
+    }
+}
+

@@ -1,0 +1,17 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <button mat-icon-button (click)="toggleSideBar()">
+            <mat-icon>menu</mat-icon>
+        </button>
+
+        <span> Employee Time Tracking App </span>
+
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+            <ul fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="end center">
+                <li>
+                    <button type="button" class="btn btn-outline-light" (click)="logout()">Sign out</button>
+                </li>
+            </ul>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>

@@ -1,38 +1,65 @@
-﻿import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
-// used to create fake backend
-import { fakeBackendProvider } from './_helpers';
-
 import { AppRoutingModule } from './app-routing.module';
-import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers';
-import { AccountService } from './_services';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DefaultModule } from './layouts/default/default.module';
+import { LoginComponent } from './modules/login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RegisterComponent } from './modules/register/register.component';
+import { ForgotPasswordComponent } from './modules/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './modules/reset-password/reset-password.component';
 import { AlertComponent } from './_components';
-import { HomeComponent } from './home';
+import { VerifyEmailComponent } from './modules/verify-email/verify-email.component';
+import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
+import { UpdateUserComponent } from './modules/update-user/update-user.component';
+import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
+import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers';
+import { ProjectListComponent } from './modules/project/project-list/project-list.component';
+import { CreateProjectComponent } from './modules/project/create-project/create-project.component';
+import { UpdateProjectComponent } from './modules/project/update-project/update-project.component';
+import { TaskListComponent } from './modules/task/task-list/task-list.component';
+import { UpdateTaskComponent } from './modules/task/update-task/update-task.component';
+import { CreateTaskComponent } from './modules/task/create-task/create-task.component';
+import { NgxLocalStorageModule, LocalStorageService } from 'ngx-localstorage';
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        AppRoutingModule
-    ],
-    declarations: [
-        AppComponent,
-        AlertComponent,
-        HomeComponent
-    ],
-    providers: [
-        { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RegisterComponent,
+    AlertComponent,
+    ResetPasswordComponent,
+    ForgotPasswordComponent,
+    VerifyEmailComponent,
+    EmployeeListComponent,
+    UpdateUserComponent,
+    WorkdiaryComponent,
+    ProjectListComponent,
+    CreateProjectComponent,
+    UpdateProjectComponent,
+    TaskListComponent,
+    UpdateTaskComponent,
+    CreateTaskComponent,
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    DefaultModule,
+    ReactiveFormsModule,
+    NgxLocalStorageModule.forRoot()
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    LocalStorageService
 
-        // provider used to create fake backend
-        fakeBackendProvider
-    ],
-    bootstrap: [AppComponent]
+  ],
+  bootstrap: [AppComponent],
+  
+
 })
 export class AppModule { }

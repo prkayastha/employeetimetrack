@@ -1,26 +1,55 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { HomeComponent } from './home';
+import { DefaultComponent } from './layouts/default/default.component';
+import { DashboardComponent } from './modules/dashboard/dashboard.component';
+import { LoginComponent } from './modules/login/login.component';
+import { RegisterComponent } from './modules/register/register.component';
+import { VerifyEmailComponent } from './modules/verify-email/verify-email.component';
+import { ForgotPasswordComponent } from './modules/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './modules/reset-password/reset-password.component';
+import { LayoutComponent } from './modules/layout/layout.component';
+import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
+import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
+import { UpdateUserComponent } from './modules/update-user/update-user.component';
 import { AuthGuard } from './_helpers';
-import { Role } from './_models';
+import { ProjectListComponent } from './modules/project/project-list/project-list.component';
 
-const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
-const adminModule = () => import('./admin/admin.module').then(x => x.AdminModule);
-const profileModule = () => import('./profile/profile.module').then(x => x.ProfileModule);
 
 const routes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-    { path: 'account', loadChildren: accountModule },
-    { path: 'profile', loadChildren: profileModule, canActivate: [AuthGuard] },
-    { path: 'admin', loadChildren: adminModule, canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
+  { path: '', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'forget-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'verify-email', component: VerifyEmailComponent },
 
-    // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+
+  {
+    path: 'home',
+    component: DefaultComponent, canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      }, {
+        path: 'employee-list',
+        component: EmployeeListComponent
+      },
+      {
+        path: 'update/:userId', component: UpdateUserComponent
+      },
+      {
+        path: 'workdiary', component: WorkdiaryComponent
+      },
+      { 
+        path: 'projects', component: ProjectListComponent 
+      }
+    ]
+  }
+
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }
