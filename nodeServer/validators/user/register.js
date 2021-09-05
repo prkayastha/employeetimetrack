@@ -22,10 +22,6 @@ module.exports = checkSchema({
     },
     password: {
         in: 'body',
-        exists: true,
-        isLength: {
-            options: {min: 8},
-            errorMessage: 'Password should atleast be 8 characters in length'
-        }
+        exists: true
     }
 });

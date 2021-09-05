@@ -1,4 +1,4 @@
-From node:9-slim
+From node:12.18.1
 
 RUN mkdir -p /app
 

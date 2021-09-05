@@ -6,6 +6,8 @@ const get = require('./get-user');
 const update = require('./update');
 const changePassword = require('../authenticate/changePassword');
 const getByUsername = require('./get-user-username');
+const getUserRole = require('./getUserRole');
+const listUserByRole = require('./listUserWithRole');
 
 module.exports = {
     add,
@@ -15,5 +17,7 @@ module.exports = {
     get,
     update,
     changePassword,
-    getByUsername
+    getByUsername,
+    getUserRoleById: getUserRole,
+    listUserByRole
 };

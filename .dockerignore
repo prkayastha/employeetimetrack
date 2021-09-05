@@ -1,1 +1,4 @@
 ./nodeServer/node_modules/
+./nodeServer/public/captures
+
+./Angular/node_modules/

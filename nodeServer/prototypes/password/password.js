@@ -2,6 +2,8 @@
 const crypto = require('crypto');
 const env = process.env.NODE_ENV || 'development';
 const settings = require('../../config/settings.json')[env];
+const PasswordPatternError = require('../../prototypes/responses/password/password-pattern.error');
+const stringRes = require('../../resources/string/resources');
 
 class Password {
     constructor() {
@@ -12,6 +14,13 @@ class Password {
     static setPassword(userId, password) {
         const passwordObject = new Password();
         passwordObject.UserId = userId;
+
+        if (!!settings.passwordPattern) {
+            const checkPattern = isPatternCorrect(password);
+            if (!checkPattern) {
+                throw new PasswordPatternError(stringRes.error.password.patternError);
+            }
+        }
 
         return generatePassword(password).then(hashPassword => {
             passwordObject.password = hashPassword;
@@ -41,6 +50,12 @@ const comparePassword = function(plainText, hashedString) {
         }
         return Promise.resolve(true);
     })
+}
+
+const isPatternCorrect = function (password) {
+    const pattern = settings.passwordPattern;
+    const regex = new RegExp(pattern);
+    return regex.test(password);
 }
 
 module.exports = Password;

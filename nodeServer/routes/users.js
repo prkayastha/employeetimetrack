@@ -49,21 +49,21 @@ router.post('/add', function (req, res) {
 });
 
 /* update user information */
-router.put('/update/:userId', 
-allow([ROLES.ADMIN, ROLES.MANAGER]),
-function (req, res) {
-  const userId = req.params.userId;
-  const user = new User();
-  user.setData(req.body, settings.seperateUsername);
+router.put('/update/:userId',
+  allow([ROLES.ADMIN, ROLES.MANAGER]),
+  function (req, res) {
+    const userId = req.params.userId;
+    const user = new User();
+    user.setData(req.body, settings.seperateUsername);
 
-  const payload = jwtDecoder(req);
+    const payload = jwtDecoder(req);
 
-  userOperation.update(payload, userId, user).then(userResponse => {
-    res.send(userResponse);
-  }).catch(error => {
-    errorHandler(res, error);
+    userOperation.update(payload, userId, user).then(userResponse => {
+      res.send(userResponse);
+    }).catch(error => {
+      errorHandler(res, error);
+    });
   });
-});
 
 /* Delete user by Id */
 router.delete('/delete/:userId',
@@ -93,6 +93,8 @@ router.get('/activate/:hash', function (req, res) {
 router.post('/list',
   allow([ROLES.ADMIN, ROLES.MANAGER]),
   function (req, res) {
+    const jwtPayload = jwtDecoder(req);
+
     const offset = req.body.offset || 0;
     const limit = req.body.limit || 10;
     const order = [[
@@ -100,12 +102,29 @@ router.post('/list',
       req.body.order
     ]];
     const searchQuery = req.body.search || '';
+    const options = {
+      offset,
+      limit,
+      orders: order,
+      searchQuery
+    };
 
-    userOperation.list(offset, limit, order, searchQuery).then(users => {
+    userOperation.list(options, jwtPayload).then(users => {
       res.send(users);
     }).catch(error => {
       errorHandler(res, error);
     });
+  });
+
+router.get('/getAllManager',
+  allow([ROLES.ADMIN, ROLES.MANAGER]),
+  async (req, res) => {
+    try {
+      const list = await userOperation.listUserByRole(2);
+      res.status(200).send(list);
+    } catch (error) {
+      errorHandler(res, error);
+    }
   });
 
 /* get users by id */

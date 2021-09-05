@@ -17,6 +17,7 @@ class Users {
 		this.updatedAt = null;
 		this.version = 0;
 		this.roles = null;
+		this.projects = null;
 		this.firstname = null;
 		this.lastname = null;
 	}

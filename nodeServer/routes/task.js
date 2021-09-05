@@ -2,12 +2,15 @@
 
 const express = require('express');
 const router = express.Router();
+const path= require('path');
+const fs = require('fs');
 
 const operations = require('../controller/task');
 const jwtDecode = require('../utils/jwt-decode');
 const errorHandler = require('../controller/errorHandler');
 
 const Task = require('../prototypes/task/task.model');
+const caputres = require('../controller/captures');
 
 router.post('/upsert', async (req, res) => {
     const taskInfo = new Task(req.body);
@@ -19,6 +22,18 @@ router.post('/upsert', async (req, res) => {
         errorHandler(res, error);
     }
 });
+
+router.post('/screenshot',
+    caputres.upload.single('capture'),
+    async (req, res) => {
+        const jwtPayload = jwtDecode(req);
+        try {
+            const result = await caputres.rename(req, jwtPayload);
+            res.status(200).send(result);
+        } catch (error) {
+            errorHandler(res, error);
+        }
+    });
 
 router.post('/:id', async (req, res) => {
     const jwtPayload = jwtDecode(req);
@@ -48,9 +63,5 @@ router.delete('/delete/:id', async (req, res) => {
         errorHandler(res, error);
     }
 });
-
-/* router.get('/:id', (req, res) => {
-
-}); */
 
 module.exports = router;

@@ -17,6 +17,9 @@ const messages = {
     task: {
         deleteSuccess: 'Task with id {0} has been successfully delete from the system'
     },
+    screenshot: {
+        updateScreenshot: 'Screenshot has been updated'
+    },
     error: {
         user: {
             multipleEmail: 'User exists in the system.',
@@ -36,7 +39,8 @@ const messages = {
             passwordExpireError: 'Password has reached it\'s maximum life.',
             accountLocked: 'Your account has been locked. Please contact adminstrator.',
             unauthorizedlink: 'The link is incorrect. Please check the link again.',
-            oldPasswordNotMatch: 'The old password is not correct'
+            oldPasswordNotMatch: 'The old password is not correct',
+            patternError: 'Password must be at least 8 character, must contain an upper case and a lower case, must contain a special character and must contain at least a number'
         },
         authorization: {
             unauthorize: 'The user is not authorized by roles',

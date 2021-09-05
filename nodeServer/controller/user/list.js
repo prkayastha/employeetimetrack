@@ -2,22 +2,22 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 const models = require('../../models');
+const getUserRole = require('./getUserRole');
 
 /**
  * function to list all the users
- * @param {number} offset offset of the row
- * @param {number} limit limit of the rows to be returned
- * @param {<Array>[]} orders list of arrays to be order by. eg [['username', 'asc'], ['email', 'asc']]
- * @param {string} searchString search value
+ * @param {Object} options list options
  */
-const list = function (offset, limit, orders, searchString) {
+const list = async function (options, operatorInfo) {
+    const operatorRole =await getUserRole(operatorInfo.id);
+
     const whereCondition = {
         deleted: false
     };
-    const offsetRows = offset || 0;
-    const limitRows = limit || 10;
-    
-    searchString = searchString.trim()+'%';
+    const offsetRows = options.offset || 0;
+    const limitRows = options.limit || 10;
+
+    let searchString = options.searchQuery.trim() + '%';
     if (searchString != null && searchString.trim() !== '') {
         whereCondition[Op.or] = [
             {
@@ -38,8 +38,14 @@ const list = function (offset, limit, orders, searchString) {
         where: whereCondition
     };
 
-    if (orders != null && orders.length > 0) {
-        listQuery.order = orders;
+    if(operatorRole.id == 2) { // manager role
+        listQuery.include[0]['where'] = {
+            id: 3
+        }
+    }
+
+    if (options.orders != null && options.orders.length > 0) {
+        listQuery.order = options.orders;
     }
 
     const cpListQuery = {
@@ -47,14 +53,14 @@ const list = function (offset, limit, orders, searchString) {
     };
     const countUser = models.Users.count(cpListQuery);
     const userCollection = models.Users.findAll(listQuery)
-    
+
     return Promise.all([countUser, userCollection]).then(([count, collection]) => {
         collection = collection.map(user => {
-            const dataCp = {...user.dataValues};
-            dataCp.roles = dataCp.roles.map(role => ({id: role.id, role: role.role}));
+            const dataCp = { ...user.dataValues };
+            dataCp.roles = dataCp.roles.map(role => ({ id: role.id, role: role.role }));
             return dataCp;
         });
-        return Promise.resolve({count, collection});
+        return Promise.resolve({ count, collection });
     });
 };
 

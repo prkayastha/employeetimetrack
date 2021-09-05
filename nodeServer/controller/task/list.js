@@ -24,6 +24,9 @@ module.exports = async function (operatorInfo, options, projectId) {
     const queryOptions = {
         offset: +options.offset,
         limit: +options.limit,
+        attributes: {
+            include: [[Sequelize.fn('duration', Sequelize.col(`id`), operatorInfo.id, '+09:30'),'timeDuration']]
+        },
         order: [[options.orderBy, options.order]],
         where: whereObj 
     };
@@ -42,7 +45,7 @@ module.exports = async function (operatorInfo, options, projectId) {
 async function canAccessProject(operatorInfo, projectId) {
     const userId = operatorInfo.id;
     const query = 'SELECT `userroles`.`UserId`, `userroles`.`RoleId`, `roles`.`role` \
-    FROM `user_management`.`userroles` `userroles` INNER JOIN `user_management`.`roles` \
+    FROM `user_management`.`UserRoles` `userroles` INNER JOIN `user_management`.`Roles` \
     `roles` ON `userroles`.`RoleId` = `roles`.`id` WHERE `userroles`.`UserId` = :userId LIMIT 1';
 
     let row = await models.sequelize.query(
@@ -63,6 +66,19 @@ async function canAccessProject(operatorInfo, projectId) {
         return false;
     } else {
         //TODO: employee can access the project only if s/he is assigned to it.
+        const query = 'SELECT * FROM UserProjects `userProject` where `userProject`.`UserId` = :userId AND `userProject`.`ProjectId` = :projectId LIMIT 1';
+
+        const roleRow = await models.sequelize.query(
+            query,
+            {
+                type: models.Sequelize.QueryTypes.SELECT,
+                replacements: { userId: operatorInfo.id, projectId }
+            }
+        );
+
+        if (roleRow.length < 1) {
+            return false;
+        }
         return true;
     }
 }

@@ -11,6 +11,7 @@ const ProjectCreateUpdateError = require('../../prototypes/responses/project/pro
 const ProjectDeleteError = require('../../prototypes/responses/project/project-delete.error');
 const ProjectNotFoundError = require('../../prototypes/responses/project/project-not-found.error');
 const TaskNotFoundError = require('../../prototypes/responses/task/task-not-found.error');
+const PasswordPatternError = require('../../prototypes/responses/password/password-pattern.error');
 
 /**
  * function to handle the errors
@@ -31,7 +32,8 @@ const handle = function(res, error) {
             || error instanceof ProjectCreateUpdateError
             || error instanceof ProjectDeleteError
             || error instanceof ProjectNotFoundError
-            || error instanceof TaskNotFoundError): {
+            || error instanceof TaskNotFoundError
+            || error instanceof PasswordPatternError): {
             response = {
                 statusCode: error.statusCode || 500,
                 message: error.message
