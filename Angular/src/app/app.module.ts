@@ -23,6 +23,9 @@ import { TaskListComponent } from './modules/task/task-list/task-list.component'
 import { UpdateTaskComponent } from './modules/task/update-task/update-task.component';
 import { CreateTaskComponent } from './modules/task/create-task/create-task.component';
 import { NgxLocalStorageModule, LocalStorageService } from 'ngx-localstorage';
+import { LayoutComponent } from './modules/layout/layout.component';
+import { PostsComponent } from './modules/posts/posts.component';
+import { ProjectsComponent } from './modules/projects/projects.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +45,9 @@ import { NgxLocalStorageModule, LocalStorageService } from 'ngx-localstorage';
     TaskListComponent,
     UpdateTaskComponent,
     CreateTaskComponent,
+    LayoutComponent, //TODO: refactor
+    PostsComponent, //TODO: refactor
+    ProjectsComponent  //TODO: refactor
   ],
   imports: [
     BrowserModule,

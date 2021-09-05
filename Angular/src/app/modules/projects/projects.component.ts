@@ -12,6 +12,7 @@ import { Account } from '../../_models';
 })
 export class ProjectsComponent implements OnInit {
 
+  accounts: any = [];
   constructor() { }
 
   ngOnInit() {

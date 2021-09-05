@@ -12,7 +12,7 @@ export class SidebarComponent implements OnInit{
   Role=Role;
   account=Account;
 
-  constructor(private accountService:AccountService,private user:UserDetails) { 
+  constructor(private accountService:AccountService,public user:UserDetails) { 
     console.log(user.role);
     //this.accountService.account.subscribe(x=>this.account=x);
   }
