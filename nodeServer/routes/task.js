@@ -26,8 +26,9 @@ router.post('/upsert', async (req, res) => {
 router.post('/screenshot',
     caputres.upload.single('capture'),
     async (req, res) => {
+        const jwtPayload = jwtDecode(req);
         try {
-            const result = await caputres.rename(req);
+            const result = await caputres.rename(req, jwtPayload);
             res.status(200).send(result);
         } catch (error) {
             errorHandler(res, error);

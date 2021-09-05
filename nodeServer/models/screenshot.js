@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Screenshots.associate = function(models) {
     // associations can be defined here
     models.Screenshot.belongsTo(models.Task);
+    models.Screenshot.belongsTo(models.Users, {foreignKey: 'assigneeUserId'})
   };
   return Screenshots;
 };

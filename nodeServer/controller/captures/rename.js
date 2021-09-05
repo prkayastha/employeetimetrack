@@ -6,7 +6,7 @@ const fs = require('fs'),
 const SuccessResponse = require('../../prototypes/responses/global.success');
 const saveInDb = require('./_saveInDb');
 
-module.exports = async function (req) {
+module.exports = async function (req, userInfo) {
     const pathName = path.join(__dirname, '../../public/captures');
     const fileExt = req.file.originalname.split('.')[1];
     const oldPath = path.join(pathName, req.file.filename);
@@ -19,7 +19,7 @@ module.exports = async function (req) {
     response['url'] = url;
     response['taskId'] = req.body.taskId;
 
-    const result = saveInDb(response);
+    const result = saveInDb(response, userInfo.id);
 
     return result;
 }
