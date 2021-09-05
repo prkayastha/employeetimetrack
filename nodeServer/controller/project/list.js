@@ -4,7 +4,7 @@ const Op = Sequelize.Op
 
 const userOperation = require('../user');
 
-module.exports = async function (operatorInfo, options) {
+module.exports = async function (operatorInfo, options, includeNested = true) {
     const operatorRole = await userOperation.getUserRoleById(operatorInfo.id);
 
     const listQuery = {};
@@ -14,7 +14,7 @@ module.exports = async function (operatorInfo, options) {
     let list = null;
     let count = null;
 
-    if (operatorRole.roleId == 2 || operatorRole.roleId == 1) { //manager role
+    if (operatorRole.id == 2 || operatorRole.id == 1) { //manager role
 
         listQuery.where = { isDelete: false };
 
@@ -22,22 +22,24 @@ module.exports = async function (operatorInfo, options) {
 
         if (!!options.search) { listQuery.where['projectName'] = { [Op.like]: options.search.trim() + '%' } }
 
-        listQuery.include = [
-            {
-                model: models.Users,
-                as: 'createdBy',
-                attributes: ['firstname', 'lastname']
-            },
-            {
-                model: models.Users,
-                as: 'projectOwner',
-                attributes: ['firstname', 'lastname']
-            }
-        ];
+        if (includeNested) {
+            listQuery.include = [
+                {
+                    model: models.Users,
+                    as: 'createdBy',
+                    attributes: ['firstname', 'lastname']
+                },
+                {
+                    model: models.Users,
+                    as: 'projectOwner',
+                    attributes: ['firstname', 'lastname']
+                }
+            ];
+        }
 
         listQuery.attributes = ['id', 'projectName'];
 
-        if (operatorRole.roleId == 2) {
+        if (operatorRole.id == 2) {
             listQuery.where[Op.or] = [
                 { createdByUserId: operatorInfo.id },
                 { projectOwnerUserId: operatorInfo.id }
@@ -52,39 +54,44 @@ module.exports = async function (operatorInfo, options) {
 
         count = models.Project.count(cpListQuery);
 
-    } else {
+    } else { //employee role
 
         listQuery.where = { UserId: operatorInfo.id };
         listQuery.include = [
             {
                 model: models.Project,
-                include: [
-                    {
-                        model: models.Users,
-                        as: 'createdBy',
-                        attributes: ['firstname', 'lastname']
-                    },
-                    {
-                        model: models.Users,
-                        as: 'projectOwner',
-                        attributes: ['firstname', 'lastname']
-                    }
-                ],
                 attributes: ['id', 'projectName'],
                 where: { isDelete: false }
             }
         ];
+        if (includeNested) {
+            listQuery.include[0].include = [
+                {
+                    model: models.Users,
+                    as: 'createdBy',
+                    attributes: ['firstname', 'lastname']
+                },
+                {
+                    model: models.Users,
+                    as: 'projectOwner',
+                    attributes: ['firstname', 'lastname']
+                }
+            ];
+        }
         if (!!options.search) { listQuery.include[0].where['projectName'] = { [Op.like]: options.search.trim() + '%' } }
         listQuery['order'] = [[{ model: models.Project }, options.sortBy || 'id', options.order || 'ASC']];
         list = models.UserProject.findAll(listQuery);
 
-        const cpListQuery = {...listQuery};
+        const cpListQuery = { ...listQuery };
 
         count = models.UserProject.count(cpListQuery);
     }
 
+    let [resultCount, resultList] = await Promise.all([count, list]);
 
+    if (operatorRole.id == 3) {
+        resultList = resultList.map(result => result.Project);
+    }
 
-    const [resultCount, resultList] = await Promise.all([count, list])
     return { count: resultCount, collection: resultList };
 }

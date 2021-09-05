@@ -29,5 +29,7 @@ services:
     stdin_open: true
     tty: true
     image: 448346412494.dkr.ecr.us-east-2.amazonaws.com/employeetimetrack
+    volumes:
+      - ~/app/public:app/public
 volumes:
   db:

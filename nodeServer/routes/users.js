@@ -49,21 +49,21 @@ router.post('/add', function (req, res) {
 });
 
 /* update user information */
-router.put('/update/:userId', 
-allow([ROLES.ADMIN, ROLES.MANAGER]),
-function (req, res) {
-  const userId = req.params.userId;
-  const user = new User();
-  user.setData(req.body, settings.seperateUsername);
+router.put('/update/:userId',
+  allow([ROLES.ADMIN, ROLES.MANAGER]),
+  function (req, res) {
+    const userId = req.params.userId;
+    const user = new User();
+    user.setData(req.body, settings.seperateUsername);
 
-  const payload = jwtDecoder(req);
+    const payload = jwtDecoder(req);
 
-  userOperation.update(payload, userId, user).then(userResponse => {
-    res.send(userResponse);
-  }).catch(error => {
-    errorHandler(res, error);
+    userOperation.update(payload, userId, user).then(userResponse => {
+      res.send(userResponse);
+    }).catch(error => {
+      errorHandler(res, error);
+    });
   });
-});
 
 /* Delete user by Id */
 router.delete('/delete/:userId',
@@ -114,6 +114,17 @@ router.post('/list',
     }).catch(error => {
       errorHandler(res, error);
     });
+  });
+
+router.get('/getAllManager',
+  allow([ROLES.ADMIN, ROLES.MANAGER]),
+  async (req, res) => {
+    try {
+      const list = await userOperation.listUserByRole(2);
+      res.status(200).send(list);
+    } catch (error) {
+      errorHandler(res, error);
+    }
   });
 
 /* get users by id */

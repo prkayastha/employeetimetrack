@@ -44,6 +44,23 @@ router.delete('/delete/:id',async (req, res) => {
     }
 });
 
+router.get('/getAll', async (req, res) => {
+    const options = {
+        limit: null,
+        offset: 0,
+        orderBy: 'projectName',
+        order: 'ASC',
+        searchString: ''
+    };
+    const jwtPayload = jwtUtil(req);
+    try {
+        const projectList = await operations.list(jwtPayload, options, false);
+        res.status(200).send(projectList);
+    } catch (error) {
+        errorHandler(res, error);
+    }
+});
+
 router.get('/:id', async (req, res) => {
     const jwtPayload = jwtUtil(req);
     try {
@@ -53,5 +70,7 @@ router.get('/:id', async (req, res) => {
         errorHandler(res, error);
     }
 });
+
+
 
 module.exports = router;

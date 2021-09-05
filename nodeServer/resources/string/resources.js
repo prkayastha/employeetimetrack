@@ -17,6 +17,9 @@ const messages = {
     task: {
         deleteSuccess: 'Task with id {0} has been successfully delete from the system'
     },
+    screenshot: {
+        updateScreenshot: 'Screenshot has been updated'
+    },
     error: {
         user: {
             multipleEmail: 'User exists in the system.',
