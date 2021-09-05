@@ -5,6 +5,24 @@ const workDiary = require('../controller/workdiary');
 const errorHandler = require('../controller/errorHandler');
 const jwtDecode = require('../utils/jwt-decode');
 
+const { allow, ROLES } = require('../controller/authorize');
+
+router.post('/segregate',
+    allow([ROLES.ADMIN, ROLES.MANAGER]),
+    async (req, res) => {
+        const info = {
+            id: req.body.id,
+            unproductive: req.body.markUnproductive
+        };
+
+        try {
+            const result = await workDiary.segregate(info);
+            res.send(result);
+        } catch (error) {
+            errorHandler(res, error);
+        }
+    });
+
 router.get('', async (req, res) => {
     // + -> %2B
     const query = {
@@ -20,7 +38,7 @@ router.get('', async (req, res) => {
     } catch (error) {
         errorHandler(res, error);
     }
-    
+
 })
 
 module.exports = router;
