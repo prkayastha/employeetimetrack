@@ -127,6 +127,17 @@ router.get('/getAllManager',
     }
   });
 
+router.get('/getAllEmployee',
+ allow([ROLES.ADMIN, ROLES.MANAGER]),
+ async (req, res) => {
+  try {
+    const list = await userOperation.listUserByRole(3);
+    res.status(200).send(list);
+  } catch (error) {
+    errorHandler (res, error);
+  }
+ });
+
 /* get users by id */
 router.get('/:userId',
   function (req, res) {
