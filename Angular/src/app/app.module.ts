@@ -26,6 +26,7 @@ import { NgxLocalStorageModule, LocalStorageService } from 'ngx-localstorage';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { PostsComponent } from './modules/posts/posts.component';
 import { ProjectsComponent } from './modules/projects/projects.component';
+import { ProjectService } from './_services/project.service';
 
 @NgModule({
   declarations: [
@@ -61,11 +62,11 @@ import { ProjectsComponent } from './modules/projects/projects.component';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    LocalStorageService
-
+    LocalStorageService,
+    ProjectService
   ],
   bootstrap: [AppComponent],
-  
+
 
 })
 export class AppModule { }

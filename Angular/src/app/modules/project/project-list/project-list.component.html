@@ -2,24 +2,24 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th style="width:30%"> Project id</th>
-            <th style="width:30%">Project Name</th>
-            <th style="width:10%"></th>
+            <th> Project id</th>
+            <th>Project Name</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let account of accounts">
-            <td>{{account.id}}</td>
-            <td>{{account.projectName}}</td>
+        <tr *ngFor="let project of ($projectList | async)?.collection">
+            <td>{{project.id}}</td>
+            <td>{{project.projectName}}</td>
             <td style="white-space: nowrap">
-                <a [routerLink]="['../update/'+account.id]" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deleteProject(account.id)" class="btn btn-sm btn-danger btn-delete-account" [disabled]="account.isDeleting">
-                    <span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!account.isDeleting">Delete</span>
+                <a [routerLink]="['../update/'+project.id]" class="btn btn-sm btn-primary mr-1">Edit</a>
+                <button (click)="deleteProject(project.id)" class="btn btn-sm btn-danger btn-delete-account" [disabled]="project.isDeleting">
+                    <span *ngIf="project.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!project.isDeleting">Delete</span>
                 </button>
             </td>
         </tr>
-        <tr *ngIf="!accounts">
+        <tr *ngIf="!($projectList | async)?.collection">
             <td colspan="4" class="text-center">
                 <span class="spinner-border spinner-border-lg align-center"></span>
             </td>
