@@ -47,11 +47,12 @@ export class SearchableDropdownComponent implements ControlValueAccessor {
         this.filteredOptions = this.filterInput.valueChanges.pipe(
             startWith(null),
             map((filter: string | null) => filter ? this._filter(filter) : this._src.slice())
-        );
+        )
     }
 
     writeValue(obj: any[]): void {
        this.actualValue = obj;
+       this.onChange(this.actualValue)
     }
 
     registerOnChange(fn: any): void {

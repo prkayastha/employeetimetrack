@@ -1,6 +1,6 @@
 <div fxLayout="column">
-    <label>Assignee</label>
-    <input placeholder="Add assignee" #searchInput [formControl]="filterInput" [matAutocomplete]="auto"
+    <label class="form-label">Assignee</label>
+    <input class="form-control" placeholder="Add assignee" #searchInput [formControl]="filterInput" [matAutocomplete]="auto"
         [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
         (matChipInputTokenEnd)="add($event)">
     <mat-chip-list #chipList aria-label='Choose Assignee'>

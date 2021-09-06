@@ -49,7 +49,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SidebarComponent,
     AreaComponent,
     CardComponent,
-    PieComponent
+    PieComponent,
+    SearchableDropdownComponent
   ]
 })
 export class SharedModule { }
