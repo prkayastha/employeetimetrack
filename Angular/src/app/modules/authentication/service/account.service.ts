@@ -4,10 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
-import { environment } from '../environments/environment';
-import { Account } from '../_models';
+import { environment } from '../../../environments/environment';
+import { Account } from '../../../_models';
 import { offset } from 'highcharts';
-import { UserDetails } from '../_models/userDetails';
+import { UserDetails } from '../../../_models/userDetails';
 
 const baseUrl = `${environment.apiUrl}`;
 
