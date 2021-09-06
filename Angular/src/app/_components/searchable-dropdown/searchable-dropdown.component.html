@@ -1,0 +1,20 @@
+<div fxLayout="column">
+    <label>Assignee</label>
+    <input placeholder="Add assignee" #searchInput [formControl]="filterInput" [matAutocomplete]="auto"
+        [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)">
+    <mat-chip-list #chipList aria-label='Choose Assignee'>
+        <mat-chip *ngFor="let value of _value" [selectable]="selectable" [removable]="removable"
+            (removed)="remove(value)">
+            {{value.name}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+    </mat-chip-list>
+</div>
+<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <ng-container *ngFor="let option of filteredOptions | async">
+        <mat-option [value]="option.id" *ngIf="!hasInList(option.id)">
+            {{option.name}}
+        </mat-option>
+    </ng-container>
+</mat-autocomplete>
