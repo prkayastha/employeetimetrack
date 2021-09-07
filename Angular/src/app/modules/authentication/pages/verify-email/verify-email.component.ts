@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService } from '../../_services';
+import { AccountService, AlertService } from '../../../../_services';
 
 enum EmailStatus {
     Verifying,
