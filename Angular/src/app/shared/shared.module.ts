@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDividerModule, MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule, 
-  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule } from '@angular/material';
+import {
+  MatDividerModule, MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule,
+  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule
+} from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 
@@ -14,43 +16,51 @@ import { CardComponent } from './widgets/card/card.component';
 import { PieComponent } from './widgets/pie/pie.component';
 import { SearchableDropdownComponent } from '../_components/searchable-dropdown/searchable-dropdown.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { NgxLocalStorageModule } from 'ngx-localstorage';
+
+const matModules = [
+  MatDividerModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatChipsModule,
+  MatFormFieldModule,
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatMenuModule,
+  MatListModule,
+];
+
+const declareComponent = [
+  HeaderComponent,
+  FooterComponent,
+  SidebarComponent,
+  AreaComponent,
+  CardComponent,
+  PieComponent,
+  SearchableDropdownComponent
+]
 
 @NgModule({
   declarations: [
-    HeaderComponent,
-    FooterComponent,
-    SidebarComponent,
-    AreaComponent,
-    CardComponent,
-    PieComponent,
-    SearchableDropdownComponent
+    ...declareComponent
   ],
   imports: [
     CommonModule,
-    MatDividerModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatChipsModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatButtonModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    NgxLocalStorageModule.forRoot(),
     FlexLayoutModule,
-    MatMenuModule,
-    MatListModule,
     RouterModule,
     HighchartsChartModule,
     FormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    ...matModules
   ],
   exports: [
-    HeaderComponent,
-    FooterComponent,
-    SidebarComponent,
-    AreaComponent,
-    CardComponent,
-    PieComponent,
-    SearchableDropdownComponent
+    ...declareComponent,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedModule { }

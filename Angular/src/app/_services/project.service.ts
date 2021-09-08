@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
@@ -9,6 +10,9 @@ const baseUrl = environment.apiUrl;
   providedIn: 'root'
 })
 export class ProjectService {
+  createProject(value: any): Observable<any> {
+      throw new Error('Method not implemented.');
+  }
 
   constructor(
     private http: HttpClient

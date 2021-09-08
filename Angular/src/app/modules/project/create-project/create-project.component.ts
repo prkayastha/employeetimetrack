@@ -41,7 +41,7 @@ export class CreateProjectComponent implements OnInit {
             assignee: ['', Validators.required]
         });
 
-        this.$managerList = this.accountService.getAllManager()
+        // this.$managerList = this.projectService.getAllManager()
         this.$employeeList = this.accountService.getAll()
 
 
