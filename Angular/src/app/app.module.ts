@@ -25,12 +25,6 @@ import { ProjectService } from './_services/project.service';
     AppComponent,
     AlertComponent,
     WorkdiaryComponent,
-    ProjectListComponent, // Project
-    CreateProjectComponent, // Project
-    UpdateProjectComponent, // Project
-    TaskListComponent, // Project
-    UpdateTaskComponent, // Project
-    CreateTaskComponent, // Project
     LayoutComponent,
     PostsComponent, //TODO: refactor
   ],

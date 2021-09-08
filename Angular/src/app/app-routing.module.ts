@@ -1,18 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { DefaultComponent } from './_components/default/default.component';
+import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
-import { LoginComponent } from './modules/authentication/pages/login/login.component';
-import { RegisterComponent } from './modules/authentication/pages/register/register.component';
-import { VerifyEmailComponent } from './modules/authentication/pages/verify-email/verify-email.component';
-import { ForgotPasswordComponent } from './modules/authentication/pages/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './modules/authentication/pages/reset-password/reset-password.component';
-import { LayoutComponent } from './modules/layout/layout.component';
-import { EmployeeListComponent } from './modules/user/pages/employee-list/employee-list.component';
-import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
-import { UpdateUserComponent } from './modules/user/pages/update-user/update-user.component';
-import { AuthGuard } from './_helpers';
 import { ProjectListComponent } from './modules/project/pages/project-list/project-list.component';
+import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
+import { DefaultComponent } from './_components/default/default.component';
+import { AuthGuard } from './_helpers';
 
 
 const routes: Routes = [
@@ -30,7 +22,7 @@ const routes: Routes = [
         path: 'workdiary', component: WorkdiaryComponent
       },
       { 
-        path: 'project', component: ProjectListComponent 
+        path: 'project', loadChildren: () => import('./modules/project/project.module').then(m => m.ProjectModule)
       }
     ]
   }
