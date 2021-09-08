@@ -1,5 +1,13 @@
 <h1>Project List</h1>
-<app-table [header]="tableHeader" [data]="($projectList | async)?.collection" (onSort)="sort($event)">
+<app-filter-options
+    [option] = "filterOption"
+    (onSearch)="search($event)"></app-filter-options>
+<app-table 
+    [header]="tableHeader" 
+    [data]="($projectList | async)?.collection" 
+    (onSort)="sort($event)">
 </app-table>
-<mat-paginator [length]="100" [pageSize]="10">
+<mat-paginator 
+    [length]="($projectList | async)?.count" 
+    [pageSize]="10">
 </mat-paginator>

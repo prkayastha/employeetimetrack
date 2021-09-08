@@ -1,17 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { debounceTime, first } from 'rxjs/operators';
-
-import { AccountService } from '../../../../_services';
-import { Account } from '../../../../_models';
-import { ProjectService } from 'src/app/_services/project.service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { ProjectService } from 'src/app/_services/project.service';
 import { TableHeader } from '../../../../_components/table/model/header.model';
 
+
 const tableHeader: TableHeader[] = [
-  {headerDef: 'id', headerLabel: 'Id', colName: 'id'},
-  {headerDef: 'projectName', headerLabel: 'ProjectName', colName: 'projectName'},
-  {headerDef: 'taskCount', headerLabel: 'Number of Task', colName: 'taskCount'},
+  { headerDef: 'id', headerLabel: 'Id', colName: 'id' },
+  { headerDef: 'projectName', headerLabel: 'ProjectName', colName: 'projectName' },
+  { headerDef: 'taskCount', headerLabel: 'Number of Task', colName: 'taskCount' },
 ];
+
+const filterOption = {
+  search: {
+    placeholder: 'Project Name',
+    label: 'Search'
+  },
+  button: {
+    label: 'Create Project'
+  }
+}
 
 @Component({
   selector: 'app-project-list',
@@ -21,6 +29,7 @@ const tableHeader: TableHeader[] = [
 export class ProjectListComponent implements OnInit {
   public $projectList: Observable<any>;
   tableHeader = tableHeader;
+  filterOption = filterOption;
   filter = {
     offset: 0,
     limit: 100,
@@ -30,7 +39,9 @@ export class ProjectListComponent implements OnInit {
   };
   $filter: Subject<any> = new BehaviorSubject(null);
 
-  constructor(private projectService: ProjectService) { }
+  constructor(private projectService: ProjectService) {
+    this.filterOption.button['callback'] = this.onCreate;
+  }
 
   ngOnInit() {
     this.$filter.pipe(
@@ -47,7 +58,21 @@ export class ProjectListComponent implements OnInit {
       orderBy: sortOption.sortColName,
       order: sortOption.dir
     };
+    this.filter = option;
     this.$filter.next(option);
+  }
+
+  search(searchValue) {
+    const option = {
+      ...this.filter,
+      search: searchValue
+    };
+    this.filter = option;
+    this.$filter.next(option);
+  }
+
+  onCreate() {
+    throw new Error('Method not implemented')
   }
 
   deleteProject(id: string) {

@@ -1,0 +1,17 @@
+<div fxLayout="row-reverse" fxLayoutGap="10px">
+    <button 
+        *ngIf="!!option && !!option['button']" 
+        class="btn btn-primary" 
+        type="button" 
+        (click)="option['button'].callback()">
+        {{option['button'].label}}
+    </button>
+    <div class="row g-3 align-items-center" *ngIf="!!option && !!option['search']">
+        <div class="col-auto">
+            <label>{{option['search'].label}}</label>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="text" [placeholder]="option['search'].placeholder" [formControl]="searchValue"/>
+        </div>
+    </div>
+</div>

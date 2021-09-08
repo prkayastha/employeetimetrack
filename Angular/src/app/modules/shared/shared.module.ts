@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxLocalStorageModule } from 'ngx-localstorage';
 import { TableComponent } from '../../_components/table/table.component';
+import { FilterOptionComponent } from '../../_components/filterOption/filter-option.component';
 
 const matModules = [
   MatDividerModule,
@@ -43,7 +44,8 @@ const declareComponent = [
   CardComponent,
   PieComponent,
   SearchableDropdownComponent,
-  TableComponent
+  TableComponent,
+  FilterOptionComponent
 ]
 
 @NgModule({
