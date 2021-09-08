@@ -19,7 +19,6 @@ export class CreateProjectComponent implements OnInit, OnChanges {
     @Output('formAction') emitAction: EventEmitter<any> = new EventEmitter();
     form: FormGroup;
     @Input('projectId') id: number = 0;
-    isAddMode: boolean;
     loading = false;
     submitted = false;
 
@@ -34,7 +33,6 @@ export class CreateProjectComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (!!changes.id) {
             this.projectService.getProjectDetail(this.id).subscribe((projectDetails: any) => {
-                console.log(projectDetails);
                 this.form.patchValue({
                     id: projectDetails.id,
                     projectName: projectDetails.projectName,
@@ -43,7 +41,6 @@ export class CreateProjectComponent implements OnInit, OnChanges {
                     version: projectDetails.version
                 });
                 this.form.get('assignee').setValue(projectDetails.assignees);
-                console.log(this.form.value);
             });
         }
     }
@@ -82,7 +79,7 @@ export class CreateProjectComponent implements OnInit, OnChanges {
     onCancel() {
         this.emitAction.emit({ action: 'cancel' });
     }
-
+    
     private createProject() {
         this.form.patchValue({id: this.id});
         const value = {...this.form.value, projectOwnerUserId: this.form.value.projectManager};

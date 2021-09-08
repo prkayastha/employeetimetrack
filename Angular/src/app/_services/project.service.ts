@@ -10,6 +10,7 @@ const baseUrl = environment.apiUrl;
   providedIn: 'root'
 })
 export class ProjectService {
+  
 
   constructor(
     private http: HttpClient
@@ -29,6 +30,12 @@ export class ProjectService {
     return this.http.post<any>(
       `${baseUrl}/project/upsert`,
       value
+    );
+  }
+
+  deleteProject(id: number): Observable<any> {
+    return this.http.delete<any>(
+      `${baseUrl}/project/delete/${id}`,
     );
   }
 

@@ -1,25 +1,34 @@
-<table mat-table [dataSource]="dataSource" 
-    matSort 
-    matSortActive="id" 
-    matSortDisableClear 
-    matSortDirection="asc"
+<table class="datatable" mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc"
     (matSortChange)="sort($event)">
     <ng-container *ngFor="let col of columns" [matColumnDef]="col.headerDef">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{col.headerLabel}} </th>
-        <td mat-cell *matCellDef="let element"> {{element[col.colName]}} </td>
+        <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="col.headerCss"> {{col.headerLabel}} </th>
+        <td mat-cell *matCellDef="let element">
+            <ng-container *ngIf="!!col.onClick; Else normalTitle">
+                <a class="btn btn-link" (click)="col.onClick(element)"> {{element[col.colName]}} </a>
+            </ng-container>
+            <ng-template #normalTitle>
+                {{element[col.colName]}}
+            </ng-template>
+        </td>
     </ng-container>
     <ng-container *ngIf="!!hasAction" matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef></th>
         <td class="button-container" mat-cell *matCellDef="let element">
-            <button *ngIf="!!actionOption.edit" type="button" mat-icon-button color="primary" (click)="actionOption.edit(element)">
-                <mat-icon>edit</mat-icon>
-            </button>
-            <button *ngIf="!!actionOption.delete" type="button" class="mat-delete" mat-icon-button (click)="actionOption.delete()">
-                <mat-icon>delete</mat-icon>
-            </button>
+            <div fxLayout="row" fxLayoutGap="20px">
+                <button *ngIf="!!actionOption.edit" type="button" mat-icon-button color="primary"
+                    (click)="actionOption.edit(element)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button *ngIf="!!actionOption.delete" type="button" class="mat-delete" mat-icon-button
+                    (click)="actionOption.delete(element)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
         </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
-    <tr mat-row *matRowDef="let row, columns: displayedColumn"></tr>
+    <tbody class="min-height">
+        <tr mat-row *matRowDef="let row, columns: displayedColumn"></tr>
+    </tbody>
 </table>

@@ -9,4 +9,20 @@ table {
     .mat-delete {
         color: #0707075c;
     }
+
+    a {
+        text-decoration: none;
+    }
+
+    
+}
+
+::ng-deep {
+    table {
+        &.datatable {
+            tbody {
+                min-height: 300px;
+            }
+        }
+    }
 }

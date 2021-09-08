@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ProjectService } from 'src/app/_services/project.service';
@@ -7,7 +8,7 @@ import { TableHeader } from '../../../../_components/table/model/header.model';
 
 const tableHeader: TableHeader[] = [
   { headerDef: 'id', headerLabel: 'Id', colName: 'id' },
-  { headerDef: 'projectName', headerLabel: 'ProjectName', colName: 'projectName' },
+  { headerDef: 'projectName', headerLabel: 'ProjectName', colName: 'projectName', headerCss: 'px-3' },
   { headerDef: 'taskCount', headerLabel: 'Number of Task', colName: 'taskCount' },
 ];
 
@@ -42,12 +43,17 @@ export class ProjectListComponent implements OnInit {
   actionCreate = false;
   actionProjectId: number = 0;
 
-  constructor(private projectService: ProjectService) {
+  constructor(
+    private projectService: ProjectService,
+    private router: Router
+  ) {
     this.filterOption.button['callback'] = this.onCreate.bind(this);
     if (!!this.actionOption) {
       this.actionOption['edit'] = this.onEdit.bind(this);
       this.actionOption['delete'] = this.onDelete.bind(this);
     }
+    const projectNameCol = this.tableHeader.find(header => header.headerDef === 'projectName');
+    projectNameCol.onClick = this.onProjectNameClick.bind(this);
   }
 
   ngOnInit() {
@@ -87,8 +93,10 @@ export class ProjectListComponent implements OnInit {
     this.actionCreate = true
   }
 
-  onDelete() {
-    throw new Error('Method not implemented');
+  onDelete(data: any) {
+    this.projectService.deleteProject(data.id).subscribe(response => {
+      this.$filter.next(this.filter);
+    })
   }
 
   onPaginate(pageEvent: PageEvent) {
@@ -106,6 +114,11 @@ export class ProjectListComponent implements OnInit {
       this.$filter.next(this.filter);
     }
   }
+
+  onProjectNameClick(data: any) {
+    this.router.navigate(['/project', 'task'])
+  }
+
 
   deleteProject(id: string) {
   }
