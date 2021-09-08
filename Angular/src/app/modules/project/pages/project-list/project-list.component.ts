@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ProjectService } from 'src/app/_services/project.service';
 import { TableHeader } from '../../../../_components/table/model/header.model';
-
 
 const tableHeader: TableHeader[] = [
   { headerDef: 'id', headerLabel: 'Id', colName: 'id' },
@@ -73,6 +73,15 @@ export class ProjectListComponent implements OnInit {
 
   onCreate() {
     throw new Error('Method not implemented')
+  }
+
+  onPaginate(pageEvent: PageEvent) {
+    const option = {
+      ...this.filter,
+      offset: pageEvent.pageIndex * pageEvent.pageSize
+    };
+    this.filter = option;
+    this.$filter.next(option);
   }
 
   deleteProject(id: string) {

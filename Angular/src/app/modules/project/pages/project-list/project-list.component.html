@@ -9,5 +9,6 @@
 </app-table>
 <mat-paginator 
     [length]="($projectList | async)?.count" 
-    [pageSize]="10">
+    [pageSize]="10"
+    (page)="onPaginate($event)">
 </mat-paginator>
