@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AccountService } from '../../../_services';
-import { Account, Role } from '../../../_models';
+import { AccountService } from '../../../../_services';
+import { Account, Role } from '../../../../_models';
 import { UserDetails } from 'src/app/_models/userDetails';
 @Component({
   selector: 'app-sidebar',

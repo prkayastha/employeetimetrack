@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocalStorageService, NgxLocalStorageModule } from 'ngx-localstorage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DefaultModule } from './layouts/default/default.module';
+import { DefaultModule } from './_components/default/default.module';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { PostsComponent } from './modules/posts/posts.component';
 import { CreateProjectComponent } from './modules/project/pages/create-project/create-project.component';

@@ -14,7 +14,7 @@ import { AreaComponent } from './widgets/area/area.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CardComponent } from './widgets/card/card.component';
 import { PieComponent } from './widgets/pie/pie.component';
-import { SearchableDropdownComponent } from '../_components/searchable-dropdown/searchable-dropdown.component';
+import { SearchableDropdownComponent } from '../../_components/searchable-dropdown/searchable-dropdown.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxLocalStorageModule } from 'ngx-localstorage';

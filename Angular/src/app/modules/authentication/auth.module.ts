@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { LocalStorageService } from "ngx-localstorage";
-import { SharedModule } from "../../shared/shared.module";
+import { SharedModule } from "../shared/shared.module";
 import { ErrorInterceptor } from "../../_helpers/error.interceptor";
 import { JwtInterceptor } from "../../_helpers/jwt.interceptor";
 import { AccountService } from "../../_services";
