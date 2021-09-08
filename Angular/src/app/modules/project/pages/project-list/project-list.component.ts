@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { debounceTime, first } from 'rxjs/operators';
 
 import { AccountService } from '../../../../_services';
 import { Account } from '../../../../_models';
 import { ProjectService } from 'src/app/_services/project.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { TableHeader } from '../../../../_components/table/model/header.model';
 
 const tableHeader: TableHeader[] = [
@@ -21,21 +21,35 @@ const tableHeader: TableHeader[] = [
 export class ProjectListComponent implements OnInit {
   public $projectList: Observable<any>;
   tableHeader = tableHeader;
-
+  filter = {
+    offset: 0,
+    limit: 100,
+    orderBy: "id",
+    order: "Desc",
+    search: null,
+  };
+  $filter: Subject<any> = new BehaviorSubject(null);
 
   constructor(private projectService: ProjectService) { }
 
   ngOnInit() {
-    this.$projectList = this.projectService.getAllProject();
+    this.$filter.pipe(
+      debounceTime(300)
+    ).subscribe(filter => {
+      this.$projectList = this.projectService.getAllProject(filter);
+    });
+    this.$filter.next(this.filter);
+  }
+
+  sort(sortOption: any) {
+    const option = {
+      ...this.filter,
+      orderBy: sortOption.sortColName,
+      order: sortOption.dir
+    };
+    this.$filter.next(option);
   }
 
   deleteProject(id: string) {
-    /* const account = this.accounts.find(x => x.id === id);
-    account.isDeleting = true;
-    this.accountService.deleteProject(id)
-        .pipe(first())
-        .subscribe(() => {
-            this.accounts = this.accounts.filter(x => x.id !== id) 
-        }); */
   }
 }

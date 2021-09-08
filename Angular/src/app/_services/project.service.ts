@@ -18,15 +18,7 @@ export class ProjectService {
     private http: HttpClient
   ) { }
 
-  //Projct List
-  getAllProject() {
-    const option = {
-      offset: 0,
-      limit: 100,
-      orderBy: "id",
-      order: "Desc",
-      search: null,
-    }
+  getAllProject(option: any) {
     return this.http.post<any[]>(`${baseUrl}/project/list`, option);
   }
 
