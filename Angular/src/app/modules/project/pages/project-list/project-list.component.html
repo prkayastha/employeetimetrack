@@ -5,6 +5,7 @@
 <app-table 
     [header]="tableHeader" 
     [data]="($projectList | async)?.collection" 
+    [action]="actionOption"
     (onSort)="sort($event)">
 </app-table>
 <mat-paginator 

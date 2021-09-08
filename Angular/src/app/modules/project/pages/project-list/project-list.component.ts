@@ -30,6 +30,7 @@ export class ProjectListComponent implements OnInit {
   public $projectList: Observable<any>;
   tableHeader = tableHeader;
   filterOption = filterOption;
+  actionOption: any = {};
   filter = {
     offset: 0,
     limit: 100,
@@ -41,6 +42,10 @@ export class ProjectListComponent implements OnInit {
 
   constructor(private projectService: ProjectService) {
     this.filterOption.button['callback'] = this.onCreate;
+    if (!!this.actionOption) {
+      this.actionOption['edit'] = this.onEdit;
+      this.actionOption['delete'] = this.onDelete;
+    }
   }
 
   ngOnInit() {
@@ -72,7 +77,15 @@ export class ProjectListComponent implements OnInit {
   }
 
   onCreate() {
-    throw new Error('Method not implemented')
+    throw new Error('Method not implemented');
+  }
+
+  onEdit() {
+    throw new Error('Method not implemented');
+  }
+
+  onDelete() {
+    throw new Error('Method not implemented');
   }
 
   onPaginate(pageEvent: PageEvent) {

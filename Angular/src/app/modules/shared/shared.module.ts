@@ -33,7 +33,8 @@ const matModules = [
   MatListModule,
   MatTableModule,
   MatSortModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatIconModule
 ];
 
 const declareComponent = [
