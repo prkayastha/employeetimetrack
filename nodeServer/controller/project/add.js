@@ -33,7 +33,7 @@ module.exports = async function (operationInfo, projectInfo) {
                 throw new UnauthorizedError('User does not have access for the project');
             }
             projectObj.createdByUserId = isUpdateable.createdByUserId;
-            projectObj.projectOwnerUserId = isUpdateable.projectOwnerUserId;
+            projectObj.projectOwnerUserId = projectObj.projectOwnerUserId;
             projectObj.version = isUpdateable.version + 1;
             let result = await models.sequelize.transaction(async (t) => {
                 const responseProject = await models.Project.bulkCreate(
@@ -73,6 +73,9 @@ async function checkUpdatable(operatorInfo, projectInfo) {
     if (!project) {
         const error = new Error('No project found');
         throw error;
+    }
+    if (operatorInfo.role === 'ADMIN') {
+        return project;
     }
     if (project.projectOwnerUserId != operatorInfo.id) {
         return null;
