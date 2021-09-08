@@ -3,16 +3,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService } from '../../../_services';
-import { MustMatch } from '../../../_helpers';
-
+import { AccountService, AlertService } from '../../../../_services';
+import { MustMatch } from '../../../../_helpers';
 @Component({
-  selector: 'app-create-task',
-  templateUrl: './create-task.component.html',
-  styleUrls: ['./create-task.component.scss']
+  selector: 'app-update-task',
+  templateUrl: './update-task.component.html',
+  styleUrls: ['./update-task.component.scss']
 })
-export class CreateTaskComponent implements OnInit {
-  form: FormGroup;
+export class UpdateTaskComponent implements OnInit {
+    form: FormGroup;
   id: string;
   isAddMode: boolean;
   loading = false;
@@ -58,9 +57,9 @@ onSubmit() {
 
     this.loading = true;
     if (this.isAddMode) {
-        this.createTask();
+        this.updateTask();
     } else {
-        this.createTask();
+        this.updateTask();
     }
 }
 
@@ -79,8 +78,8 @@ private createTask() {
         });
 }
 
-private updateAccount() {
-    this.accountService.update(this.id, this.form.value)
+private updateTask() {
+    this.accountService.updateTask(this.id, this.form.value)
         .pipe(first())
         .subscribe({
             next: () => {

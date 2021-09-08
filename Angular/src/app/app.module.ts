@@ -9,13 +9,12 @@ import { AppComponent } from './app.component';
 import { DefaultModule } from './layouts/default/default.module';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { PostsComponent } from './modules/posts/posts.component';
-import { CreateProjectComponent } from './modules/project/create-project/create-project.component';
-import { ProjectListComponent } from './modules/project/project-list/project-list.component';
-import { UpdateProjectComponent } from './modules/project/update-project/update-project.component';
-import { ProjectsComponent } from './modules/projects/projects.component';
-import { CreateTaskComponent } from './modules/task/create-task/create-task.component';
-import { TaskListComponent } from './modules/task/task-list/task-list.component';
-import { UpdateTaskComponent } from './modules/task/update-task/update-task.component';
+import { CreateProjectComponent } from './modules/project/pages/create-project/create-project.component';
+import { ProjectListComponent } from './modules/project/pages/project-list/project-list.component';
+import { UpdateProjectComponent } from './modules/project/pages/update-project/update-project.component';
+import { CreateTaskComponent } from './modules/project/pages/create-task/create-task.component';
+import { TaskListComponent } from './modules/project/pages/task-list/task-list.component';
+import { UpdateTaskComponent } from './modules/project/pages/update-task/update-task.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { AlertComponent } from './_components';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
@@ -26,15 +25,14 @@ import { ProjectService } from './_services/project.service';
     AppComponent,
     AlertComponent,
     WorkdiaryComponent,
-    ProjectListComponent,
-    CreateProjectComponent,
-    UpdateProjectComponent,
-    TaskListComponent,
-    UpdateTaskComponent,
-    CreateTaskComponent,
-    LayoutComponent, //TODO: refactor
+    ProjectListComponent, // Project
+    CreateProjectComponent, // Project
+    UpdateProjectComponent, // Project
+    TaskListComponent, // Project
+    UpdateTaskComponent, // Project
+    CreateTaskComponent, // Project
+    LayoutComponent,
     PostsComponent, //TODO: refactor
-    ProjectsComponent  //TODO: refactor
   ],
   imports: [
     BrowserModule,

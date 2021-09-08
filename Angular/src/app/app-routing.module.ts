@@ -12,7 +12,7 @@ import { EmployeeListComponent } from './modules/user/pages/employee-list/employ
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { UpdateUserComponent } from './modules/user/pages/update-user/update-user.component';
 import { AuthGuard } from './_helpers';
-import { ProjectListComponent } from './modules/project/project-list/project-list.component';
+import { ProjectListComponent } from './modules/project/pages/project-list/project-list.component';
 
 
 const routes: Routes = [
@@ -30,7 +30,7 @@ const routes: Routes = [
         path: 'workdiary', component: WorkdiaryComponent
       },
       { 
-        path: 'projects', component: ProjectListComponent 
+        path: 'project', component: ProjectListComponent 
       }
     ]
   }

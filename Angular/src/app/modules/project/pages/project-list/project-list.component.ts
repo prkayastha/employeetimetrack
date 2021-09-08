@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 
-import { AccountService } from '../../../_services';
-import { Account } from '../../../_models';
+import { AccountService } from '../../../../_services';
+import { Account } from '../../../../_models';
 import { ProjectService } from 'src/app/_services/project.service';
 import { Observable } from 'rxjs';
 
