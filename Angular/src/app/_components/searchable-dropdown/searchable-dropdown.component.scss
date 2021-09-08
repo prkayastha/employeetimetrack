@@ -1,8 +1,11 @@
 :host {
+    label {
+        margin-bottom: 0px;
+    }
     input {
         margin: 0;
         &.mat-input-element {
-            width: inherit;
+            width: 100%;
             flex: 1 0 38px;
         }
     }

@@ -69,7 +69,8 @@ const declareComponent = [
     ...declareComponent,
     ...matModules,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FlexLayoutModule
   ]
 })
 export class SharedModule { }

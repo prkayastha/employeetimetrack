@@ -39,9 +39,11 @@ export class ProjectListComponent implements OnInit {
     search: null,
   };
   $filter: Subject<any> = new BehaviorSubject(null);
+  actionCreate = false;
+  actionProjectId: number = 0;
 
   constructor(private projectService: ProjectService) {
-    this.filterOption.button['callback'] = this.onCreate;
+    this.filterOption.button['callback'] = this.onCreate.bind(this);
     if (!!this.actionOption) {
       this.actionOption['edit'] = this.onEdit;
       this.actionOption['delete'] = this.onDelete;
@@ -77,10 +79,10 @@ export class ProjectListComponent implements OnInit {
   }
 
   onCreate() {
-    throw new Error('Method not implemented');
+    this.actionCreate = true;
   }
 
-  onEdit() {
+  onEdit(data: any) {
     throw new Error('Method not implemented');
   }
 
@@ -95,6 +97,13 @@ export class ProjectListComponent implements OnInit {
     };
     this.filter = option;
     this.$filter.next(option);
+  }
+
+  createFormAction(action: any) {
+    this.actionCreate = false;
+    if (action.action !== 'cancel') {
+      this.$filter.next(this.filter);
+    }
   }
 
   deleteProject(id: string) {

@@ -5,6 +5,7 @@ import { LocalStorageService } from "ngx-localstorage";
 import { ErrorInterceptor, JwtInterceptor } from "../../_helpers";
 import { ProjectService } from "../../_services/project.service";
 import { SharedModule } from "../shared/shared.module";
+import { UserService } from "../user/user.service";
 import { CreateProjectComponent } from "./pages/create-project/create-project.component";
 import { CreateTaskComponent } from "./pages/create-task/create-task.component";
 import { ProjectListComponent } from "./pages/project-list/project-list.component";
@@ -31,7 +32,8 @@ import { ProjectRoutingModule } from "./project-routing.module";
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         LocalStorageService,
-        ProjectService
+        ProjectService,
+        UserService
     ]
 })
 

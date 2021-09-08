@@ -10,9 +10,6 @@ const baseUrl = environment.apiUrl;
   providedIn: 'root'
 })
 export class ProjectService {
-  createProject(value: any): Observable<any> {
-      throw new Error('Method not implemented.');
-  }
 
   constructor(
     private http: HttpClient
@@ -20,6 +17,13 @@ export class ProjectService {
 
   getAllProject(option: any) {
     return this.http.post<any[]>(`${baseUrl}/project/list`, option);
+  }
+
+  createProject(value: any): Observable<any> {
+    return this.http.post<any>(
+      `${baseUrl}/project/upsert`,
+      value
+    );
   }
 
 }

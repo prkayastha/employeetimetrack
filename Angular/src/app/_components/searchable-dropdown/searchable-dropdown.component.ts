@@ -1,4 +1,4 @@
-import { Component, forwardRef, ElementRef, ViewChild } from "@angular/core";
+import { Component, forwardRef, ElementRef, ViewChild, Input, OnInit, OnChanges, SimpleChanges } from "@angular/core";
 import { MatAutocompleteSelectedEvent, MatChipInputEvent } from "@angular/material";
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from "rxjs";
@@ -17,42 +17,50 @@ import { map, startWith } from "rxjs/operators";
         }
     ]
 })
-export class SearchableDropdownComponent implements ControlValueAccessor {
+export class SearchableDropdownComponent implements ControlValueAccessor, OnChanges {
     actualValue = null;
-
     selectable = false;
     removable = true;
     separatorKeysCodes: number[] = [ENTER, COMMA];
     _value: any[] = [];
     filteredOptions: Observable<any[]>;
     filterInput: FormControl = new FormControl('');
-    _src: any[] = [
-        { id: 1, name: 'Prajesh' },
-        { id: 2, name: 'Ravi' },
-        { id: 3, name: 'Santosh' }
-    ];
+    _src: any[] = [];
     selectFromList: boolean = false;
+
+    @Input() label: string = '';
+    @Input() placeholder: string = '';
+    @Input() dataSource(source: any[]) {
+        this._src = [...this._src, ...source];
+    }
+
 
     @ViewChild('searchInput', { static: false }) searchInput: ElementRef<HTMLInputElement>;
 
-    onChange = (_value) => {};
+    onChange = (_value) => { };
 
-    onTouched = () => {};
+    onTouched = () => { };
 
     touched = false;
 
     disabled = false;
 
     constructor() {
-        this.filteredOptions = this.filterInput.valueChanges.pipe(
-            startWith(null),
-            map((filter: string | null) => filter ? this._filter(filter) : this._src.slice())
-        )
+    }
+    
+    ngOnChanges(changes: SimpleChanges): void {
+        if (!!changes && !!changes.dataSource && !!changes.dataSource.currentValue) {
+            this._src = [...changes.dataSource.currentValue];
+            this.filteredOptions = this.filterInput.valueChanges.pipe(
+                startWith(null),
+                map((filter: string | null) => !!filter ? this._filter(filter) : this._src.slice())
+            );
+        }
     }
 
     writeValue(obj: any[]): void {
-       this.actualValue = obj;
-       this.onChange(this.actualValue)
+        this.actualValue = obj;
+        this.onChange(this.actualValue)
     }
 
     registerOnChange(fn: any): void {
@@ -70,10 +78,8 @@ export class SearchableDropdownComponent implements ControlValueAccessor {
     add(event: MatChipInputEvent): void {
         const value = (event.value || '').trim();
 
-        // Add our fruit
         if (value) {
             this._value.push(this._src.find(option => option.id === value));
-
             this.writeValue(this._value);
         }
 
@@ -95,21 +101,15 @@ export class SearchableDropdownComponent implements ControlValueAccessor {
         }
     }
 
-    private _filter(filter: string): any {
-        if (this.selectFromList) {
-            return this._src;
+    private _filter(filter: any): any {
+        if (!isNaN(filter)) {
+            filter = filter.toString();
         }
-
         const filterValue = filter.toLowerCase();
-
         return this._src.filter(option => option.name.toLowerCase().includes(filterValue));
     }
 
     selected(event: MatAutocompleteSelectedEvent) {
-        this.selectFromList = true;
-        setTimeout(() => {
-            this.selectFromList = false;
-        }, 1000);
         const selectedObject = this._src.find(option => option.id === event.option.value);
         this._value.push(selectedObject);
         this.writeValue(this._value);

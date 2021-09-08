@@ -1,25 +1,39 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-row">
-        <div class="form-group col-5">
-            <label>Project id</label>
-            <input type="text" formControlName="project_id" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.project_id.errors }" />
-            <div *ngIf="submitted && f.project_id.errors" class="invalid-feedback">
-                <div *ngIf="f.project_id.errors.required">project_id is required</div>
-            </div>
-        </div>
-        <div class="form-group col-5">
-            <label>Project Name</label>
-            <input type="text" formControlName="projectName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }" />
-            <div *ngIf="submitted && f.projectName.errors" class="invalid-feedback">
-                <div *ngIf="f.projectName.errors.required">projectName is required</div>
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
+    <div fxLayout="row-reverse" fxLayoutGap="10px" class="form-group">
+        <button type="button" class="btn btn-outline-danger" (click)="onCancel()">Cancel</button>
         <button [disabled]="loading" class="btn btn-primary">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
             Save
         </button>
-        <a routerLink="employee-list" class="btn btn-link">Cancel</a>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" class="form-row create-form">
+        <div class="form-group col-5">
+            <label>Project Name</label>
+            <input type="text" formControlName="projectName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }" />
+            <div *ngIf="submitted && f.projectName.errors" class="invalid-feedback">
+                <div *ngIf="f.projectName.errors.required">Project Name is required</div>
+            </div>
+        </div>
+        <div class="form-group col-5">
+            <label>Project Owner / Manager </label>
+            <!-- <input type="text" formControlName="projectName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }" /> -->
+            <select class="form-select is-invalid" formControlName="projectManager" [ngClass]="{ 'is-invalid': submitted && f.projectManager.errors }">
+                <option [value]="0">Select</option>
+                <option *ngFor="let manager of ($managerList | async)" [value]="manager.id">{{manager.name}}</option>
+            </select>
+            <div *ngIf="submitted && f.projectManager.errors" class="invalid-feedback">
+                <div *ngIf="f.projectName.errors.required">Project Manager is required</div>
+            </div>
+        </div>
+        <div class="form-group col-5">
+            <input-searchable-dropdown
+            formControlName="assignee"
+            [label]="'Assignee'"
+            [placeholder]="'Add Assignee'"
+            [dataSource]="($employeeList | async)"></input-searchable-dropdown>
+            <div *ngIf="submitted && f.projectName.errors" class="invalid-feedback">
+                <div *ngIf="f.projectName.errors.required">projectName is required</div>
+            </div>
+        </div>
     </div>
 </form>

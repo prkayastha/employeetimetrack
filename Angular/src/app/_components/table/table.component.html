@@ -11,7 +11,7 @@
     <ng-container *ngIf="!!hasAction" matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef></th>
         <td class="button-container" mat-cell *matCellDef="let element">
-            <button *ngIf="!!actionOption.edit" type="button" mat-icon-button color="primary" (click)="actionOption.edit()">
+            <button *ngIf="!!actionOption.edit" type="button" mat-icon-button color="primary" (click)="actionOption.edit(element)">
                 <mat-icon>edit</mat-icon>
             </button>
             <button *ngIf="!!actionOption.delete" type="button" class="mat-delete" mat-icon-button (click)="actionOption.delete()">
