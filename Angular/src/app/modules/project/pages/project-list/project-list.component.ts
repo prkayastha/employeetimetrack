@@ -45,8 +45,8 @@ export class ProjectListComponent implements OnInit {
   constructor(private projectService: ProjectService) {
     this.filterOption.button['callback'] = this.onCreate.bind(this);
     if (!!this.actionOption) {
-      this.actionOption['edit'] = this.onEdit;
-      this.actionOption['delete'] = this.onDelete;
+      this.actionOption['edit'] = this.onEdit.bind(this);
+      this.actionOption['delete'] = this.onDelete.bind(this);
     }
   }
 
@@ -83,7 +83,8 @@ export class ProjectListComponent implements OnInit {
   }
 
   onEdit(data: any) {
-    throw new Error('Method not implemented');
+    this.actionProjectId = data.id;
+    this.actionCreate = true
   }
 
   onDelete() {

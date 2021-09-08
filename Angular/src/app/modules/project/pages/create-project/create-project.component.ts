@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { first, map } from 'rxjs/operators';
@@ -13,24 +13,31 @@ import { UserService } from '../../../user/user.service';
     templateUrl: './create-project.component.html',
     styleUrls: ['./create-project.component.scss']
 })
-export class CreateProjectComponent implements OnInit {
+export class CreateProjectComponent implements OnInit, OnChanges {
     $managerList;
     $employeeList;
     @Output('formAction') emitAction: EventEmitter<any> = new EventEmitter();
     form: FormGroup;
-    id: string;
+    @Input('projectId') id: number;
     isAddMode: boolean;
     loading = false;
     submitted = false;
 
     constructor(
         private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
         private router: Router,
         private projectService: ProjectService,
         private userService: UserService,
         private alertService: AlertService
     ) { }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (!!changes.id) {
+            this.projectService.getProjectDetail(this.id).subscribe(projectDetails => {
+                console.log(projectDetails);
+            });
+        }
+    }
 
     ngOnInit() {
         this.form = this.formBuilder.group({

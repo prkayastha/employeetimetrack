@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, SimpleChange } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
@@ -17,6 +17,12 @@ export class ProjectService {
 
   getAllProject(option: any) {
     return this.http.post<any[]>(`${baseUrl}/project/list`, option);
+  }
+
+  getProjectDetail(id: number) {
+    return this.http.get(
+      `${baseUrl}/project/${id}`
+    )
   }
 
   createProject(value: any): Observable<any> {
