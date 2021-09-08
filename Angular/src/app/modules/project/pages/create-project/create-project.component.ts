@@ -18,7 +18,7 @@ export class CreateProjectComponent implements OnInit, OnChanges {
     $employeeList;
     @Output('formAction') emitAction: EventEmitter<any> = new EventEmitter();
     form: FormGroup;
-    @Input('projectId') id: number;
+    @Input('projectId') id: number = 0;
     isAddMode: boolean;
     loading = false;
     submitted = false;
@@ -33,17 +33,28 @@ export class CreateProjectComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (!!changes.id) {
-            this.projectService.getProjectDetail(this.id).subscribe(projectDetails => {
+            this.projectService.getProjectDetail(this.id).subscribe((projectDetails: any) => {
                 console.log(projectDetails);
+                this.form.patchValue({
+                    id: projectDetails.id,
+                    projectName: projectDetails.projectName,
+                    projectManager: projectDetails.projectOwner.id,
+                    assignee: projectDetails.assignees,
+                    version: projectDetails.version
+                });
+                this.form.get('assignee').setValue(projectDetails.assignees);
+                console.log(this.form.value);
             });
         }
     }
 
     ngOnInit() {
         this.form = this.formBuilder.group({
+            id: [this.id],
             projectName: ['', Validators.required],
             projectManager: [0, this.validateNumber],
-            assignee: [null]
+            assignee: [null],
+            version: [0]
         });
 
         this.$managerList = this.userService.getAllManager();
@@ -73,7 +84,10 @@ export class CreateProjectComponent implements OnInit, OnChanges {
     }
 
     private createProject() {
-        this.projectService.createProject(this.form.value)
+        this.form.patchValue({id: this.id});
+        const value = {...this.form.value, projectOwnerUserId: this.form.value.projectManager};
+        value.assignee = value.assignee.map(assignee => assignee.id);
+        this.projectService.createProject(value)
             .subscribe({
                 next: () => {
                     this.alertService.success('Account created successfully', { keepAfterRouteChange: true });

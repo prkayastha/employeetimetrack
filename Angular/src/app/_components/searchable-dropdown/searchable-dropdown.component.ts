@@ -18,7 +18,6 @@ import { map, startWith } from "rxjs/operators";
     ]
 })
 export class SearchableDropdownComponent implements ControlValueAccessor, OnChanges {
-    actualValue = null;
     selectable = false;
     removable = true;
     separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -59,8 +58,8 @@ export class SearchableDropdownComponent implements ControlValueAccessor, OnChan
     }
 
     writeValue(obj: any[]): void {
-        this.actualValue = obj;
-        this.onChange(this.actualValue)
+        this._value = obj;
+        this.onChange(this._value);
     }
 
     registerOnChange(fn: any): void {
