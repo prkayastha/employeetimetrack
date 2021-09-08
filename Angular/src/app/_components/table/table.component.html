@@ -1,0 +1,14 @@
+<table mat-table [dataSource]="dataSource" 
+    matSort 
+    matSortActive="id" 
+    matSortDisableClear 
+    matSortDirection="asc"
+    (matSortChange)="sort($event)">
+    <ng-container *ngFor="let col of columns" [matColumnDef]="col.headerDef">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> {{col.headerLabel}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[col.colName]}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
+    <tr mat-row *matRowDef="let row, columns: displayedColumn"></tr>
+</table>

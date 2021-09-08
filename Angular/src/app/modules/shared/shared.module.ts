@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatDividerModule, MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule,
-  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule
+  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule, MatTableModule, MatSortModule, MatPaginatorModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
@@ -18,6 +18,7 @@ import { SearchableDropdownComponent } from '../../_components/searchable-dropdo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxLocalStorageModule } from 'ngx-localstorage';
+import { TableComponent } from '../../_components/table/table.component';
 
 const matModules = [
   MatDividerModule,
@@ -29,6 +30,9 @@ const matModules = [
   MatButtonModule,
   MatMenuModule,
   MatListModule,
+  MatTableModule,
+  MatSortModule,
+  MatPaginatorModule
 ];
 
 const declareComponent = [
@@ -38,7 +42,8 @@ const declareComponent = [
   AreaComponent,
   CardComponent,
   PieComponent,
-  SearchableDropdownComponent
+  SearchableDropdownComponent,
+  TableComponent
 ]
 
 @NgModule({
@@ -59,6 +64,7 @@ const declareComponent = [
   ],
   exports: [
     ...declareComponent,
+    ...matModules,
     FormsModule,
     ReactiveFormsModule
   ]

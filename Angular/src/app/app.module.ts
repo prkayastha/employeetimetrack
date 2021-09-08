@@ -6,17 +6,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocalStorageService, NgxLocalStorageModule } from 'ngx-localstorage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DefaultModule } from './_components/default/default.module';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { PostsComponent } from './modules/posts/posts.component';
-import { CreateProjectComponent } from './modules/project/pages/create-project/create-project.component';
-import { ProjectListComponent } from './modules/project/pages/project-list/project-list.component';
-import { UpdateProjectComponent } from './modules/project/pages/update-project/update-project.component';
-import { CreateTaskComponent } from './modules/project/pages/create-task/create-task.component';
-import { TaskListComponent } from './modules/project/pages/task-list/task-list.component';
-import { UpdateTaskComponent } from './modules/project/pages/update-task/update-task.component';
+import { SharedModule } from './modules/shared/shared.module';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { AlertComponent } from './_components';
+import { DefaultModule } from './_components/default/default.module';
+import { TableComponent } from './_components/table/table.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { ProjectService } from './_services/project.service';
 
@@ -35,6 +31,7 @@ import { ProjectService } from './_services/project.service';
     BrowserAnimationsModule,
     DefaultModule,
     ReactiveFormsModule,
+    SharedModule,
     NgxLocalStorageModule.forRoot()
   ],
   providers: [

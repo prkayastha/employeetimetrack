@@ -4,6 +4,7 @@ import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { ProjectListComponent } from './modules/project/pages/project-list/project-list.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { DefaultComponent } from './_components/default/default.component';
+import { TableComponent } from './_components/table/table.component';
 import { AuthGuard } from './_helpers';
 
 
@@ -25,7 +26,8 @@ const routes: Routes = [
         path: 'project', loadChildren: () => import('./modules/project/project.module').then(m => m.ProjectModule)
       }
     ]
-  }
+  },
+  { path: 'test', component: TableComponent}
 
 ];
 
