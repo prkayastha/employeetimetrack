@@ -3,12 +3,12 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from '../../../environments/environment';
-import { UserDetails } from "../../_models/userDetails";
 
 const baseUrl = environment.apiUrl;
 
 @Injectable()
 export class UserService {
+
     constructor(private http: HttpClient) {
     }
 
@@ -38,6 +38,17 @@ export class UserService {
                     return mapping;
                 });
                 return response;
+            })
+        );
+    }
+
+    getUserById(userId: number): Observable<any> {
+        return this.http.get(
+            `${baseUrl}/user/${userId}`
+        ).pipe(
+            map((user: any) => {
+                user['fullname'] = `${user.firstname} ${user.lastname}`
+                return user;
             })
         );
     }

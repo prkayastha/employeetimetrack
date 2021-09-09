@@ -9,11 +9,13 @@ import { EmployeeListComponent } from "./pages/employee-list/employee-list.compo
 import { UpdateUserComponent } from "./pages/update-user/update-user.component";
 import { UserRoutingModule } from "./user-routing.module";
 import { UserService } from "./user.service";
+import { ViewUserComponent } from "./pages/view-user/view-user.component";
 
 @NgModule({
     declarations: [
         EmployeeListComponent,
         UpdateUserComponent,
+        ViewUserComponent
     ],
     imports: [
         CommonModule,
