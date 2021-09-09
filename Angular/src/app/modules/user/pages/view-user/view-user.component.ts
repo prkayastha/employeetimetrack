@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { Observable } from "rxjs";
 import { flatMap } from "rxjs/operators";
 import { UserService } from "../../user.service";
 
@@ -10,6 +11,7 @@ import { UserService } from "../../user.service";
 })
 export class ViewUserComponent implements OnInit {
     userId: number;
+    $userInformation: Observable<any>;
 
     constructor(
         private route: ActivatedRoute,
@@ -19,14 +21,16 @@ export class ViewUserComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.route.paramMap.pipe(
+        this.$userInformation = this.route.paramMap.pipe(
             flatMap((params) => {
                 this.userId = +params.get('userId');
                 return this.userService.getUserById(this.userId);
             })
-        ).subscribe((user) => {
-            console.log(user);
-        });
+        );
+
+        this.$userInformation.subscribe((userInfo) => {
+            console.log(userInfo);
+        })
     }
 
 

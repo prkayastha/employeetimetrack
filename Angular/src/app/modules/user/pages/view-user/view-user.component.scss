@@ -1,0 +1,50 @@
+.card {
+    width: 30rem;
+}
+
+.container {
+    font-size: 14px;
+
+    .label {
+        color: #00000080;
+    }
+
+    .row {
+        padding: 1rem 0rem;
+    }
+
+    .hr {
+        height: 1px;
+        background-color: #0000001f;
+    }
+
+    ul.list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            padding: 0.6rem 0rem;
+        }
+    }
+
+    .badge {
+        font-size: 12px;
+        font-weight: 500;
+        margin: 0.2rem;
+    }
+
+    .badge-primary {
+        color: #fff;
+        background-color: #007bff;
+    }
+
+    .badge-info {
+        color: #fff;
+        background-color: #17a2b8;
+    }
+
+    .btn-block {
+        width: 100%;
+    }
+}
