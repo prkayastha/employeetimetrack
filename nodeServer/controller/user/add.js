@@ -33,8 +33,11 @@ const add = function (user, passwordString) {
                     return Password.setPassword(user.id, passwordString);
                 }).then(passwordObject => {
                     return models.Password.create(passwordObject, { transaction: t })
-                }).then(function (result) {
-                    return addRoles(user.roles, result.UserId, t)
+                }).then(async function (result) {
+                    const addRolePromise = addRoles(user.roles, result.UserId, t)
+                    const addDetailsPromise = addUserDetails(user.details, result.userId, t);
+
+                    return await Promise.all([addRolePromise, addDetailsPromise]);
                 }.bind(response));
             }
         })
@@ -131,6 +134,13 @@ function addRoles(roles, userId, transactionIns) {
     );
 
     return insertQuery;
+}
+
+async function addUserDetails(details, userId, transaction) {
+    const insertRes = await models.UserDetails.create({
+        ...details
+    }, { transaction });
+    return insertRes;
 }
 
 module.exports = add;
