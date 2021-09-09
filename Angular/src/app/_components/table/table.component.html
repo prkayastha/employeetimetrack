@@ -1,13 +1,13 @@
-<table class="datatable" mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc"
+<table class="datatable table table-striped" mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc"
     (matSortChange)="sort($event)">
     <ng-container *ngFor="let col of columns" [matColumnDef]="col.headerDef">
         <th mat-header-cell mat-sort-header *matHeaderCellDef [ngClass]="col.headerCss"> {{col.headerLabel}} </th>
         <td mat-cell *matCellDef="let element">
             <ng-container *ngIf="!!col.onClick; Else normalTitle">
-                <a class="btn btn-link" (click)="col.onClick(element)"> {{element[col.colName]}} </a>
+                <a class="btn btn-link" (click)="col.onClick(element)"> {{element[col.headerDef]}} </a>
             </ng-container>
             <ng-template #normalTitle>
-                {{element[col.colName]}}
+                {{element[col.headerDef]}}
             </ng-template>
         </td>
     </ng-container>

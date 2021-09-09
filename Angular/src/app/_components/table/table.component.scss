@@ -12,6 +12,7 @@ table {
 
     a {
         text-decoration: none;
+        font-size: 12px;
     }
 
     
@@ -21,7 +22,10 @@ table {
     table {
         &.datatable {
             tbody {
-                min-height: 300px;
+                td {
+                    line-height: 48px;
+                    font-size: 12px;
+                }
             }
         }
     }

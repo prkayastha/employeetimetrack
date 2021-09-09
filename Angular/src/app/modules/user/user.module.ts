@@ -8,6 +8,7 @@ import { AccountService } from "../../_services";
 import { EmployeeListComponent } from "./pages/employee-list/employee-list.component";
 import { UpdateUserComponent } from "./pages/update-user/update-user.component";
 import { UserRoutingModule } from "./user-routing.module";
+import { UserService } from "./user.service";
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { UserRoutingModule } from "./user-routing.module";
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         LocalStorageService,
-        AccountService
+        AccountService,
+        UserService
     ]
 })
 
