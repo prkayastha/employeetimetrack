@@ -1,11 +1,12 @@
 :host {
-    .outline {
-        outline: -webkit-focus-ring-color auto 1px;
-        padding: 8px 6px;
-        margin-top: 8px;
-        input {
-            border: none;
-            outline: none;
+    label {
+        margin-bottom: 0px;
+    }
+    input {
+        margin: 0;
+        &.mat-input-element {
+            width: 100%;
+            flex: 1 0 38px;
         }
     }
 }

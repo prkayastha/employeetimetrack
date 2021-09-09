@@ -12,28 +12,43 @@ module.exports = async function (operationInfo, projectInfo) {
     let operation = projectObj.id == 0 ? 'add' : 'update';
     try {
         if (operation === 'add') {
-            const responseProject = await models.Project.bulkCreate(
-                [projectObj],
-                {
-                    updateOnDuplicate: ['projectName', 'createdByUserId', 'projectOwnerUserId']
-                }
-            );
-            return responseProject[0];
+            var responseProject = null;
+            const result = await models.sequelize.transaction(async (t) => {
+                const responseProject = await models.Project.bulkCreate(
+                    [projectObj],
+                    {
+                        updateOnDuplicate: ['projectName', 'createdByUserId', 'projectOwnerUserId'],
+                        transaction: t
+                    }
+                );
+
+                const insertResult = await addAssignment(t, projectInfo.assignee, responseProject[0].id);
+                return responseProject;
+            });
+
+            return result[0];
         } else if (operation === 'update') {
             const isUpdateable = await checkUpdatable(operationInfo, projectObj);
             if (!isUpdateable) {
                 throw new UnauthorizedError('User does not have access for the project');
             }
             projectObj.createdByUserId = isUpdateable.createdByUserId;
-            projectObj.projectOwnerUserId = isUpdateable.projectOwnerUserId;
+            projectObj.projectOwnerUserId = projectObj.projectOwnerUserId;
             projectObj.version = isUpdateable.version + 1;
-            const responseProject = await models.Project.bulkCreate(
-                [projectObj],
-                {
-                    updateOnDuplicate: ['projectName', 'projectOwnerUserId', 'isDelete', 'version']
-                }
-            );
-            return responseProject[0];
+            let result = await models.sequelize.transaction(async (t) => {
+                const responseProject = await models.Project.bulkCreate(
+                    [projectObj],
+                    {
+                        updateOnDuplicate: ['projectName', 'projectOwnerUserId', 'isDelete', 'version'],
+                        transaction: t
+                    }
+                );
+
+                const insertResult = await addAssignment(t, projectInfo.assignee, responseProject[0].id);
+                return responseProject;
+            })
+            
+            return result[0];
         } else {
             throw new Error('No operations');
         }
@@ -59,6 +74,9 @@ async function checkUpdatable(operatorInfo, projectInfo) {
         const error = new Error('No project found');
         throw error;
     }
+    if (operatorInfo.role === 'ADMIN') {
+        return project;
+    }
     if (project.projectOwnerUserId != operatorInfo.id) {
         return null;
     }
@@ -67,4 +85,16 @@ async function checkUpdatable(operatorInfo, projectInfo) {
         throw error;
     }
     return project;
+}
+
+async function addAssignment(transaction, assignee, projectId) {
+    assignee = assignee.map(assignee => ({ProjectId: projectId, UserId: assignee}));
+    const deleteResult = await models.UserProject.destroy({
+        where: {ProjectId: projectId },
+        transaction: transaction
+    });
+
+    const insertOperation = await models.UserProject.bulkCreate(assignee, {transaction})
+
+    return insertOperation;
 }

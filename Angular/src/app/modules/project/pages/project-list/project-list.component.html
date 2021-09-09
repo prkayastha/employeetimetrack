@@ -1,0 +1,21 @@
+<h1>Projects</h1>
+<app-filter-options
+    *ngIf="!actionCreate"
+    [option] = "filterOption"
+    (onSearch)="search($event)"></app-filter-options>
+<app-create-project
+    [projectId]="actionProjectId"
+    (formAction)="createFormAction($event)"
+    *ngIf="actionCreate">
+</app-create-project>
+<app-table 
+    [header]="tableHeader" 
+    [data]="($projectList | async)?.collection" 
+    [action]="actionOption"
+    (onSort)="sort($event)">
+</app-table>
+<mat-paginator 
+    [length]="($projectList | async)?.count" 
+    [pageSize]="10"
+    (page)="onPaginate($event)">
+</mat-paginator>

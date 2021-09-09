@@ -20,6 +20,7 @@ class Users {
 		this.projects = null;
 		this.firstname = null;
 		this.lastname = null;
+		this.details = null
 	}
 
 	/**

@@ -1,0 +1,17 @@
+<h1>Users</h1>
+
+<app-filter-options
+    [option]="headerOption"
+    (onSearch)="search($event)">
+</app-filter-options>
+
+<app-table
+    [header]="tableHeader"
+    [data]="($userList | async)?.collection"
+    (onSort)="sort($event)"></app-table>
+
+<mat-paginator 
+    #paginator
+    [length]="($userList | async)?.count" 
+    [pageSize]="10"
+    (page)="onPaginate($event)"></mat-paginator>
