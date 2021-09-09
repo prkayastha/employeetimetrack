@@ -1,15 +1,34 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
+import { CreateTaskComponent } from './create-task/create-task.component';
+import { NotifyService } from './services/notify.service';
 
 @Component({
   selector: 'app-workdiary',
   templateUrl: './workdiary.component.html',
   styleUrls: ['./workdiary.component.scss']
 })
-export class WorkdiaryComponent implements OnInit {
+export class WorkdiaryComponent {
+  // The value of the search input.
+  searchTerm: string;
 
-  constructor() { }
+  constructor(public dialog: MatDialog, private notifyService: NotifyService) {}
 
-  ngOnInit() {
+  /**
+   * Opens a dialog to create a new task.
+   */
+  openCreateDialog(): void {
+    this.notifyService.announceTaskStarted(-1);
+    this.dialog.open(CreateTaskComponent, { width: '400px' });
+    this.searchTerm = '';
+    this.search();
   }
 
+  /**
+   * Notifies subscribed components that a search has occured.
+   */
+  search() {
+    this.notifyService.announceSearch(this.searchTerm);
+  }
 }

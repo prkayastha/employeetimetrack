@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DefaultModule } from './layouts/default/default.module';
 import { LoginComponent } from './modules/login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './modules/register/register.component';
 import { ForgotPasswordComponent } from './modules/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './modules/reset-password/reset-password.component';
@@ -26,6 +26,7 @@ import { NgxLocalStorageModule, LocalStorageService } from 'ngx-localstorage';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { PostsComponent } from './modules/posts/posts.component';
 import { ProjectsComponent } from './modules/projects/projects.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { ProjectsComponent } from './modules/projects/projects.component';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    FormsModule,
     BrowserAnimationsModule,
     DefaultModule,
     ReactiveFormsModule,
