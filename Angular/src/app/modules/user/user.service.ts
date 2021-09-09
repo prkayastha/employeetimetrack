@@ -31,7 +31,7 @@ export class UserService {
                     const mapping = {};
                     mapping['id'] = user.id;
                     mapping['name'] = `${user.firstname} ${user.lastname}`;
-                    mapping['designation'] = !!user.UserDetail ? user.UserDetails.designation : 'N/A';
+                    mapping['designation'] = !!user.UserDetail ? user.UserDetail.designation : 'N/A';
                     mapping['noOfProject'] = user.noOfProjects;
                     mapping['timeSpent'] = user.timeSpent;
                     mapping['role'] = user.roles[0].role
@@ -47,9 +47,16 @@ export class UserService {
             `${baseUrl}/user/${userId}`
         ).pipe(
             map((user: any) => {
-                user['fullname'] = `${user.firstname} ${user.lastname}`
+                user['fullname'] = `${user.firstname} ${user.lastname}`;
+                user['skills'] = !!user['skills'] ? user['skills'].split(',') : null;
                 return user;
             })
+        );
+    }
+
+    deleteUser(userId: number): Observable<any> {
+        return this.http.delete<any>(
+            `${baseUrl}/user/delete/${userId}`
         );
     }
 }

@@ -96,16 +96,7 @@ export class AccountService {
     }
 
     update(id, params) {
-        return this.http.put(`${baseUrl}/user/update/${id}`, params)
-            .pipe(map((account: any) => {
-                // update the current account if it was updated
-                if (account.id === this.accountValue.id) {
-                    // publish updated account to subscribers
-                    account = { ...this.accountValue, ...account };
-                    this.accountSubject.next(account);
-                }
-                return account;
-            }));
+        return this.http.put(`${baseUrl}/user/update/${id}`, params);
     }
 
     delete(id: string) {

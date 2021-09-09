@@ -1,5 +1,6 @@
+import { ThrowStmt } from "@angular/compiler";
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { flatMap } from "rxjs/operators";
 import { UserService } from "../../user.service";
@@ -15,10 +16,9 @@ export class ViewUserComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private rotuer: Router,
         private userService: UserService
-    ){
-        
-    }
+    ){}
 
     ngOnInit(): void {
         this.$userInformation = this.route.paramMap.pipe(
@@ -27,10 +27,16 @@ export class ViewUserComponent implements OnInit {
                 return this.userService.getUserById(this.userId);
             })
         );
+    }
 
-        this.$userInformation.subscribe((userInfo) => {
-            console.log(userInfo);
-        })
+    onDelete() {
+        this.userService.deleteUser(this.userId).subscribe((response) => {
+            this.rotuer.navigate(['/user', 'list']);
+        });
+    }
+
+    onEdit() {
+        this.rotuer.navigate(['/user', 'update', this.userId]);
     }
 
 
