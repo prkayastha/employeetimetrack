@@ -31,6 +31,7 @@ const list = async function (options, operatorInfo) {
 
     const listQuery = {
         attributes: [
+            'id',
             'firstname',
             'lastname',
             [models.sequelize.fn('countProjectInvolvement', models.sequelize.col('Users`.`id')), 'noOfProjects'],
