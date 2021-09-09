@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatDividerModule, MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule,
-  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule, MatTableModule, MatSortModule, MatPaginatorModule
+  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule, MatTableModule, MatSortModule, MatPaginatorModule, MatDialogModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
@@ -34,7 +34,8 @@ const matModules = [
   MatTableModule,
   MatSortModule,
   MatPaginatorModule,
-  MatIconModule
+  MatIconModule,
+  MatDialogModule
 ];
 
 const declareComponent = [

@@ -9,6 +9,9 @@ import { AppComponent } from './app.component';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { PostsComponent } from './modules/posts/posts.component';
 import { SharedModule } from './modules/shared/shared.module';
+import { CreateTaskComponent } from './modules/workdiary/create-task/create-task.component';
+import { TaskListComponent } from './modules/workdiary/task-list/task-list.component';
+import { TaskComponent } from './modules/workdiary/task/task.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { AlertComponent } from './_components';
 import { DefaultModule } from './_components/default/default.module';
@@ -21,6 +24,9 @@ import { ProjectService } from './_services/project.service';
     AppComponent,
     AlertComponent,
     WorkdiaryComponent,
+    CreateTaskComponent,
+    TaskListComponent,
+    TaskComponent,
     LayoutComponent,
     PostsComponent, //TODO: refactor
   ],
@@ -40,6 +46,9 @@ import { ProjectService } from './_services/project.service';
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     LocalStorageService,
     ProjectService
+  ],
+  entryComponents: [
+    CreateTaskComponent
   ],
   bootstrap: [AppComponent],
 

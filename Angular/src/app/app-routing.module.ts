@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { ProjectListComponent } from './modules/project/pages/project-list/project-list.component';
+import { TaskListComponent } from './modules/workdiary/task-list/task-list.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { DefaultComponent } from './_components/default/default.component';
 import { TableComponent } from './_components/table/table.component';
@@ -20,7 +21,10 @@ const routes: Routes = [
       },
       { path: 'user', loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule)},
       {
-        path: 'workdiary', component: WorkdiaryComponent
+        path: 'workdiary', component: WorkdiaryComponent,
+        children: [
+          { path: 'current',  component: TaskListComponent }
+        ]
       },
       { 
         path: 'project', loadChildren: () => import('./modules/project/project.module').then(m => m.ProjectModule)
