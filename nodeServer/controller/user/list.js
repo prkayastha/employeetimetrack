@@ -30,8 +30,16 @@ const list = async function (options, operatorInfo) {
     }
 
     const listQuery = {
+        attributes: [
+            'id',
+            'firstname',
+            'lastname',
+            [models.sequelize.fn('countProjectInvolvement', models.sequelize.col('Users`.`id')), 'noOfProjects'],
+            [models.sequelize.fn('involvementHrForWeek', models.sequelize.col('Users`.`id'), '+09:30'), 'timeSpent']
+        ],
         include: [
-            { model: models.Roles, as: 'roles' }
+            { model: models.Roles, as: 'roles' },
+            { model: models.UserDetails }
         ],
         offset: +offsetRows,
         limit: +limitRows,

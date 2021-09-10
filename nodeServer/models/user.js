@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     models.Users.hasMany(models.Password);
     models.Users.belongsToMany(models.Roles, {through: 'UserRole', as: 'roles'});
     models.Users.belongsToMany(models.Project, {through: 'UserProject', as: 'projects'})
+    models.Users.hasOne(models.UserDetails);
   };
   return User;
 };

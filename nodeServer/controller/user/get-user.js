@@ -59,6 +59,9 @@ function getUser(userId) {
                 as: 'projects',
                 attributes: ['id', 'projectName'],
                 where: { isDelete: false }
+            },
+            {
+                model: models.UserDetails
             }
         ],
         where: whereCondition
@@ -75,7 +78,11 @@ function getUser(userId) {
             return { id: role.id, role: role.role }
         });
         userCp.projects = userCp.projects.map(project => ({id: project.id, name: project.projectName}));
+        userCp.designation = !!userCp.UserDetail ? userCp.UserDetail.designation : null;
+        userCp.skills = !!userCp.UserDetail ? userCp.UserDetail.skills : null;
 
+        delete userCp['UserDetail'];
+        
         return Promise.resolve(userCp);
     });
 }

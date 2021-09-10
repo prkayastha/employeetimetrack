@@ -1,50 +1,37 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { DefaultComponent } from './layouts/default/default.component';
+import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
-import { LoginComponent } from './modules/login/login.component';
-import { RegisterComponent } from './modules/register/register.component';
-import { VerifyEmailComponent } from './modules/verify-email/verify-email.component';
-import { ForgotPasswordComponent } from './modules/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './modules/reset-password/reset-password.component';
-import { LayoutComponent } from './modules/layout/layout.component';
-import { EmployeeListComponent } from './modules/employee-list/employee-list.component';
+import { ProjectListComponent } from './modules/project/pages/project-list/project-list.component';
+import { TaskListComponent } from './modules/workdiary/task-list/task-list.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
-import { UpdateUserComponent } from './modules/update-user/update-user.component';
+import { DefaultComponent } from './_components/default/default.component';
+import { TableComponent } from './_components/table/table.component';
 import { AuthGuard } from './_helpers';
-import { ProjectListComponent } from './modules/project/project-list/project-list.component';
 
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'forget-password', component: ForgotPasswordComponent },
-  { path: 'reset-password', component: ResetPasswordComponent },
-  { path: 'verify-email', component: VerifyEmailComponent },
-
-
+  { path: 'auth', loadChildren: () => import('./modules/authentication/auth.module').then(m => m.AuthModule)},
   {
-    path: 'home',
+    path: '',
     component: DefaultComponent, canActivate: [AuthGuard],
     children: [
       {
-        path: 'dashboard',
+        path: '',
         component: DashboardComponent
-      }, {
-        path: 'employee-list',
-        component: EmployeeListComponent
       },
+      { path: 'user', loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule)},
       {
-        path: 'update/:userId', component: UpdateUserComponent
-      },
-      {
-        path: 'workdiary', component: WorkdiaryComponent
+        path: 'workdiary', component: WorkdiaryComponent,
+        children: [
+          { path: 'current',  component: TaskListComponent }
+        ]
       },
       { 
-        path: 'projects', component: ProjectListComponent 
+        path: 'project', loadChildren: () => import('./modules/project/project.module').then(m => m.ProjectModule)
       }
     ]
-  }
+  },
+  { path: 'test', component: TableComponent}
 
 ];
 

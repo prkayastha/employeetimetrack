@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, SimpleChange } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
@@ -9,21 +10,33 @@ const baseUrl = environment.apiUrl;
   providedIn: 'root'
 })
 export class ProjectService {
+  
 
   constructor(
     private http: HttpClient
   ) { }
 
-  //Projct List
-  getAllProject() {
-    const option = {
-      offset: 0,
-      limit: 100,
-      orderBy: "id",
-      order: "Desc",
-      search: null,
-    }
+  getAllProject(option: any) {
     return this.http.post<any[]>(`${baseUrl}/project/list`, option);
+  }
+
+  getProjectDetail(id: number) {
+    return this.http.get(
+      `${baseUrl}/project/${id}`
+    )
+  }
+
+  createProject(value: any): Observable<any> {
+    return this.http.post<any>(
+      `${baseUrl}/project/upsert`,
+      value
+    );
+  }
+
+  deleteProject(id: number): Observable<any> {
+    return this.http.delete<any>(
+      `${baseUrl}/project/delete/${id}`,
+    );
   }
 
 }

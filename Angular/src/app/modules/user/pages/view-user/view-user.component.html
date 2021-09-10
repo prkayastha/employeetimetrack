@@ -1,0 +1,67 @@
+<h1>Users</h1>
+
+<div class="d-flex justify-content-center">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title center">User Information</h5>
+            <div class="mt-3"></div>
+            <div class="container card-text">
+                <div class="row">
+                    <div class="col label">Name</div>
+                    <div class="col">{{($userInformation | async)?.fullname}}</div>
+                </div>
+                <div class="hr"></div>
+                <div class="row">
+                    <div class="col label">Designation</div>
+                    <div class="col">{{($userInformation | async)?.designation || 'N/A'}}</div>
+                </div>
+                <div class="hr"></div>
+                <div class="row">
+                    <div class="col label">Role</div>
+                    <div class="col">{{($userInformation | async)?.roles[0].role}}</div>
+                </div>
+                <div class="hr"></div>
+                <div class="row">
+                    <div class="col label">Projects</div>
+                    <div class="col">
+                        <div class="d-flex flex-wrap">
+                            <ng-container 
+                                *ngIf="!($userInformation | async)?.projects.length">
+                                N/A</ng-container>
+                            <span 
+                                *ngFor="let project of ($userInformation | async)?.projects"
+                                class="badge badge-primary">{{project.name}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hr"></div>
+                <div class="row">
+                    <div class="col label">Skills</div>
+                    <div class="col">
+                        <ng-container 
+                            *ngIf="!($userInformation | async)?.skills.length">
+                            N/A</ng-container>
+                        <span 
+                            *ngFor="let skill of ($userInformation | async)?.skills" 
+                            class="badge badge-info">
+                            {{skill}}</span>
+                    </div>
+                </div>
+                <div class="hr"></div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-primary btn-sm btn-block" (click)="onEdit()">Edit</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-danger btn-sm btn-block" (click)="onDelete()">Delete</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-info btn-sm btn-block">View Reports</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

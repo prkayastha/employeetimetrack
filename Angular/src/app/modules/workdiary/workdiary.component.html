@@ -1,1 +1,27 @@
-<p>workdiary works!</p>
+<main class="container">
+
+    <div class="menu">
+  
+      <header fxLayout="row" fxLayout.lt-sm="column">
+  
+        <h1 class="title">Time Tracker</h1>
+  
+        <div fxLayout="row">
+  
+          <button class="btn btn-primary" (click)="openCreateDialog()"><i class="fa fa-plus"></i></button>
+          <input fxFlex (input)="search()" [(ngModel)]="searchTerm" type="text" placeholder="Search" class="form-control search">
+        </div>
+        
+      </header>
+  
+      <nav>
+  
+        <a routerLinkActive="is-active" routerLink="current" (click)="searchTerm = ''">Current</a>
+  
+        <a routerLinkActive="is-active" routerLink="archive" (click)="searchTerm = ''">Archive</a>
+  
+      </nav>
+      
+      <router-outlet></router-outlet>
+    </div>
+  </main>

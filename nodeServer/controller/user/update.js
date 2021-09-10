@@ -77,11 +77,16 @@ const update = function (operatorInfo, userId, infoToUpdate) {
                     throw error;
                 }
 
+                const promise = [];
                 if (!!infoToUpdate.roles) {
-                    return updateRoles(infoToUpdate.roles.filter(role => role != 1), userId);
+                    promise.push(updateRoles(infoToUpdate.roles.filter(role => role != 1), userId));
                 }
 
-                return true;
+                if (!!infoToUpdate.details) {
+                    promise.push(addUserDetails(infoToUpdate.details, userId));
+                }
+
+                return Promise.all(promise);
             })
         } else if (cacheOperatorRole === 'MANAGER') {
             promise = models.Users.update(updateData, {
@@ -94,11 +99,16 @@ const update = function (operatorInfo, userId, infoToUpdate) {
                     throw error;
                 }
 
+                const promise = [];
                 if (!!infoToUpdate.projects) {
                     return updateProject(infoToUpdate.projects, userId, operatorInfo.id);
                 }
 
-                return true;
+                if (!!infoToUpdate.details) {
+                    promise.push(addUserDetails(infoToUpdate.details, userId));
+                }
+
+                return Promise.all(promise);
             });
 
 
@@ -189,6 +199,16 @@ function getOperatorInfo(operatorId) {
         ],
         where: whereCondition
     });
+}
+
+async function addUserDetails(details, userId, transaction) {
+    details = { ...details, UserId: userId};
+    const queryRes = await models.UserDetails.findOne({ where: {UserId: +userId}});
+    if (!!queryRes) {
+        details = { ...details, id: queryRes.id};
+    }
+    const insertRes = await models.UserDetails.bulkCreate([details], { updateOnDuplicate: ['designation', 'skills'] });
+    return insertRes;
 }
 
 module.exports = update;

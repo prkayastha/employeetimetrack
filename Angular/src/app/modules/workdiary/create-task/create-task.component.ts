@@ -1,0 +1,56 @@
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, FormGroupName, Validators } from '@angular/forms';
+
+import { WorkdiaryComponent } from '../workdiary.component';
+import { TaskService } from '../services/task.service';
+import { ITask } from '../models/task';
+import { NotifyService } from '../services/notify.service';
+
+@Component({
+  selector: 'app-create-task',
+  templateUrl: './create-task.component.html',
+  styleUrls: ['./create-task.component.css']
+})
+
+export class CreateTaskComponent implements OnInit {
+  createForm: FormGroup;
+
+  constructor(
+    public dialogRef: MatDialogRef<WorkdiaryComponent>,
+    private taskService: TaskService,
+    private notifyService: NotifyService,
+    private fb: FormBuilder) { 
+    }
+
+  ngOnInit() {
+    this.createForm = this.fb.group({
+      taskName: ['', Validators.required],
+      projectName: ['', Validators.required],
+    });
+  }
+
+  /**
+   * Saves the new task.
+   * @param form The component's form group.
+   */
+  save(form: FormGroup): void {
+    this.taskService.getHighestId().subscribe((highestId: number) => {
+      const task: ITask = {
+        id: highestId + 1,
+        name: form.value.taskName,
+        project: form.value.projectName,
+        isCurrent: true,
+        time: {
+          hours: 0,
+          minutes: 0,
+          seconds: 0
+        }
+      };
+
+      this.taskService.saveTask(task);
+      this.notifyService.announceTaskAdded(task);
+      this.dialogRef.close();
+    });
+  }
+}
