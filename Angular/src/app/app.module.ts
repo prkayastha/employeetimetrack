@@ -9,6 +9,8 @@ import { AppComponent } from './app.component';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { PostsComponent } from './modules/posts/posts.component';
 import { SharedModule } from './modules/shared/shared.module';
+import { ArchiveListComponent } from './modules/workdiary/archive-list/archive-list.component';
+import { ArchiveTaskComponent } from './modules/workdiary/archive-task/archive-task.component';
 import { CreateTaskComponent } from './modules/workdiary/create-task/create-task.component';
 import { TaskListComponent } from './modules/workdiary/task-list/task-list.component';
 import { TaskComponent } from './modules/workdiary/task/task.component';
@@ -28,6 +30,8 @@ import { ProjectService } from './_services/project.service';
     TaskListComponent,
     TaskComponent,
     LayoutComponent,
+    ArchiveListComponent,
+    ArchiveTaskComponent,
     PostsComponent, //TODO: refactor
   ],
   imports: [
