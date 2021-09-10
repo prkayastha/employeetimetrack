@@ -13,6 +13,16 @@ const errorHandler = require('../controller/errorHandler');
 const userValidator = require('../validators/user');
 const { validationResult } = require('express-validator');
 const { allow, ROLES } = require('../controller/authorize');
+const models = require('../models');
+
+const orderMap = {
+  'id': 'id',
+  'firstname': ['firstname', 'lastname'],
+  'role': [{models: models.Roles, as: 'role'}, 'role'],
+  'designation': [{model: models.UserDetails}, 'designation'],
+  'noOfProject': models.sequelize.fn('countProjectInvolvement', models.sequelize.col('Users`.`id')),
+  'timeSpent': models.sequelize.fn('involvementHrForWeek', models.sequelize.col('Users`.`id'), '+09:30')
+};
 
 router.post('/register',
   userValidator.register,
@@ -97,10 +107,29 @@ router.post('/list',
 
     const offset = req.body.offset || 0;
     const limit = req.body.limit || 10;
-    const order = [[
-      req.body.orderBy,
-      req.body.order
-    ]];
+    let order = null;
+
+    const orderBy = orderMap[req.body.orderBy];
+    if (!!orderBy) {
+      if (Array.isArray(orderBy)) {
+        if (orderBy === 'firstname') {
+        order = orderBy.map(order => ([order, req.body.order || 'ASC']));
+        } else {
+          order = [[...orderBy, req.body.order || 'ASC']]
+        }
+      } else {
+        order = [[
+          orderBy,
+          req.body.order || 'ASC'
+        ]];
+      }
+    } else {
+      order = [[
+        'id',
+        req.body.order || 'ASC'
+      ]];
+    }
+    
     const searchQuery = req.body.search || '';
     const options = {
       offset,
