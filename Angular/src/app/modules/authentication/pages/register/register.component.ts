@@ -6,7 +6,11 @@ import { first } from 'rxjs/operators';
 import { AccountService, AlertService } from '../../../../_services';
 import { MustMatch } from '../../../../_helpers';
 
-@Component({ templateUrl: 'register.component.html' })
+@Component({ 
+    selector: 'app-register-user',
+    styleUrls: ['./register.component.scss'],
+    templateUrl: 'register.component.html' 
+})
 export class RegisterComponent implements OnInit {
     form: FormGroup;
     loading = false;
