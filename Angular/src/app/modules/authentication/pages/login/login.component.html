@@ -35,8 +35,8 @@
 						</button>
 					</div>
 					<div class="link-grp">
-						<a routerLink="register" class="btn btn-link">Register</a>
-						<a routerLink="forget-password" class="btn btn-link pr-0">Forgot Password?</a>
+						<a [routerLink]="['/auth','register']" class="btn btn-link">Register</a>
+						<a [routerLink]="['/auth','forget-password']" class="btn btn-link pr-0">Forgot Password?</a>
 					</div>
 				</form>
 			</div>
