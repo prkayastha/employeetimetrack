@@ -29,7 +29,7 @@
             "autoUnlockAfter": 180,
             "hashSalt": "!==qwerty//poiu",
             "maxPasswordLife": 90,
-            "tokenLife": 20
+            "tokenLife": 120
         },
         "tokenSecret": "My Secret Key"
     },
@@ -46,7 +46,7 @@
             "autoUnlockAfter": 180,
             "hashSalt": "!==qwerty//poiu",
             "maxPasswordLife": 90,
-            "tokenLife": 20
+            "tokenLife": 120
         },
         "tokenSecret": "My Secret Key"
     }
