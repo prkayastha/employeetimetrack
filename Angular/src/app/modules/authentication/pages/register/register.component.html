@@ -40,7 +40,7 @@
                         [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
                     <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                         <div *ngIf="f.password.errors.required">Password is required</div>
-                        <div *ngIf="f.password.errors.minlength">Password must be at least 8 characters
+                        <div *ngIf="f.password.errors.pattern">Password must have an upper case, a lower case, a number, a special character and must be atleast of 8 character.
                         </div>
                     </div>
                 </div>
