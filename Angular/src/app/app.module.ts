@@ -17,9 +17,9 @@ import { TaskComponent } from './modules/workdiary/task/task.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { AlertComponent } from './_components';
 import { DefaultModule } from './_components/default/default.module';
-import { TableComponent } from './_components/table/table.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { ProjectService } from './_services/project.service';
+import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -43,13 +43,16 @@ import { ProjectService } from './_services/project.service';
     DefaultModule,
     ReactiveFormsModule,
     SharedModule,
-    NgxLocalStorageModule.forRoot()
+    NgxLocalStorageModule.forRoot(),
+    BsDatepickerModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     LocalStorageService,
-    ProjectService
+    ProjectService,
+    BsDatepickerConfig,
+    BsDaterangepickerConfig
   ],
   entryComponents: [
     CreateTaskComponent
