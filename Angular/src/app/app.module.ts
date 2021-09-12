@@ -21,6 +21,7 @@ import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { ProjectService } from './_services/project.service';
 import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ReportService } from './_services/report.service';
+import { ViewCaptureComponent } from './modules/workdiary/component/view-capture.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ReportService } from './_services/report.service';
     ArchiveListComponent,
     ArchiveTaskComponent,
     PostsComponent, //TODO: refactor
+    ViewCaptureComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +59,8 @@ import { ReportService } from './_services/report.service';
     BsDaterangepickerConfig
   ],
   entryComponents: [
-    CreateTaskComponent
+    CreateTaskComponent,
+    ViewCaptureComponent
   ],
   bootstrap: [AppComponent],
 

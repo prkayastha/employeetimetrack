@@ -21,7 +21,7 @@
           <div fxLayout="row" fxLayoutGap="10px">
             <div *ngFor="let capture of task.captures">
               <div fxLayout="column">
-                <img [src]="capture.location"/>
+                <img class="capture" [src]="capture.location" (click)="openCapture(capture.location)"/>
                 <span class="task-content">11:00pm</span>
               </div>
             </div>

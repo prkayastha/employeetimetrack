@@ -7,6 +7,7 @@ import { NotifyService } from './services/notify.service';
 import * as moment from 'moment-timezone';
 import { ReportService } from '../../_services/report.service';
 import { BehaviorSubject } from 'rxjs';
+import { ViewCaptureComponent } from './component/view-capture.component';
 
 @Component({
   selector: 'app-workdiary',
@@ -19,7 +20,10 @@ export class WorkdiaryComponent {
   date: FormControl = new FormControl();
   $workDiary: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  constructor(public dialog: MatDialog, private notifyService: NotifyService, private report: ReportService) {
+  constructor(
+    public dialog: MatDialog, 
+    private notifyService: NotifyService, 
+    private report: ReportService) {
     this.date.patchValue(moment.tz().utcOffset("+09:30").toString());
 
     this.date.valueChanges.subscribe((date) => {
@@ -34,6 +38,20 @@ export class WorkdiaryComponent {
       //perform ops
       this.$workDiary.next(response);
     });
+  }
+
+  openCapture(location: string) {
+    const initState = {
+      data: {
+        location
+      },
+      width: '80%',
+      height: '80%'
+    };
+
+    const dialogRef = this.dialog.open(ViewCaptureComponent, initState);
+
+    dialogRef.afterClosed();
   }
 
   /**
