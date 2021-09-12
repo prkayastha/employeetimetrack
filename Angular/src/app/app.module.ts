@@ -20,6 +20,7 @@ import { DefaultModule } from './_components/default/default.module';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { ProjectService } from './_services/project.service';
 import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
+import { ReportService } from './_services/report.service';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     LocalStorageService,
     ProjectService,
+    ReportService,
     BsDatepickerConfig,
     BsDaterangepickerConfig
   ],

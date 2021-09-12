@@ -1,14 +1,38 @@
-<h1>Workdiary</h1>
-
 <div class="container">
+  <h1>Workdiary</h1>
   <div class="row">
     <div class="col">Your diary for the day 12/09/2021</div>
   </div>
   <div class="d-flex calendar mt-2 form-group">
     <div class="label">Choose a day</div>
     <span>
-      <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker placement="bottom left" data-date-format='dd/mm/yyyy'>
+      <input [formControl]="date" type="text" placeholder="Datepicker" class="form-control" bsDatepicker placement="bottom left" data-date-format='dd/mm/yyyy'>
     </span>
+  </div>
+  <div class="hr"></div>
+  <div class="mt-2"></div>
+
+  <div class="diary" fxLayout="column" fxLayoutGap="30px" *ngIf="!!($workDiary | async)?.length">
+    <div *ngFor="let timeHour of ($workDiary | async)" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+      <div class="timehour">{{timeHour.timeHour === '0 PM' ? '12 PM' : timeHour.timeHour}}</div>
+      <div *ngFor="let task of timeHour.taskInfo">
+        <div fxLayout="column" fxLayoutGap="5px">
+          <div class="task-label">{{task.taskId}}</div>
+          <div fxLayout="row" fxLayoutGap="10px">
+            <div *ngFor="let capture of task.captures">
+              <div fxLayout="column">
+                <img [src]="capture.location"/>
+                <span class="task-content">11:00pm</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="!($workDiary | async) || !($workDiary | async)?.length">
+    No data for the date
   </div>
 </div>
 
