@@ -23,11 +23,12 @@ router.post('/segregate',
         }
     });
 
-router.get('', async (req, res) => {
+router.post('', async (req, res) => {
     // + -> %2B
     const query = {
-        date: req.query.date,
-        offset: req.query.offset
+        date: req.body.date,
+        offset: req.body.offset,
+        userId: req.body.userId
     };
 
     const jwtPayload = jwtDecode(req);
