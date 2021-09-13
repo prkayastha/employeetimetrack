@@ -13,9 +13,14 @@ export class ReportService {
 
     constructor(private http: HttpClient) {}
 
-    getWorkDiary(date: string, offset: string): Observable<any> {
-        return this.http.get(
-            `${baseUrl}/workdiary?date=${date}&offset=${offset.replace('+', '%2B')}`
+    getWorkDiary(date: string, offset: string, userId: number): Observable<any> {
+        return this.http.post(
+            `${baseUrl}/workdiary`,
+            {
+                date,
+                offset,
+                userId
+            }
         ).pipe(
             map((result) => {
                 console.log(result);

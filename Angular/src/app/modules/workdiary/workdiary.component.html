@@ -14,12 +14,16 @@
 
   <div class="diary" fxLayout="column" fxLayoutGap="30px" *ngIf="!!($workDiary | async)?.length">
     <div *ngFor="let timeHour of ($workDiary | async)" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-      <div class="timehour">{{timeHour.timeHour === '0 PM' ? '12 PM' : timeHour.timeHour}}</div>
+      <div class="timehour">{{timeHour.time}}</div>
       <div *ngFor="let task of timeHour.taskInfo">
         <div fxLayout="column" fxLayoutGap="5px">
-          <div class="task-label">{{task.taskId}}</div>
+          <div class="task-label">
+            <div fxLayout="row" style="width: 100%;">
+              <div class="label" fxFlex [title]="task.taskDescription"> {{task.taskDescription}} </div>
+            </div>
+          </div>
           <div fxLayout="row" fxLayoutGap="10px">
-            <div *ngFor="let capture of task.captures">
+            <div *ngFor="let capture of task.log">
               <div fxLayout="column">
                 <img class="capture" [src]="capture.location" (click)="openCapture(capture.location)"/>
                 <span class="task-content">11:00pm</span>

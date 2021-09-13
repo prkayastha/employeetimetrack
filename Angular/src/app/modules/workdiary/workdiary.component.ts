@@ -8,6 +8,7 @@ import * as moment from 'moment-timezone';
 import { ReportService } from '../../_services/report.service';
 import { BehaviorSubject } from 'rxjs';
 import { ViewCaptureComponent } from './component/view-capture.component';
+import { UserDetails } from '../../_models/userDetails';
 
 @Component({
   selector: 'app-workdiary',
@@ -23,7 +24,8 @@ export class WorkdiaryComponent {
   constructor(
     public dialog: MatDialog, 
     private notifyService: NotifyService, 
-    private report: ReportService) {
+    private report: ReportService,
+    private user: UserDetails) {
     this.date.patchValue(moment.tz().utcOffset("+09:30").toString());
 
     this.date.valueChanges.subscribe((date) => {
@@ -33,8 +35,17 @@ export class WorkdiaryComponent {
     });
   }
 
-  getWorkDiary(date:any) {
-    this.report.getWorkDiary(date.format('YYYY-MM-DD'), date.format('Z')).subscribe((response) => {
+  getWorkDiary(date:any, userId?: number) {
+    const role = this.user.role;
+    let requestHook = null;
+
+    if (role === 'EMPLOYEE') {
+      requestHook = this.report.getWorkDiary(date.format('YYYY-MM-DD'), date.format('Z'), this.user.id);
+    } else {
+      requestHook = this.report.getWorkDiary(date.format('YYYY-MM-DD'), date.format('Z'), userId);
+    }
+
+    requestHook.subscribe((response) => {
       //perform ops
       this.$workDiary.next(response);
     });
