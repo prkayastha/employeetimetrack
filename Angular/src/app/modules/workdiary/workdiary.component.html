@@ -11,6 +11,7 @@
     <span>
       <input [formControl]="date" type="text" placeholder="Datepicker" class="form-control" bsDatepicker
         placement="bottom left" data-date-format='dd/mm/yyyy'>
+        <!-- [maxDate]="today" //add for prod -->
     </span>
   </div>
   <div class="hr"></div>
@@ -41,7 +42,7 @@
               <div class="task-content">{{getImgInfo(slot, timeHour.flatterned, 'screenshotTakenAt') | date: 'shortTime'}}
               </div>
               <div class="form-check marking" *ngIf="showCheckbox()">
-                <input type="checkbox" class="form-check-input">
+                <input type="checkbox" class="form-check-input" [checked]="getImgInfo(slot, timeHour.flatterned, 'unproductive')" (click)="onMark($event, getImgInfo(slot, timeHour.flatterned, 'id'))">
                 <label class="form-check-label">Mark Unproductive</label>
               </div>
             </ng-template>

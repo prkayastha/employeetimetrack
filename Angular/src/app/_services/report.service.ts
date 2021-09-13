@@ -49,7 +49,7 @@ export class ReportService {
                                 timeSlot: [i]
                             })
                         } else if (!descp && !!lastObj) {
-                            if (lastObj.taskId == 0 ) {
+                            if (lastObj.taskId == 0) {
                                 lastObj.timeSlot.push(i)
                             } else {
                                 descriptionList.push({
@@ -59,7 +59,7 @@ export class ReportService {
                                 })
                             }
                         } else if (!!descp && !!lastObj) {
-                            if (lastObj.taskId == descp.taskId ) {
+                            if (lastObj.taskId == descp.taskId) {
                                 lastObj.timeSlot.push(i)
                             } else {
                                 descriptionList.push({
@@ -83,6 +83,13 @@ export class ReportService {
                 });
                 return mapped;
             })
+        )
+    }
+
+    markScreen(screenInfo: { id: number; markUnproductive: boolean; }): Observable<any> {
+        return this.http.post(
+            `${baseUrl}/workdiary/segregate`,
+            screenInfo
         )
     }
 }

@@ -25,6 +25,7 @@ export class WorkdiaryComponent implements OnInit {
   role: string;
   userId: number;
   name: string;
+  today = new Date();
 
   constructor(
     public dialog: MatDialog,
@@ -49,7 +50,7 @@ export class WorkdiaryComponent implements OnInit {
     this.route.queryParamMap.subscribe((query) => {
       this.userId = (<any>query.get('userId')) as number;
       this.name = query.get('name').trim();
-      this.date.patchValue(new Date());
+      this.date.patchValue(this.today);
     })
   }
 
@@ -95,6 +96,13 @@ export class WorkdiaryComponent implements OnInit {
 
   showCheckbox() {
     return this.user.role !== 'EMPLOYEE';
+  }
+
+  onMark(event: Event, captureId: number) {
+    const markedUnproductive = event.target['checked'];
+    this.report.markScreen({ id: captureId, markUnproductive: markedUnproductive }).subscribe((result) => {
+      //no action
+    });
   }
 
   /**
