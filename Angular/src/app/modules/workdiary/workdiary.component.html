@@ -1,7 +1,10 @@
 <div class="container">
   <h1>Workdiary</h1>
   <div class="row">
-    <div class="col">Your diary for the day 12/09/2021</div>
+    <div class="col" *ngIf="role === 'EMPLOYEE'; Else empWorkDiary">Your diary for the day {{date.value | date: 'd/M/yyyy'}}</div>
+    <ng-template #empWorkDiary>
+      <div class="col">{{name}}'s diary for the day {{date.value | date: 'd/M/yyyy'}}</div>
+    </ng-template>
   </div>
   <div class="d-flex calendar mt-2 form-group">
     <div class="label">Choose a day</div>
@@ -36,6 +39,10 @@
               <img class="capture" [src]="getImgInfo(slot, timeHour.flatterned, 'location')"
                 (click)="openCapture(getImgInfo(slot, timeHour.flatterned, 'location'))" />
               <div class="task-content">{{getImgInfo(slot, timeHour.flatterned, 'screenshotTakenAt') | date: 'shortTime'}}
+              </div>
+              <div class="form-check marking" *ngIf="showCheckbox()">
+                <input type="checkbox" class="form-check-input">
+                <label class="form-check-label">Mark Unproductive</label>
               </div>
             </ng-template>
           </div>

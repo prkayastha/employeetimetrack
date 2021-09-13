@@ -21,10 +21,7 @@ const routes: Routes = [
       },
       { path: 'user', loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule)},
       {
-        path: 'workdiary', component: WorkdiaryComponent,
-        children: [
-          { path: 'current',  component: TaskListComponent }
-        ]
+        path: 'workdiary', component: WorkdiaryComponent
       },
       { 
         path: 'project', loadChildren: () => import('./modules/project/project.module').then(m => m.ProjectModule)

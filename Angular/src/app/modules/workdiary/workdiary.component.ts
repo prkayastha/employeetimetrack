@@ -9,35 +9,51 @@ import { ReportService } from '../../_services/report.service';
 import { BehaviorSubject } from 'rxjs';
 import { ViewCaptureComponent } from './component/view-capture.component';
 import { UserDetails } from '../../_models/userDetails';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-workdiary',
   templateUrl: './workdiary.component.html',
   styleUrls: ['./workdiary.component.scss']
 })
-export class WorkdiaryComponent {
+export class WorkdiaryComponent implements OnInit {
   // The value of the search input.
   timeSlot = [...Array(6).keys()];
   searchTerm: string;
   date: FormControl = new FormControl();
   $workDiary: BehaviorSubject<any> = new BehaviorSubject(null);
+  role: string;
+  userId: number;
+  name: string;
 
   constructor(
-    public dialog: MatDialog, 
-    private notifyService: NotifyService, 
+    public dialog: MatDialog,
+    private notifyService: NotifyService,
     private report: ReportService,
+    private route: ActivatedRoute,
     private user: UserDetails) {
-
+    this.role = this.user.role;
     this.date.valueChanges.subscribe((date) => {
       const zone = moment.tz.guess();
       const dateMoment = moment.tz(date, zone);
-      this.getWorkDiary(dateMoment);
-    });
 
-    this.date.patchValue(new Date());
+      if (this.role === 'EMPLOYEE') {
+        this.getWorkDiary(dateMoment);
+      } else {
+        this.getWorkDiary(dateMoment, this.userId);
+      }
+    });
   }
 
-  getWorkDiary(date:any, userId?: number) {
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((query) => {
+      this.userId = (<any>query.get('userId')) as number;
+      this.name = query.get('name').trim();
+      this.date.patchValue(new Date());
+    })
+  }
+
+  getWorkDiary(date: any, userId?: number) {
     const role = this.user.role;
     let requestHook = null;
 
@@ -68,13 +84,17 @@ export class WorkdiaryComponent {
   }
 
   getImgInfo(slot, list, infoKey) {
-    const capture = list.find(screen => screen.timeMinutes/10 == slot);
+    const capture = list.find(screen => screen.timeMinutes / 10 == slot);
 
     if (!!capture) {
       return capture[infoKey];
     }
 
     return null;
+  }
+
+  showCheckbox() {
+    return this.user.role !== 'EMPLOYEE';
   }
 
   /**
