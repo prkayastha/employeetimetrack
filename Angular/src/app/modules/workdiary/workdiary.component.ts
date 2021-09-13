@@ -27,13 +27,14 @@ export class WorkdiaryComponent {
     private notifyService: NotifyService, 
     private report: ReportService,
     private user: UserDetails) {
-    this.date.patchValue(moment.tz().utcOffset("+09:30").toString());
 
     this.date.valueChanges.subscribe((date) => {
       const zone = moment.tz.guess();
       const dateMoment = moment.tz(date, zone);
       this.getWorkDiary(dateMoment);
     });
+
+    this.date.patchValue(new Date());
   }
 
   getWorkDiary(date:any, userId?: number) {
