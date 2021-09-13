@@ -25,13 +25,62 @@ export class ReportService {
             map((result: any[]) => {
                 const mapped = result.map(eachTime => {
                     let tasks = [];
-                    eachTime.taskInfo.forEach(taskInfo => {
-                        tasks = [...tasks, ...taskInfo.log]
+                    eachTime.taskInfo = eachTime.taskInfo.map(taskInfo => {
+                        tasks = [...tasks, ...taskInfo.log];
+                        return {
+                            taskId: taskInfo.taskId,
+                            taskDescription: taskInfo.taskDescription,
+                            timeSlot: taskInfo.log.map(each => each.timeMinutes / 10),
+                            log: taskInfo.log
+                        };
                     });
                     eachTime['flatterned'] = tasks;
+
+                    const descriptionList = [];
+                    for (let i = 0; i < 6; i++) {
+                        const lastObj = descriptionList.slice(-1).pop();
+
+                        const descp = eachTime.taskInfo.find(description => description.timeSlot.includes(i));
+
+                        if (!descp && !lastObj) {
+                            descriptionList.push({
+                                taskId: 0,
+                                taskDescription: null,
+                                timeSlot: [i]
+                            })
+                        } else if (!descp && !!lastObj) {
+                            if (lastObj.taskId == 0 ) {
+                                lastObj.timeSlot.push(i)
+                            } else {
+                                descriptionList.push({
+                                    taskId: 0,
+                                    taskDescription: null,
+                                    timeSlot: [i]
+                                })
+                            }
+                        } else if (!!descp && !!lastObj) {
+                            if (lastObj.taskId == descp.taskId ) {
+                                lastObj.timeSlot.push(i)
+                            } else {
+                                descriptionList.push({
+                                    taskId: descp.taskId,
+                                    taskDescription: descp.taskDescription,
+                                    timeSlot: [i]
+                                })
+                            }
+                        } else if (!!descp && !lastObj) {
+                            descriptionList.push({
+                                taskId: descp.taskId,
+                                taskDescription: descp.taskDescription,
+                                timeSlot: [i]
+                            })
+                        }
+                    }
+                    eachTime['descriptionList'] = descriptionList;
+
+                    delete eachTime['taskInfo']
                     return eachTime;
                 });
-                console.log(mapped);
                 return mapped;
             })
         )

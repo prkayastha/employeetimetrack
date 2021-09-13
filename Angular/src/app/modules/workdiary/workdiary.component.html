@@ -16,14 +16,30 @@
   <div class="diary" fxLayout="column" fxLayoutGap="30px" *ngIf="!!($workDiary | async)?.length">
     <div *ngFor="let timeHour of ($workDiary | async)" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="10px">
       <div class="timehour">{{timeHour.time}}</div>
-      <div *ngFor="let slot of timeSlot">
-        <div class="capture" *ngIf="!getImgInfo(slot, timeHour.flatterned, 'location'); else screenCapture"></div>
-        <ng-template #screenCapture>
-          <img class="capture" [src]="getImgInfo(slot, timeHour.flatterned, 'location')"
-            (click)="openCapture(getImgInfo(slot, timeHour.flatterned, 'location'))" />
-          <div class="task-content">{{getImgInfo(slot, timeHour.flatterned, 'screenshotTakenAt') | date: 'shortTime'}}
+      <div fxLayout="column" fxLayoutGap="10px">
+        <div fxLayout="row" fxLayoutGap="10px">
+          <div *ngFor="let description of timeHour.descriptionList">
+            <div fxLayout="column">
+              <div class="task-label" [class.empty]="description.taskId == 0">
+                <div class="label" fxFlex>{{description.taskDescription}}</div>
+              </div>
+              <div fxLayout="row" fxLayoutGap="10px">
+                <div class="captuer-space" *ngFor="let slot of description.timeSlot"></div>
+              </div>
+            </div>
           </div>
-        </ng-template>
+        </div>
+        <div fxLayout="row" fxLayoutGap="10px">
+          <div *ngFor="let slot of timeSlot">
+            <div class="capture" *ngIf="!getImgInfo(slot, timeHour.flatterned, 'location'); else screenCapture"></div>
+            <ng-template #screenCapture>
+              <img class="capture" [src]="getImgInfo(slot, timeHour.flatterned, 'location')"
+                (click)="openCapture(getImgInfo(slot, timeHour.flatterned, 'location'))" />
+              <div class="task-content">{{getImgInfo(slot, timeHour.flatterned, 'screenshotTakenAt') | date: 'shortTime'}}
+              </div>
+            </ng-template>
+          </div>
+        </div>
       </div>
     </div>
   </div>
