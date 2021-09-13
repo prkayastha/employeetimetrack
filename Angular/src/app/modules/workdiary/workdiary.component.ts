@@ -17,6 +17,7 @@ import { UserDetails } from '../../_models/userDetails';
 })
 export class WorkdiaryComponent {
   // The value of the search input.
+  timeSlot = [...Array(6).keys()];
   searchTerm: string;
   date: FormControl = new FormControl();
   $workDiary: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -63,6 +64,16 @@ export class WorkdiaryComponent {
     const dialogRef = this.dialog.open(ViewCaptureComponent, initState);
 
     dialogRef.afterClosed();
+  }
+
+  getImgInfo(slot, list, infoKey) {
+    const capture = list.find(screen => screen.timeMinutes/10 == slot);
+
+    if (!!capture) {
+      return capture[infoKey];
+    }
+
+    return null;
   }
 
   /**

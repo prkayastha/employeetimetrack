@@ -6,31 +6,24 @@
   <div class="d-flex calendar mt-2 form-group">
     <div class="label">Choose a day</div>
     <span>
-      <input [formControl]="date" type="text" placeholder="Datepicker" class="form-control" bsDatepicker placement="bottom left" data-date-format='dd/mm/yyyy'>
+      <input [formControl]="date" type="text" placeholder="Datepicker" class="form-control" bsDatepicker
+        placement="bottom left" data-date-format='dd/mm/yyyy'>
     </span>
   </div>
   <div class="hr"></div>
   <div class="mt-2"></div>
 
   <div class="diary" fxLayout="column" fxLayoutGap="30px" *ngIf="!!($workDiary | async)?.length">
-    <div *ngFor="let timeHour of ($workDiary | async)" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <div *ngFor="let timeHour of ($workDiary | async)" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="10px">
       <div class="timehour">{{timeHour.time}}</div>
-      <div *ngFor="let task of timeHour.taskInfo">
-        <div fxLayout="column" fxLayoutGap="5px">
-          <div class="task-label">
-            <div fxLayout="row" style="width: 100%;">
-              <div class="label" fxFlex [title]="task.taskDescription"> {{task.taskDescription}} </div>
-            </div>
+      <div *ngFor="let slot of timeSlot">
+        <div class="capture" *ngIf="!getImgInfo(slot, timeHour.flatterned, 'location'); else screenCapture"></div>
+        <ng-template #screenCapture>
+          <img class="capture" [src]="getImgInfo(slot, timeHour.flatterned, 'location')"
+            (click)="openCapture(getImgInfo(slot, timeHour.flatterned, 'location'))" />
+          <div class="task-content">{{getImgInfo(slot, timeHour.flatterned, 'screenshotTakenAt') | date: 'shortTime'}}
           </div>
-          <div fxLayout="row" fxLayoutGap="10px">
-            <div *ngFor="let capture of task.log">
-              <div fxLayout="column">
-                <img class="capture" [src]="capture.location" (click)="openCapture(capture.location)"/>
-                <span class="task-content">11:00pm</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        </ng-template>
       </div>
     </div>
   </div>
