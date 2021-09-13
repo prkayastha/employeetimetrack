@@ -23,7 +23,6 @@ export class ReportService {
             }
         ).pipe(
             map((result) => {
-                console.log(result);
                 return result;
             })
         )
