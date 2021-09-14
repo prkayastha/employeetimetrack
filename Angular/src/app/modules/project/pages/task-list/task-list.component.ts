@@ -14,6 +14,7 @@ import { UserDetails } from 'src/app/_models/userDetails';
 })
 export class TaskListComponent implements OnInit {
   project: any;
+  public tasklist: any;
 
   constructor(private projectService: ProjectService, private route: ActivatedRoute,private userDetail:UserDetails) { }
 
@@ -29,6 +30,19 @@ export class TaskListComponent implements OnInit {
     this.projectService.addTask(taskname,this.project.id,this.userDetail.id).subscribe(task=>{
       //after success
       inputbox.value='';
+    });
+  }
+  getTask(){
+    const tasklist={
+      offset:0,
+      limit: 10,
+      orderBy: "createdAt",
+      order:"ASC",
+      search: ""
+    }
+    this.projectService.getAllTask(tasklist).subscribe(task=>{
+      this.tasklist=task
+
     });
   }
 }
