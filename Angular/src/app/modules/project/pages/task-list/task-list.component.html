@@ -1,7 +1,7 @@
 <div class="container">
-    <h1>{{project?.projectName}} | Task</h1>
+    <h1>{{projectName}} | Task</h1>
     <div class="mt-3"></div>
-    <div class="row">
+    <div class="row" *ngIf="roles==='MANAGER' || roles==='ADMIN'">
         <form class="col" fxLayout="row" fxLayoutGap="10px" class="formsubmit">
             <input class="form-control" type="text" placeholder="Add new tasks" #taskdescription>
             <button (click)="addTask(taskdescription)" class="btn btn-outline-primary rounded-button">
@@ -12,7 +12,7 @@
     <div class="mt-5"></div>
     <div class="row">
         <div class="col">
-            <h2> Tasks</h2>
+            <h2 *ngIf="roles==='MANAGER' || roles==='ADMIN'"> Tasks</h2>
             <app-filter-options
                 [option] = "filterOption"
                 (onSearch)="search($event)">
@@ -51,7 +51,7 @@
                             [class.hide]="!!editMode" class="btn btn-outline-danger rounded-button">
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <button *ngIf="roles==='EMPLOYEE'" class="btn btn-outline-primary rounded-button float-right">
+                        <button *ngIf="roles==='EMPLOYEE'"  class="btn btn-outline-primary rounded-button">
                             <mat-icon>play_arrow</mat-icon>
                         </button>
                     </ng-template>

@@ -123,7 +123,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   onProjectNameClick(data: any) {
-    this.router.navigate(['/project', 'task', data.id])
+    this.router.navigate(['/project', 'task', data.id], { queryParams: {name: data.projectName} })
   }
 
   deleteProject(id: string) {

@@ -13,7 +13,7 @@ import { ProjectService } from 'src/app/_services/project.service';
   styleUrls: ['./task-list.component.scss']
 })
 export class TaskListComponent implements OnInit {
-  project: any;
+  projectName: string;
   projectId: number;
   public $taskList: Subject<any> = new BehaviorSubject(null);
   public $filter: Subject<any> = new BehaviorSubject(null);
@@ -40,17 +40,9 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit() {
     this.projectId = this.route.snapshot.params.projectid;
-
-    this.projectService.getProjectDetail(this.projectId).pipe(
-      switchMap(project => {
-        this.project = project;
-        this.roles = this.userDetail.role;
-        return of(this._filter)
-      })
-    ).subscribe(filter => {
-      this.getTask(filter);
-    });
-
+    this.projectName = this.route.snapshot.queryParams.name;
+    this.roles = this.userDetail.role;
+    this.getTask(this._filter);
 
     this.$filter.subscribe((filter) => {
       this.getTask(filter);
