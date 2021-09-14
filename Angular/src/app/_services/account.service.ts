@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { Account } from '../_models';
+import { Account,Task} from '../_models';
 import { offset } from 'highcharts';
 import { UserDetails } from '../_models/userDetails';
 
@@ -127,7 +127,7 @@ export class AccountService {
            order:"Desc",
            search:null,
         }
-        return this.http.post<any[]>(`${baseUrl}/project/list`, option);
+        return this.http.post<any[]>(`${baseUrl}/task/1`, option);
     }
     // Create Project
     createProject(params) {
@@ -159,15 +159,15 @@ export class AccountService {
     }
 
     // Task List
-    getAllTask() {
+    getAllTask(): Observable<any> {
         const option = {
            offset:0,
-           limit:5,
-           orderBy:"id",
-           order:"Desc",
-           search:null,
+           limit:10,
+           orderBy:"createdAt",
+           order:"ASC",
+           search:"",
         }
-        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
+        return this.http.post<Task[]>(`${baseUrl}/task/1`, option);
     }
      // Create Task
      createTask(params) {

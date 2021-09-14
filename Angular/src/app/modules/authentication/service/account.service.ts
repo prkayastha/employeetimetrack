@@ -143,12 +143,12 @@ export class AccountService {
     getAllTask() {
         const option = {
             offset: 0,
-            limit: 5,
-            orderBy: "id",
-            order: "Desc",
-            search: null,
+            limit: 10,
+            orderBy: "createdAt",
+            order: "ASC",
+            search: "",
         }
-        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
+        return this.http.post<Account[]>(`${baseUrl}/task/1`, option);
     }
     // Create Task
     createTask(params) {

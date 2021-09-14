@@ -10,23 +10,23 @@ import { Account } from '../../../../_models';
   styleUrls: ['./task-list.component.scss']
 })
 export class TaskListComponent implements OnInit {
-  accounts: any[];
+  tasks: any[];
 
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-      this.accountService.getAll()
+      this.accountService.getAllTask()
           .pipe(first())
-          .subscribe(accounts => this.accounts = accounts);
+          .subscribe(tasks => this.tasks = tasks);
   }
 
   deleteTask(id: string) {
-      const account = this.accounts.find(x => x.id === id);
+      const account = this.tasks.find(x => x.id === id);
       account.isDeleting = true;
       this.accountService.deleteTask(id)
           .pipe(first())
           .subscribe(() => {
-              this.accounts = this.accounts.filter(x => x.id !== id) 
+              this.tasks = this.tasks.filter(x => x.id !== id) 
           });
   }
 }
