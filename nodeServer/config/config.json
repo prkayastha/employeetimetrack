@@ -3,7 +3,7 @@
     "username": "root",
     "password": "root",
     "database": "user_management",
-    "host": "ec2-3-142-156-200.us-east-2.compute.amazonaws.com",
+    "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": 0,
     "define": {
