@@ -16,6 +16,7 @@ module.exports = async function (operatorInfo, options, projectId) {
 
     const whereObj = {};
     whereObj.projectId = +projectId;
+    whereObj.isDelete = false;
     if (!!options.search) {
         whereObj.taskDescription = {
             [Op.like] : '%'+options.search.trim()+'%'
