@@ -14,7 +14,7 @@
     <div *ngFor="let task of tasklist?.collection" class="row">
         <div class="task-row" fxLayout="row">
             <div fxFlex >
-                Name of the task
+                {{task.taskDescription}}
                 <span class="task-date">Created on: 14/09/2021 </span>
             </div>
             <button class="btn btn-outline-primary rounded-button float-right">
