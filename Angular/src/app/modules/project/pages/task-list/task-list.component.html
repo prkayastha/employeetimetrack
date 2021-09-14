@@ -12,19 +12,19 @@
         <h2> Tasks</h2>
     </div>
     <div *ngFor="let task of tasklist?.collection" class="row">
-        <div class="task-row" fxLayout="row">
+        <div class="task-row" fxLayout="row" fxLayoutGap="10px">
             <div fxFlex >
-                {{task.taskDescription}
+                {{task.taskDescription}}
                 <span class="task-date">Created on: 14/09/2021 </span>
             </div>
-            <button class="btn btn-outline-primary rounded-button">
+            <button *ngIf="roles==='MANAGER'|| roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
                 <mat-icon>edit</mat-icon>
             </button>
-            <button class="btn btn-outline-primary rounded-button">
+            <button (onClick)="deleteTask(task.id)"*ngIf="roles==='MANAGER' || roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
                 <mat-icon>delete</mat-icon>
             </button>
             
-            <button class="btn btn-outline-primary rounded-button float-right">
+            <button *ngIf="roles==='EMPLOYEE'" class="btn btn-outline-primary rounded-button float-right">
                 <mat-icon>play_arrow</mat-icon>
             </button>
         </div>

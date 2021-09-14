@@ -15,6 +15,7 @@ import { UserDetails } from 'src/app/_models/userDetails';
 export class TaskListComponent implements OnInit {
   project: any;
   public tasklist: any;
+  public roles;
 
   constructor(private projectService: ProjectService, private route: ActivatedRoute,private userDetail:UserDetails) { }
 
@@ -23,6 +24,7 @@ export class TaskListComponent implements OnInit {
     this.projectService.getProjectDetail(id).subscribe(project => {
       this.project = project;
       this.getTask();
+      this.roles=this.userDetail.role;
     })
   }
 
@@ -45,5 +47,13 @@ export class TaskListComponent implements OnInit {
       this.tasklist=task
 
     });
+  }
+  deleteTask(id:number){
+    this.projectService.deleteTask(id).subscribe(task=>{
+      console.log("tasklist");
+      
+
+    })
+
   }
 }
