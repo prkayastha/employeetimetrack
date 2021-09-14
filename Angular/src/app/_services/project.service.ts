@@ -11,6 +11,7 @@ const baseUrl = environment.apiUrl;
 })
 export class ProjectService {
  
+ 
   
 
   constructor(
@@ -50,6 +51,10 @@ export class ProjectService {
 
    return this.http.post<any>(
     `${baseUrl}/task/upsert`,obj)
+  }
+  getAllTask(tasklist: any) {
+    return this.http.post<any>(
+      `${baseUrl}/task/1`,tasklist)
   }
 
 }
