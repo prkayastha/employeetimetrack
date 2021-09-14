@@ -123,7 +123,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   onProjectNameClick(data: any) {
-    this.router.navigate(['/project', 'task'])
+    this.router.navigate(['/project', 'task',data.id])
   }
 
 

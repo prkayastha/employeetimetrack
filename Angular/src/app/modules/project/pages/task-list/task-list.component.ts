@@ -3,6 +3,9 @@ import { first } from 'rxjs/operators';
 
 import { AccountService } from '../../../../_services';
 import { Account } from '../../../../_models';
+import { ProjectService } from 'src/app/_services/project.service';
+import { ActivatedRoute } from '@angular/router';
+import { UserDetails } from 'src/app/_models/userDetails';
 
 @Component({
   selector: 'app-task-list',
@@ -10,23 +13,22 @@ import { Account } from '../../../../_models';
   styleUrls: ['./task-list.component.scss']
 })
 export class TaskListComponent implements OnInit {
-  tasks: any[];
+  project: any;
 
-  constructor(private accountService: AccountService) {}
+  constructor(private projectService: ProjectService, private route: ActivatedRoute,private userDetail:UserDetails) { }
 
   ngOnInit() {
-      this.accountService.getAllTask()
-          .pipe(first())
-          .subscribe(tasks => this.tasks = tasks);
+    const id = this.route.snapshot.params.projectid;
+    this.projectService.getProjectDetail(id).subscribe(project => {
+      this.project = project;
+    })
   }
 
-  deleteTask(id: string) {
-      const account = this.tasks.find(x => x.id === id);
-      account.isDeleting = true;
-      this.accountService.deleteTask(id)
-          .pipe(first())
-          .subscribe(() => {
-              this.tasks = this.tasks.filter(x => x.id !== id) 
-          });
+  addTask(inputbox: HTMLInputElement) {
+    const taskname=inputbox.value;
+    this.projectService.addTask(taskname,this.project.id,this.userDetail.id).subscribe(task=>{
+      //after success
+      inputbox.value='';
+    });
   }
 }
