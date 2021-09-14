@@ -140,17 +140,6 @@ export class AccountService {
             }));
     }
 
-    // Task List
-    getAllTask() {
-        const option = {
-            offset: 0,
-            limit: 5,
-            orderBy: "id",
-            order: "Desc",
-            search: null,
-        }
-        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
-    }
     // Create Task
     createTask(params) {
         return this.http.put('${baseUrl}', params);
