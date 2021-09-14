@@ -14,30 +14,48 @@
             <div *ngFor="let task of ($taskList | async)?.collection">
                 <div class="mt-2"></div>
                 <div class="task-row" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
-                    <div fxFlex >
-                        {{task.taskDescription}}
-                        <span class="task-date">Created on: 14/09/2021 </span>
-                    </div>
-                    <button *ngIf="roles==='MANAGER'|| roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button (click)="deleteTask(task.id)"*ngIf="roles==='MANAGER' || roles==='ADMIN'" class="btn btn-outline-danger rounded-button">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                    
-                    <button *ngIf="roles==='EMPLOYEE'" class="btn btn-outline-primary rounded-button float-right">
-                        <mat-icon>play_arrow</mat-icon>
-                    </button>
+                    <ng-container *ngIf="!!editMode && editMode == task.id; Else normalRow">
+                        <div fxFlex>
+                            <div class="input-group has-validation">
+                                <input type="text" [value]="task.taskDescription"
+                                class="form-control task-description-field" [class.is-invalid]="giveInvalidFeedback" placeholder="Task Description" required
+                                #descriptionField />
+                                <div *ngIf="giveInvalidFeedback" class="invalid-feedback">This field is required</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary rounded-button"
+                            (click)="updateTask(task, descriptionField)">
+                            <mat-icon>done</mat-icon>
+                        </button>
+                        <button class="btn btn-outline-danger rounded-button"
+                            (click)="closeTask(task, descriptionField)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </ng-container>
+                    <ng-template #normalRow>
+                        <div fxFlex>
+                            {{task.taskDescription}}
+                            <span class="task-date">Created on: {{task.createdAt | date: 'dd/MM/yyyy'}}</span>
+                        </div>
+                        <button *ngIf="(roles==='MANAGER'|| roles==='ADMIN')" class="btn btn-outline-primary rounded-button"
+                            [class.hide]="!!editMode" (click)="editTask(task.id)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button (click)="deleteTask(task.id)" *ngIf="(roles==='MANAGER' || roles==='ADMIN')"
+                            [class.hide]="!!editMode" class="btn btn-outline-danger rounded-button">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button *ngIf="roles==='EMPLOYEE'" class="btn btn-outline-primary rounded-button float-right">
+                            <mat-icon>play_arrow</mat-icon>
+                        </button>
+                    </ng-template>
                 </div>
                 <div class="hr mt-2 px-2">
                 </div>
             </div>
-            <mat-paginator 
-                [length]="($taskList | async)?.totalRecords" 
-                [pageSize]="10"
-                (page)="onPaginate($event)">
+            <mat-paginator [length]="($taskList | async)?.totalRecords" [pageSize]="10" (page)="onPaginate($event)">
             </mat-paginator>
         </div>
     </div>
-    
+
 </div>

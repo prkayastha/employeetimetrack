@@ -25,9 +25,11 @@ export class TaskListComponent implements OnInit {
     search: ""
   };
   public roles;
+  public editMode: number;
+  public giveInvalidFeedback = false;
 
-  constructor(private projectService: ProjectService, 
-    private route: ActivatedRoute, 
+  constructor(private projectService: ProjectService,
+    private route: ActivatedRoute,
     private userDetail: UserDetails) { }
 
   ngOnInit() {
@@ -43,7 +45,7 @@ export class TaskListComponent implements OnInit {
       this.getTask(filter);
     });
 
-    
+
     this.$filter.subscribe((filter) => {
       this.getTask(filter);
     });
@@ -68,6 +70,35 @@ export class TaskListComponent implements OnInit {
     this.projectService.deleteTask(id).subscribe(task => {
       this.$filter.next(this._filter);
     })
+  }
+
+  editTask(id: number) {
+    this.editMode = id;
+  }
+
+  updateTask(task: any, descriptionField: HTMLInputElement) {
+    if (descriptionField.value === '') {
+      this.giveInvalidFeedback = true;
+      return;
+    }
+
+    const updateTask = {
+      id: task.id,
+      taskDescription: descriptionField.value,
+      projectId: this.projectId,
+      assigneeUserId: this.userDetail.id,
+      version: task.version
+    };
+    this.projectService.updateTask(updateTask).subscribe((response) => {
+      this.editMode = 0;
+      this.giveInvalidFeedback = false;
+      this.$filter.next(this._filter);
+    })
+  }
+
+  closeTask(task: any, descriptionField: HTMLInputElement) {
+    this.editMode = 0;
+    this.giveInvalidFeedback = false;
   }
 
   onPaginate(page: PageEvent) {

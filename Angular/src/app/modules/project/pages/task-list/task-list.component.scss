@@ -14,3 +14,14 @@
 .task-row{
     padding: 15px;
 }
+.hide {
+    display: none;
+}
+.task-description-field {
+    display: inline;
+    width: 80%;
+    margin-right: 10px;
+}
+.invalid-feedback{
+    display: block;
+}

@@ -10,6 +10,7 @@ const baseUrl = environment.apiUrl;
   providedIn: 'root'
 })
 export class ProjectService {
+
   constructor(
     private http: HttpClient
   ) { }
@@ -60,4 +61,10 @@ export class ProjectService {
       `${baseUrl}/task/delete/${id}`)
   }
 
+  updateTask(updateTask: { id: any; taskDescription: string; projectId: number; assigneeUserId: number; version: any; }): Observable<any> {
+    return this.http.post<any>(
+      `${baseUrl}/task/upsert`,
+      updateTask
+    );
+  }
 }
