@@ -140,17 +140,6 @@ export class AccountService {
             }));
     }
 
-    // Task List
-    getAllTask() {
-        const option = {
-            offset: 0,
-            limit: 10,
-            orderBy: "createdAt",
-            order: "ASC",
-            search: "",
-        }
-        return this.http.post<Account[]>(`${baseUrl}/task/1`, option);
-    }
     // Create Task
     createTask(params) {
         return this.http.put('${baseUrl}', params);

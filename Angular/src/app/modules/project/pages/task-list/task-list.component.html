@@ -20,7 +20,7 @@
             <button *ngIf="roles==='MANAGER'|| roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
                 <mat-icon>edit</mat-icon>
             </button>
-            <button (onClick)="deleteTask(task.id)"*ngIf="roles==='MANAGER' || roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
+            <button (click)="deleteTask(task.id)"*ngIf="roles==='MANAGER' || roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
                 <mat-icon>delete</mat-icon>
             </button>
             

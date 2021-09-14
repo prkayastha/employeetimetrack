@@ -43,16 +43,13 @@ export class TaskListComponent implements OnInit {
       order:"ASC",
       search: ""
     }
-    this.projectService.getAllTask(tasklist).subscribe(task=>{
+    this.projectService.getAllTask(tasklist, this.project.id).subscribe(task=>{
       this.tasklist=task
-
     });
   }
   deleteTask(id:number){
     this.projectService.deleteTask(id).subscribe(task=>{
       console.log("tasklist");
-      
-
     })
 
   }

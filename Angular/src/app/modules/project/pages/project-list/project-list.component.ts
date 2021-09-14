@@ -123,9 +123,8 @@ export class ProjectListComponent implements OnInit {
   }
 
   onProjectNameClick(data: any) {
-    this.router.navigate(['/project', 'task',data.id])
+    this.router.navigate(['/project', 'task', data.id])
   }
-
 
   deleteProject(id: string) {
   }

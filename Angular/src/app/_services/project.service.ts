@@ -10,10 +10,6 @@ const baseUrl = environment.apiUrl;
   providedIn: 'root'
 })
 export class ProjectService {
-
-
-
-
   constructor(
     private http: HttpClient
   ) { }
@@ -40,6 +36,7 @@ export class ProjectService {
       `${baseUrl}/project/delete/${id}`,
     );
   }
+
   addTask(taskname: string, id: any, userid: number): Observable<any> {
     const obj = {
       id: 0,
@@ -52,10 +49,12 @@ export class ProjectService {
     return this.http.post<any>(
       `${baseUrl}/task/upsert`, obj)
   }
-  getAllTask(tasklist: any) {
+
+  getAllTask(tasklist: any, projectId: number) {
     return this.http.post<any>(
-      `${baseUrl}/task/1`, tasklist)
+      `${baseUrl}/task/${projectId}`, tasklist)
   }
+
   deleteTask(id: number) {
     return this.http.delete<any>(
       `${baseUrl}/task/delete/${id}`)
