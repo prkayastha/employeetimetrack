@@ -1,7 +1,7 @@
 <div class="container">
     <h1>{{project?.projectName}} | Task</h1>
     <div class="row">
-        <form fxLayout="row" fxLayoutGap="10px" class="formsubmit">
+        <form class="col" fxLayout="row" fxLayoutGap="10px" class="formsubmit">
             <input class="form-control" type="text" placeholder="Add new tasks" #taskdescription>
             <button (click)="addTask(taskdescription)" class="btn btn-outline-primary rounded-button">
                 <mat-icon>add</mat-icon>
@@ -9,27 +9,35 @@
         </form>
     </div>
     <div class="row">
-        <h2> Tasks</h2>
-    </div>
-    <div *ngFor="let task of tasklist?.collection" class="row">
-        <div class="task-row" fxLayout="row" fxLayoutGap="10px">
-            <div fxFlex >
-                {{task.taskDescription}}
-                <span class="task-date">Created on: 14/09/2021 </span>
+        <div class="col">
+            <h2> Tasks</h2>
+            <div *ngFor="let task of ($taskList | async)?.collection">
+                <div class="mt-2"></div>
+                <div class="task-row" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+                    <div fxFlex >
+                        {{task.taskDescription}}
+                        <span class="task-date">Created on: 14/09/2021 </span>
+                    </div>
+                    <button *ngIf="roles==='MANAGER'|| roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button (click)="deleteTask(task.id)"*ngIf="roles==='MANAGER' || roles==='ADMIN'" class="btn btn-outline-danger rounded-button">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    
+                    <button *ngIf="roles==='EMPLOYEE'" class="btn btn-outline-primary rounded-button float-right">
+                        <mat-icon>play_arrow</mat-icon>
+                    </button>
+                </div>
+                <div class="hr mt-2 px-2">
+                </div>
             </div>
-            <button *ngIf="roles==='MANAGER'|| roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
-                <mat-icon>edit</mat-icon>
-            </button>
-            <button (click)="deleteTask(task.id)"*ngIf="roles==='MANAGER' || roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
-                <mat-icon>delete</mat-icon>
-            </button>
-            
-            <button *ngIf="roles==='EMPLOYEE'" class="btn btn-outline-primary rounded-button float-right">
-                <mat-icon>play_arrow</mat-icon>
-            </button>
-        </div>
-        <div class="hr mt-2">
-
+            <mat-paginator 
+                [length]="($taskList | async)?.totalRecords" 
+                [pageSize]="10"
+                (page)="onPaginate($event)">
+            </mat-paginator>
         </div>
     </div>
+    
 </div>
