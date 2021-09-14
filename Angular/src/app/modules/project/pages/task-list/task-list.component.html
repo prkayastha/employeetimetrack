@@ -1,27 +1,29 @@
-<h1>Employee List</h1>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th style="width:30%">Task ID</th>
-            <th style="width:30%">Task Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let account of accounts">
-            <td>{{account.id}}</td>
-            <td>{{account.taskName}}</td>
-            <td style="white-space: nowrap">
-                <a [routerLink]="['../update/'+account.id]" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deleteTask(account.id)" class="btn btn-sm btn-danger btn-delete-account" [disabled]="account.isDeleting">
-                    <span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!account.isDeleting">Delete</span>
-                </button>
-            </td>
-        </tr>
-        <tr *ngIf="!accounts">
-            <td colspan="4" class="text-center">
-                <span class="spinner-border spinner-border-lg align-center"></span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+    <h1>{{project?.projectName}} | Task</h1>
+    <div class="row">
+        <form fxLayout="row" fxLayoutGap="10px" class="formsubmit">
+            <input class="form-control" type="text" placeholder="Add new tasks" #taskdescription>
+            <button (click)="addTask(taskdescription)" class="btn btn-outline-primary rounded-button">
+                <mat-icon>add</mat-icon>
+            </button>
+        </form>
+    </div>
+    <div class="row">
+        <h2> Tasks</h2>
+    </div>
+    <div class="row">
+        <div class="task-row" fxLayout="row">
+            <div fxFlex >
+                Name of the task
+                <span class="task-date">Created on: 14/09/2021 </span>
+            </div>
+            <button class="btn btn-outline-primary rounded-button float-right">
+                <mat-icon>play_arrow</mat-icon>
+            </button>
+        </div>
+        <div class="hr mt-2">
+
+        </div>
+    </div>
+
+</div>

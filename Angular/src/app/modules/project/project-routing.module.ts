@@ -5,7 +5,7 @@ import { TaskListComponent } from "./pages/task-list/task-list.component";
 
 const route: Routes = [
     {path: 'list', component: ProjectListComponent},
-    {path: 'task', component: TaskListComponent},
+    {path: 'task/:projectid', component: TaskListComponent},
     {path: '', redirectTo: '/project/list'}
 ];
 

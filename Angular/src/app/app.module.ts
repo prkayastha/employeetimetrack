@@ -9,15 +9,19 @@ import { AppComponent } from './app.component';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { PostsComponent } from './modules/posts/posts.component';
 import { SharedModule } from './modules/shared/shared.module';
+import { ArchiveListComponent } from './modules/workdiary/archive-list/archive-list.component';
+import { ArchiveTaskComponent } from './modules/workdiary/archive-task/archive-task.component';
 import { CreateTaskComponent } from './modules/workdiary/create-task/create-task.component';
 import { TaskListComponent } from './modules/workdiary/task-list/task-list.component';
 import { TaskComponent } from './modules/workdiary/task/task.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { AlertComponent } from './_components';
 import { DefaultModule } from './_components/default/default.module';
-import { TableComponent } from './_components/table/table.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { ProjectService } from './_services/project.service';
+import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
+import { ReportService } from './_services/report.service';
+import { ViewCaptureComponent } from './modules/workdiary/component/view-capture.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,10 @@ import { ProjectService } from './_services/project.service';
     TaskListComponent,
     TaskComponent,
     LayoutComponent,
+    ArchiveListComponent,
+    ArchiveTaskComponent,
     PostsComponent, //TODO: refactor
+    ViewCaptureComponent
   ],
   imports: [
     BrowserModule,
@@ -39,16 +46,21 @@ import { ProjectService } from './_services/project.service';
     DefaultModule,
     ReactiveFormsModule,
     SharedModule,
-    NgxLocalStorageModule.forRoot()
+    NgxLocalStorageModule.forRoot(),
+    BsDatepickerModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     LocalStorageService,
-    ProjectService
+    ProjectService,
+    ReportService,
+    BsDatepickerConfig,
+    BsDaterangepickerConfig
   ],
   entryComponents: [
-    CreateTaskComponent
+    CreateTaskComponent,
+    ViewCaptureComponent
   ],
   bootstrap: [AppComponent],
 

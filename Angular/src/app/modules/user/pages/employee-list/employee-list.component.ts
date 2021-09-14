@@ -80,12 +80,12 @@ export class EmployeeListComponent implements OnInit {
       ...this._filter,
       search: searchOption
     };
+    this.paginator.firstPage();
     this._filter = options;
     this.$filter.next(this._filter);
   }
 
   onPaginate(event: PageEvent) {
-    this.paginator.firstPage();
     const options = {
       ...this._filter,
       offset: event.pageIndex * event.pageSize

@@ -2,3 +2,31 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+
+/* Importing Datepicker SCSS file. */
+@import "~ngx-bootstrap/datepicker/bs-datepicker";
+
+.bs-datepicker-head,
+.bs-datepicker-head, .bs-datepicker button:active,
+.bs-datepicker-body table td span.selected,
+.bs-datepicker-body table td.selected span,
+.bs-datepicker-body table td span[class*="select-"]:after,
+.bs-datepicker-body table td[class*="select-"] span:after,
+.bs-datepicker-body table td.active-week span:hover 
+{
+  background-color: #7b53b3 !important; 
+}
+
+.bs-datepicker-body table td.week span 
+{
+  color: #7b53b3 !important; 
+}
+
+.hr {
+  height: 1px;
+  background-color: #7b53b3;
+  margin-top: 20px;
+}

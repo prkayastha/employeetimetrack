@@ -5,11 +5,13 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ProjectService } from 'src/app/_services/project.service';
 import { TableHeader } from '../../../../_components/table/model/header.model';
+import { UserDetails } from '../../../../_models/userDetails';
 
 const tableHeader: TableHeader[] = [
   { headerDef: 'id', headerLabel: 'Id', colName: 'id' },
   { headerDef: 'projectName', headerLabel: 'ProjectName', colName: 'projectName', headerCss: 'px-3' },
   { headerDef: 'taskCount', headerLabel: 'Number of Task', colName: 'taskCount' },
+  { headerDef: 'createdAt', headerLabel: 'Date Created', colName: 'createdAt'}
 ];
 
 const filterOption = {
@@ -45,7 +47,8 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private router: Router
+    private router: Router,
+    private userModel: UserDetails
   ) {
     this.filterOption.button['callback'] = this.onCreate.bind(this);
     if (!!this.actionOption) {
@@ -54,6 +57,10 @@ export class ProjectListComponent implements OnInit {
     }
     const projectNameCol = this.tableHeader.find(header => header.headerDef === 'projectName');
     projectNameCol.onClick = this.onProjectNameClick.bind(this);
+
+    if (userModel.role === 'EMPLOYEE') {
+      this.tableHeader.pop();
+    }
   }
 
   ngOnInit() {
@@ -116,7 +123,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   onProjectNameClick(data: any) {
-    this.router.navigate(['/project', 'task'])
+    this.router.navigate(['/project', 'task',data.id])
   }
 
 

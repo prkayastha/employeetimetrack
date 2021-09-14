@@ -1,7 +1,9 @@
+import { ThrowStmt } from "@angular/compiler";
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { Observable } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { flatMap } from "rxjs/operators";
+import { UserDetails } from "../../../../_models/userDetails";
 import { UserService } from "../../user.service";
 
 @Component({
@@ -11,26 +13,39 @@ import { UserService } from "../../user.service";
 })
 export class ViewUserComponent implements OnInit {
     userId: number;
-    $userInformation: Observable<any>;
+    $userInformation: Subject<any> = new BehaviorSubject(null);
+    role: string;
 
     constructor(
         private route: ActivatedRoute,
-        private userService: UserService
-    ){
-        
-    }
+        private rotuer: Router,
+        private userService: UserService,
+    ){}
 
     ngOnInit(): void {
-        this.$userInformation = this.route.paramMap.pipe(
+        this.route.paramMap.pipe(
             flatMap((params) => {
                 this.userId = +params.get('userId');
                 return this.userService.getUserById(this.userId);
             })
-        );
+        ).subscribe((userDetails) => {
+            this.$userInformation.next(userDetails);
+            this.role = userDetails.roles[0].role;
+        });
+    }
 
-        this.$userInformation.subscribe((userInfo) => {
-            console.log(userInfo);
-        })
+    onDelete() {
+        this.userService.deleteUser(this.userId).subscribe((response) => {
+            this.rotuer.navigate(['/user', 'list']);
+        });
+    }
+
+    onEdit() {
+        this.rotuer.navigate(['/user', 'update', this.userId]);
+    }
+
+    showViewReport() {
+        return this.role === 'EMPLOYEE';
     }
 
 

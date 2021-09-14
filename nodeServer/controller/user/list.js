@@ -25,6 +25,12 @@ const list = async function (options, operatorInfo) {
             },
             {
                 email: { [Op.like]: searchString }
+            },
+            {
+                firstname: { [Op.like]: searchString }
+            },
+            {
+                lastname: { [Op.like]: searchString }
             }
         ];
     }

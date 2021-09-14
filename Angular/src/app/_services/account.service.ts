@@ -4,16 +4,16 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
-import { environment } from '../../../../environments/environment';
-import { Account } from '../../../_models';
+import { environment } from '../../environments/environment';
+import { Account,Task} from '../_models';
 import { offset } from 'highcharts';
-import { UserDetails } from '../../../_models/userDetails';
+import { UserDetails } from '../_models/userDetails';
 
 const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-
+    
     private accountSubject: BehaviorSubject<Account>;
     public account: Observable<Account>;
 
@@ -41,11 +41,10 @@ export class AccountService {
     }
 
     logout() {
-        // this.http.post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true }).subscribe();
+        this.http.post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true }).subscribe();
         this.stopRefreshTokenTimer();
         this.accountSubject.next(null);
-        this.user.clearDetails();
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/']);
     }
 
     refreshToken() {
@@ -64,26 +63,26 @@ export class AccountService {
     verifyEmail(token: string) {
         return this.http.post(`${baseUrl}/verify-email`, { token });
     }
-
+    
     forgotPassword(email: string) {
         return this.http.post(`${baseUrl}/password/reset`, { username: email });
     }
-
+    
     validateResetToken(token: string) {
         return this.http.post(`${baseUrl}/password/check/token`, { token });
     }
-
+    
     resetPassword(token: string, password: string, confirmPassword: string) {
         return this.http.post(`${baseUrl}/password/change`, { reset: token, password, confirmPassword });
     }
 
     getAll(): Observable<any> {
         const option = {
-            offset: 0,
-            limit: 100,
-            orderBy: "id",
-            order: "Desc",
-            search: null,
+           offset:0,
+           limit:100,
+           orderBy:"id",
+           order:"Desc",
+           search:null,
         }
         return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
     }
@@ -91,15 +90,24 @@ export class AccountService {
     getById(id: string) {
         return this.http.get<Account>(`${baseUrl}/${id}`);
     }
-
+    
     create(params) {
-        return this.http.put('${baseUrl}', params);
+        return this.http.put('${baseUrl}',params);
     }
-
+    
     update(id, params) {
-        return this.http.put(`${baseUrl}/user/update/${id}`, params);
+        return this.http.put(`${baseUrl}/user/update/${id}`, params)
+            .pipe(map((account: any) => {
+                // update the current account if it was updated
+                if (account.id === this.accountValue.id) {
+                    // publish updated account to subscribers
+                    account = { ...this.accountValue, ...account };
+                    this.accountSubject.next(account);
+                }
+                return account;
+            }));
     }
-
+    
     delete(id: string) {
         return this.http.delete(`${baseUrl}/user/delete/${id}`)
             .pipe(finalize(() => {
@@ -110,10 +118,20 @@ export class AccountService {
     }
 
 
-
+    //Projct List
+    getAllProject() {
+        const option = {
+           offset:0,
+           limit:100,
+           orderBy:"id",
+           order:"Desc",
+           search:null,
+        }
+        return this.http.post<any[]>(`${baseUrl}/task/1`, option);
+    }
     // Create Project
     createProject(params) {
-        return this.http.put('${baseUrl}/Project/upsert ', params);
+        return this.http.put('${baseUrl}/Project/upsert ',params);
     }
 
     //delete Project
@@ -141,19 +159,19 @@ export class AccountService {
     }
 
     // Task List
-    getAllTask() {
+    getAllTask(): Observable<any> {
         const option = {
-            offset: 0,
-            limit: 10,
-            orderBy: "createdAt",
-            order: "ASC",
-            search: "",
+           offset:0,
+           limit:10,
+           orderBy:"createdAt",
+           order:"ASC",
+           search:"",
         }
-        return this.http.post<Account[]>(`${baseUrl}/task/1`, option);
+        return this.http.post<Task[]>(`${baseUrl}/task/1`, option);
     }
-    // Create Task
-    createTask(params) {
-        return this.http.put('${baseUrl}', params);
+     // Create Task
+     createTask(params) {
+        return this.http.put('${baseUrl}',params);
     }
 
     //delete Task

@@ -10,6 +10,7 @@ const baseUrl = environment.apiUrl;
   providedIn: 'root'
 })
 export class ProjectService {
+ 
   
 
   constructor(
@@ -37,6 +38,18 @@ export class ProjectService {
     return this.http.delete<any>(
       `${baseUrl}/project/delete/${id}`,
     );
+  }
+  addTask(taskname: string, id: any,userid:number): Observable<any> {
+    const obj={
+      id:0,
+      taskDescription:taskname,
+      projectId:id,
+      assigneedUserId:userid,
+      version:0
+    }
+
+   return this.http.post<any>(
+    `${baseUrl}/task/upsert`,obj)
   }
 
 }

@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '../../../../_services';
 import { MustMatch } from '../../../../_helpers';
+import { UserDetails } from '../../../../_models/userDetails';
 
 @Component({
     selector: 'app-update-user',
@@ -17,19 +18,21 @@ export class UpdateUserComponent implements OnInit {
     isAddMode: boolean;
     loading = false;
     submitted = false;
+    operatorRole: string;
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
-        private alertService: AlertService
-    ) { }
+        private alertService: AlertService,
+        private userModel: UserDetails
+    ) { 
+        this.operatorRole = this.userModel.role;
+    }
 
     ngOnInit() {
         this.id = this.route.snapshot.params['userId'];
-        this.isAddMode = !this.id;
-
         this.form = this.getForm();
         this.getUserInfo(+this.id);
     }
@@ -49,41 +52,25 @@ export class UpdateUserComponent implements OnInit {
         }
 
         this.loading = true;
-        if (this.isAddMode) {
-            this.updateAccount();
-        } else {
-            this.updateAccount();
-        }
-    }
-
-    private createAccount() {
-        this.accountService.create(this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
-                    this.alertService.success('Account created successfully', { keepAfterRouteChange: true });
-                    this.router.navigate(['../'], { relativeTo: this.route });
-                },
-                error: error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                }
-            });
+        this.updateAccount();
     }
 
     private updateAccount() {
-        this.accountService.update(this.id, this.form.value)
-            .pipe(first())
-            .subscribe({
-                next: () => {
+        const formValue = { ...this.form.value, roles: [this.form.value.role] };
+        formValue['details'] = {
+            designation: formValue.designation,
+            skills: formValue.skills
+        };
+        this.accountService.update(this.id, formValue)
+            .subscribe(
+                (response) => {
                     this.alertService.success('Update successful', { keepAfterRouteChange: true });
-                    this.router.navigate(['../../'], { relativeTo: this.route });
+                    this.router.navigate(['/user', this.id]);
                 },
-                error: error => {
+                (error) => {
                     this.alertService.error(error);
                     this.loading = false;
-                }
-            });
+                });
     }
 
     private getUserInfo(userId: number) {
@@ -93,8 +80,8 @@ export class UpdateUserComponent implements OnInit {
                 lastName: user.lastname,
                 email: user.email,
                 role: user.roles[0].id,
-                password: null,
-                confirmPassword: null,
+                designation: user.designation,
+                skills: user.skills,
                 version: user.version
             };
             this.form.patchValue(preFillValue);
@@ -107,11 +94,9 @@ export class UpdateUserComponent implements OnInit {
             lastName: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             role: ['', Validators.required],
-            password: ['', [Validators.minLength(6), this.isAddMode ? Validators.required : Validators.nullValidator]],
-            confirmPassword: [''],
+            designation: [''],
+            skills: [''],
             version: ['0']
-        }, {
-            validator: MustMatch('password', 'confirmPassword')
         });
     }
 

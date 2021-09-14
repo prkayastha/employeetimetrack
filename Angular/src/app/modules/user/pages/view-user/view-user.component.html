@@ -13,24 +13,24 @@
                 <div class="hr"></div>
                 <div class="row">
                     <div class="col label">Designation</div>
-                    <div class="col">{{($userInformation | async)?.designation}}</div>
+                    <div class="col">{{($userInformation | async)?.designation || 'N/A'}}</div>
                 </div>
                 <div class="hr"></div>
                 <div class="row">
                     <div class="col label">Role</div>
-                    <div class="col">{{($userInformation | async)?.role}}</div>
+                    <div class="col">{{($userInformation | async)?.roles[0].role}}</div>
                 </div>
                 <div class="hr"></div>
                 <div class="row">
                     <div class="col label">Projects</div>
                     <div class="col">
                         <div class="d-flex flex-wrap">
-                            <span class="badge badge-primary">Project 1</span>
-                            <span class="badge badge-primary">Project 1</span>
-                            <span class="badge badge-primary">Project 1</span>
-                            <span class="badge badge-primary">Project 1</span>
-                            <span class="badge badge-primary">Project 1</span>
-                            <span class="badge badge-primary">Project 1</span>
+                            <ng-container 
+                                *ngIf="!($userInformation | async)?.projects.length">
+                                N/A</ng-container>
+                            <span 
+                                *ngFor="let project of ($userInformation | async)?.projects"
+                                class="badge badge-primary">{{project.name}}</span>
                         </div>
                     </div>
                 </div>
@@ -38,24 +38,30 @@
                 <div class="row">
                     <div class="col label">Skills</div>
                     <div class="col">
-                        <span class="badge badge-info">Project 1</span>
-                        <span class="badge badge-info">Project 1</span>
-                        <span class="badge badge-info">Project 1</span>
-                        <span class="badge badge-info">Project 1</span>
-                        <span class="badge badge-info">Project 1</span>
-                        <span class="badge badge-info">Project 1</span>
+                        <ng-container 
+                            *ngIf="!($userInformation | async)?.skills?.length">
+                            N/A</ng-container>
+                        <span 
+                            *ngFor="let skill of ($userInformation | async)?.skills" 
+                            class="badge badge-info">
+                            {{skill}}</span>
                     </div>
                 </div>
                 <div class="hr"></div>
                 <div class="row">
                     <div class="col">
-                        <button type="button" class="btn btn-primary btn-sm btn-block">Edit</button>
+                        <button type="button" class="btn btn-primary btn-sm btn-block" (click)="onEdit()">Edit</button>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-danger btn-sm btn-block">Delete</button>
+                        <button type="button" class="btn btn-danger btn-sm btn-block" (click)="onDelete()">Delete</button>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="showViewReport()">
+                    <div class="col">
+                        <a type="button" class="btn btn-info btn-sm btn-block" [routerLink]="['/workdiary']" [queryParams]="{ userId: ($userInformation | async).id, name: ($userInformation | async).firstname}">View {{($userInformation | async).firstname}}'s Diary</a>
+                    </div>
+                </div>
+                <div class="row" *ngIf="showViewReport()">
                     <div class="col">
                         <button type="button" class="btn btn-info btn-sm btn-block">View Reports</button>
                     </div>

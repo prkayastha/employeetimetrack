@@ -6,8 +6,6 @@
     <div class="description">
 
       <p class="task-name">{{task.name}}</p>
-
-      <p>{{task.project}}</p>
     </div>
 
     <div fxFlex></div>
@@ -27,9 +25,6 @@
 
       <button class="btn btn-primary" (click)="stopTimer()" [disabled]="!canBeStopped"><i
           class="fa fa-stop"></i></button>
-
-      <button class="btn btn-primary" (click)="resetTimer()" [disabled]="!canBeStopped"><i
-          class="fa fa-refresh"></i></button>
 
     </div>
 
