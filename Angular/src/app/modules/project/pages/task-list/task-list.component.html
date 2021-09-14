@@ -11,19 +11,22 @@
     <div class="row">
         <h2> Tasks</h2>
     </div>
-    <div *ngFor="let task of tasklist?.collection" class="row">
-        <div class="task-row" fxLayout="row">
-            <div fxFlex >
-                Name of the task
-                <span class="task-date">Created on: 14/09/2021 </span>
+    <div class="row">
+        <div class="col">
+            <div *ngFor="let task of tasklist?.collection">
+                <div class="mt-3"></div>
+                <div class="task-row" fxLayout="row" fxLayoutAlign="start center">
+                    <div fxFlex >
+                        {{task.taskDescription}}
+                        <span class="task-date">Created on: {{task.createdAt | date: 'dd/MM/yyyy'}} </span>
+                    </div>
+                    <button class="btn btn-outline-primary rounded-button float-right">
+                        <mat-icon>play_arrow</mat-icon>
+                    </button>
+                </div>
+                <div class="hr mt-3">
+                </div>
             </div>
-            <button class="btn btn-outline-primary rounded-button float-right">
-                <mat-icon>play_arrow</mat-icon>
-            </button>
-        </div>
-        <div class="hr mt-2">
-
         </div>
     </div>
-
 </div>
