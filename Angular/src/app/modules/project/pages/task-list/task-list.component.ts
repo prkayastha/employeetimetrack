@@ -22,6 +22,7 @@ export class TaskListComponent implements OnInit {
     const id = this.route.snapshot.params.projectid;
     this.projectService.getProjectDetail(id).subscribe(project => {
       this.project = project;
+      this.getTask();
     })
   }
 
