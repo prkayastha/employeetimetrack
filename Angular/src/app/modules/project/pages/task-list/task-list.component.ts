@@ -27,6 +27,12 @@ export class TaskListComponent implements OnInit {
   public roles;
   public editMode: number;
   public giveInvalidFeedback = false;
+  public filterOption = {
+    search: {
+      placeholder: 'Task Description',
+      label: 'Search'
+    }
+  }
 
   constructor(private projectService: ProjectService,
     private route: ActivatedRoute,
@@ -105,6 +111,15 @@ export class TaskListComponent implements OnInit {
     const option = {
       ...this._filter,
       offset: page.pageIndex * page.pageSize
+    };
+    this._filter = option;
+    this.$filter.next(option);
+  }
+
+  search(searchString: string) {
+    const option = {
+      ...this._filter,
+      search: searchString
     };
     this._filter = option;
     this.$filter.next(option);
