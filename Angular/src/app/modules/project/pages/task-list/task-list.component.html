@@ -1,27 +1,35 @@
-<h1>Task List</h1>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th style="width:30%">Task ID</th>
-            <th style="width:30%">Task Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let task of tasks">
-            <td>{{task.id}}</td>
-            <td>{{task.taskDescription}}</td>
-            <td style="white-space: nowrap">
-                <a [routerLink]="['../update/'+task.id]" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deleteTask(task.id)" class="btn btn-sm btn-danger btn-delete-task" [disabled]="task.isDeleting">
-                    <span *ngIf="task.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!task.isDeleting">Delete</span>
-                </button>
-            </td>
-        </tr>
-        <tr *ngIf="!tasks">
-            <td colspan="4" class="text-center">
-                <span class="spinner-border spinner-border-lg align-center"></span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+    <h1>{{project?.projectName}} | Task</h1>
+    <div class="row">
+        <form fxLayout="row" fxLayoutGap="10px" class="formsubmit">
+            <input class="form-control" type="text" placeholder="Add new tasks" #taskdescription>
+            <button (click)="addTask(taskdescription)" class="btn btn-outline-primary rounded-button">
+                <mat-icon>add</mat-icon>
+            </button>
+        </form>
+    </div>
+    <div class="row">
+        <h2> Tasks</h2>
+    </div>
+    <div *ngFor="let task of tasklist?.collection" class="row">
+        <div class="task-row" fxLayout="row" fxLayoutGap="10px">
+            <div fxFlex >
+                {{task.taskDescription}}
+                <span class="task-date">Created on: 14/09/2021 </span>
+            </div>
+            <button *ngIf="roles==='MANAGER'|| roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button (click)="deleteTask(task.id)"*ngIf="roles==='MANAGER' || roles==='ADMIN'" class="btn btn-outline-primary rounded-button">
+                <mat-icon>delete</mat-icon>
+            </button>
+            
+            <button *ngIf="roles==='EMPLOYEE'" class="btn btn-outline-primary rounded-button float-right">
+                <mat-icon>play_arrow</mat-icon>
+            </button>
+        </div>
+        <div class="hr mt-2">
+
+        </div>
+    </div>
+</div>
