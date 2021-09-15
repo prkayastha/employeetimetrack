@@ -5,6 +5,8 @@ import { BehaviorSubject, of, Subject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { UserDetails } from 'src/app/_models/userDetails';
 import { ProjectService } from 'src/app/_services/project.service';
+import {MatDialog} from '@angular/material/dialog';
+import { TaskTimerComponent } from '../project-list/task-timer/task-timer.component';
 
 
 @Component({
@@ -36,7 +38,7 @@ export class TaskListComponent implements OnInit {
 
   constructor(private projectService: ProjectService,
     private route: ActivatedRoute,
-    private userDetail: UserDetails) { }
+    private userDetail: UserDetails,public dialog:MatDialog){ }
 
   ngOnInit() {
     this.projectId = this.route.snapshot.params.projectid;
@@ -115,5 +117,10 @@ export class TaskListComponent implements OnInit {
     };
     this._filter = option;
     this.$filter.next(option);
+  }
+  openDialog(taskDescription:string, id: number){
+    this.dialog.open(TaskTimerComponent,{data:{id,taskDescription}},);
+    console.log(id,taskDescription);
+
   }
 }

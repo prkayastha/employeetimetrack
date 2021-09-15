@@ -1,1 +1,21 @@
-<p>task-timer works!</p>
+<div fxLayout="row" fxLayoutAlign="space-between">
+    <div class="row">
+        <h5>Task Recording</h5>
+    </div>
+
+    <div fxFlex class="taskname">
+        {{data.taskDescription}}
+    </div>
+    <div fxFlex>
+
+    </div>
+    <button class="btn btn-outline-primary rounded-button">
+        <mat-icon>play_arrow</mat-icon>
+    </button>
+    <button class="btn btn-outline-primary rounded-button">
+        <mat-icon>pause</mat-icon>
+    </button>
+    <button class="btn btn-outline-primary rounded-button">
+        <mat-icon>stop</mat-icon>
+    </button>
+</div>
