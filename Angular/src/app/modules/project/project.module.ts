@@ -13,6 +13,7 @@ import { TaskListComponent } from "./pages/task-list/task-list.component";
 import { UpdateProjectComponent } from "./pages/update-project/update-project.component";
 import { UpdateTaskComponent } from "./pages/update-task/update-task.component";
 import { ProjectRoutingModule } from "./project-routing.module";
+import { TaskTimerComponent } from './pages/project-list/task-timer/task-timer.component';
 
 @NgModule({
     declarations: [
@@ -22,6 +23,7 @@ import { ProjectRoutingModule } from "./project-routing.module";
         TaskListComponent,
         UpdateTaskComponent,
         CreateTaskComponent,
+        TaskTimerComponent,
     ],
     imports: [
         CommonModule,
