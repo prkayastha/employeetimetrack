@@ -15,11 +15,10 @@
     <button (click)="pauseTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!isActive">
         <mat-icon>pause</mat-icon>
     </button>
-    <button (click)="stopTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!canBeStopped">
+    <button (click)="stopRecordingTime()" class="btn btn-outline-primary rounded-button" [disabled]="!canBeStopped">
         <mat-icon>stop</mat-icon>
     </button>
 </div>
-<button class="btn btn-primary" (click)="startTakingSnapShot()">Take Screenshot</button>
 <div class="alert alert-danger" *ngIf="showError">{{ errorMessage || 'Timer cannot start unless screen is shared.'}}</div>
 
 <button (click)="toggleShow()" type="checkbox">show/hide</button>

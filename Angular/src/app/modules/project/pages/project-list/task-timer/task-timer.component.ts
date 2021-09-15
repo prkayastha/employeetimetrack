@@ -4,8 +4,9 @@ import { ITask } from './models/task';
 import { NotifyService } from 'src/app/modules/workdiary/services/notify.service';
 import { ProjectService } from 'src/app/_services/project.service';
 
-declare function startCapture(displayMediaOptions): any;
+declare function startCapture(displayMediaOptions, callback): any;
 declare function captureSnapShot(videoElement): any;
+declare function stopCapture(videoElement): any;
 
 @Component({
   selector: 'app-task-timer',
@@ -35,11 +36,9 @@ export class TaskTimerComponent implements OnInit {
   showError: boolean;
   errorMessage: string = '';
 
-
-
   constructor(public projectService: ProjectService,
     private notifyService: NotifyService,
-    private dialog: MatDialogRef<TaskTimerComponent>,
+    public dialog: MatDialogRef<TaskTimerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.deleted = new EventEmitter<number>();
     this.stopped = new EventEmitter<number>();
@@ -63,7 +62,6 @@ export class TaskTimerComponent implements OnInit {
     });
   }
 
-
   ngOnInit() {
     const atask: ITask = {
       id: this.data.id,
@@ -78,7 +76,6 @@ export class TaskTimerComponent implements OnInit {
     };
     this.notifyService.announceTaskAdded(atask);
     this.isActive = false;
-
   }
 
   /**
@@ -92,7 +89,6 @@ export class TaskTimerComponent implements OnInit {
    * Sets the format of the displayed time.
    */
   determinePrettyTime(): string {
-
     return `${this.padTime(this.task.time.hours)}:${this.padTime(this.task.time.minutes)}:${this.padTime(this.task.time.seconds)}`;
   }
 
@@ -107,8 +103,6 @@ export class TaskTimerComponent implements OnInit {
 
     return `${time}`;
   }
-
-
 
   /**
    * Starts the timer on a task.
@@ -142,9 +136,7 @@ export class TaskTimerComponent implements OnInit {
 
 
   toggleShow() {
-
     this.isShown = !this.isShown;
-
   }
 
   /**
@@ -156,8 +148,6 @@ export class TaskTimerComponent implements OnInit {
     this.task.isCurrent = false;
     this.stopped.emit(this.task.id);
   }
-
-
 
   /**
    * Determines the difference in seconds between two dates.
@@ -196,21 +186,27 @@ export class TaskTimerComponent implements OnInit {
 
   stopRecordingTime() {
     this.action = 'stop';
+    stopCapture(this.videoElement);
     this.projectService.startTimer({ taskId: this.task.id, action: this.action }).subscribe(timer => {
       this.stopTimer();
-      clearInterval(this.servertimer)
+      clearInterval(this.servertimer);
+      clearInterval(this.captureTimer);
+      this.dialog.close();
     });
   }
 
   startCaptureScreen(event: Event) {
-    console.log('ask for recording');
-
     const displayMediaOptions = {
       cursor: 'always',
       displaySurface: 'monitor'
     };
 
-    startCapture(displayMediaOptions).then(([stream, video]) => {
+    const callback = function () {
+      this.stopRecordingTime();
+      this.dialog.close();
+    }.bind(this);
+
+    startCapture(displayMediaOptions, callback).then(([stream, video]) => {
       this.videoElement = video;
       const tracks = stream.getVideoTracks();
       if (!!tracks && !!tracks.length) {
@@ -219,7 +215,8 @@ export class TaskTimerComponent implements OnInit {
           this.errorMessage = 'Entire screen must be shared to start timer';
           this.showErrorMessage();
         } else {
-          this.startTimer();
+          this.startRecordingTime();
+          this.startTakingSnapShot();
         }
       }
     }, error => {
@@ -230,12 +227,27 @@ export class TaskTimerComponent implements OnInit {
   }
 
   startTakingSnapShot() {
-    /* const dataUrl = captureSnapShot(this.videoElement);
-    const file: File = this.dataURLtoFile(dataUrl, 'CaptureScreen.png');
 
-    this.projectService.uploadScreenshot(this.data.id, file).subscribe((response) => {
+    const takeSnapShot = () => {
+      const dataUrl = captureSnapShot(this.videoElement);
+      const file: File = this.dataURLtoFile(dataUrl, 'CaptureScreen.png');
 
-    }); */
+      this.projectService.uploadScreenshot(this.data.id, file).subscribe((response) => {
+      });
+    }
+
+    const randomNumber = Math.floor(Math.random() * 10);
+    const timeout = randomNumber * 60 * 1000;
+    console.log('Taking 1st screenshot in '+randomNumber+' min');
+    
+    setTimeout(function() {
+      takeSnapShot();
+      this.captureTimer = setInterval(() => {
+        console.log('Interval snapshot');
+        takeSnapShot();
+      }, 600000);
+    }.bind(this), timeout)
+
   }
 
   showErrorMessage() {
@@ -246,18 +258,16 @@ export class TaskTimerComponent implements OnInit {
   }
 
   private dataURLtoFile(dataurl, filename) {
- 
     var arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), 
-        n = bstr.length, 
-        u8arr = new Uint8Array(n);
-        
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    
-    return new File([u8arr], filename, {type:mime});
-}
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
 
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
+  }
 }

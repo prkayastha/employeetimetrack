@@ -1,9 +1,10 @@
 const video = document.querySelector('#screenshot video');
 
-async function startCapture(displayMediaOptions) {
+async function startCapture(displayMediaOptions, callback) {
     let captureStream = null;
     let video = document.createElement('video');
     video.style.cssText = "display: none; width: 1px; height: 1px;";
+    video.autoplay = true;
 
     let caputerInterval = null;
 
@@ -21,6 +22,7 @@ async function startCapture(displayMediaOptions) {
             console.log('Streaming stopped');
             localStorage.removeItem('captureImage')
             stopCapture(video);
+            callback();
             /* if (!!caputerInterval) {
                 debugger;
                 console.log('clearing interval')
