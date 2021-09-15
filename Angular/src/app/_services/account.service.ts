@@ -117,18 +117,6 @@ export class AccountService {
             }));
     }
 
-
-    //Projct List
-    getAllProject() {
-        const option = {
-           offset:0,
-           limit:100,
-           orderBy:"id",
-           order:"Desc",
-           search:null,
-        }
-        return this.http.post<any[]>(`${baseUrl}/task/1`, option);
-    }
     // Create Project
     createProject(params) {
         return this.http.put('${baseUrl}/Project/upsert ',params);
@@ -157,18 +145,7 @@ export class AccountService {
                 return account;
             }));
     }
-
-    // Task List
-    getAllTask(): Observable<any> {
-        const option = {
-           offset:0,
-           limit:10,
-           orderBy:"createdAt",
-           order:"ASC",
-           search:"",
-        }
-        return this.http.post<Task[]>(`${baseUrl}/task/1`, option);
-    }
+    
      // Create Task
      createTask(params) {
         return this.http.put('${baseUrl}',params);

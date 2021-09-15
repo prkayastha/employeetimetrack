@@ -4,13 +4,30 @@
     border-radius: 50%;
     padding: 6px;
 }
+
 .task-date{
     font-size: 11px;
     color:rgba(0, 0, 0, 0.514);
 }
+
 .play{
     float: right;
 }
+
 .task-row{
     padding: 15px;
+}
+
+.hide {
+    display: none;
+}
+
+.task-description-field {
+    display: inline;
+    width: 80%;
+    margin-right: 10px;
+}
+
+.invalid-feedback{
+    display: block;
 }
