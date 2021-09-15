@@ -11,8 +11,8 @@ import { ProjectService } from 'src/app/_services/project.service';
 })
 export class TaskTimerComponent implements OnInit {
   task: ITask;
-  action:string;
-  servertimer:any;
+  action: string;
+  servertimer: any;
 
   // The index of the task within the containing list.
   index: number;
@@ -27,14 +27,14 @@ export class TaskTimerComponent implements OnInit {
   // Determines whether the task can be stopped or whether the timer can be reset.
   canBeStopped: boolean;
 
- 
 
-  constructor(public projectService:ProjectService,private notifyService: NotifyService, @Inject(MAT_DIALOG_DATA) public data: any) {
+
+  constructor(public projectService: ProjectService, private notifyService: NotifyService, @Inject(MAT_DIALOG_DATA) public data: any) {
     this.deleted = new EventEmitter<number>();
     this.stopped = new EventEmitter<number>();
 
     // Add a task when a new task has been created.
-  
+
     this.notifyService.taskAdded.subscribe((task: ITask) => {
       this.task = task;
       this.setPrettyTime();
@@ -81,7 +81,7 @@ export class TaskTimerComponent implements OnInit {
    * Sets the format of the displayed time.
    */
   determinePrettyTime(): string {
-  
+
     return `${this.padTime(this.task.time.hours)}:${this.padTime(this.task.time.minutes)}:${this.padTime(this.task.time.seconds)}`;
   }
 
@@ -97,16 +97,7 @@ export class TaskTimerComponent implements OnInit {
     return `${time}`;
   }
 
-  /**
-   * Resets the time.
-   */
-  resetTimer(): void {
-    this.pauseTimer();
-    this.isActive = false;
-    this.task.time.hours = this.task.time.minutes = this.task.time.seconds = 0;
-    this.setPrettyTime();
-    this.canBeStopped = false;
-  }
+ 
 
   /**
    * Starts the timer on a task.
@@ -123,17 +114,17 @@ export class TaskTimerComponent implements OnInit {
       this.timer = window.setInterval(() => this.increaseTime(dateStarted, timeAlreadyElapsed), 1000);
       this.notifyService.announceTaskStarted(this.task.id);
       this.canBeStopped = true;
-      this.action='start';
+      this.action = 'start';
 
-      this.projectService.startTimer({taskId:this.task.id,action:this.action}).subscribe(timer => {
+      this.projectService.startTimer({ taskId: this.task.id, action: this.action }).subscribe(timer => {
       });
 
-      this.servertimer=setInterval(()=>{
-        this.projectService.startTimer({taskId:this.task.id,action:this.action}).subscribe(timer => {
+      this.servertimer = setInterval(() => {
+        this.projectService.startTimer({ taskId: this.task.id, action: this.action }).subscribe(timer => {
         });
-      },120000)
+      }, 120000)
 
-    
+
     }
   }
 
@@ -147,6 +138,15 @@ export class TaskTimerComponent implements OnInit {
     }
   }
 
+  isShown: boolean = false; // hidden by default
+
+
+  toggleShow() {
+
+    this.isShown = !this.isShown;
+
+  }
+
   /**
    * Stops the timer and moves a task to the archived list.
    */
@@ -155,18 +155,13 @@ export class TaskTimerComponent implements OnInit {
     this.task.dateEnded = new Date();
     this.task.isCurrent = false;
     this.stopped.emit(this.task.id);
-    this.action='stop';
-    this.projectService.startTimer({taskId:this.task.id,action:this.action}).subscribe(timer => {
+    this.action = 'stop';
+    this.projectService.startTimer({ taskId: this.task.id, action: this.action }).subscribe(timer => {
       clearInterval(this.servertimer)
     });
   }
 
-  /**
-   * Deletes a task.
-   */
-  delete(): void {
-    this.deleted.emit(this.task.id);
-  }
+
 
   /**
    * Determines the difference in seconds between two dates.
