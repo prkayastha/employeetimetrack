@@ -47,11 +47,15 @@ export class WorkdiaryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((query) => {
-      this.userId = (<any>query.get('userId')) as number;
-      this.name = query.get('name').trim();
+    if (this.role === 'ADMIN' || this.role === 'MANAGER') {
+      this.route.queryParamMap.subscribe((query) => {
+        this.userId = (<any>query.get('userId')) as number;
+        this.name = query.get('name').trim();
+        this.date.patchValue(this.today);
+      })
+    } else {
       this.date.patchValue(this.today);
-    })
+    }
   }
 
   getWorkDiary(date: any, userId?: number) {

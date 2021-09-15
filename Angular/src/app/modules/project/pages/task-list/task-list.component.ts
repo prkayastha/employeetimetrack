@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, of, Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { UserDetails } from 'src/app/_models/userDetails';
 import { ProjectService } from 'src/app/_services/project.service';
-import {MatDialog} from '@angular/material/dialog';
 import { TaskTimerComponent } from '../project-list/task-timer/task-timer.component';
-
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
+
 export class TaskListComponent implements OnInit {
   projectName: string;
   projectId: number;
@@ -119,7 +118,7 @@ export class TaskListComponent implements OnInit {
     this.$filter.next(option);
   }
   openDialog(taskDescription:string, id: number){
-    this.dialog.open(TaskTimerComponent,{data:{id,taskDescription}},);
+    this.dialog.open(TaskTimerComponent,{disableClose: true, data:{id,taskDescription}},);
     console.log(id,taskDescription);
 
   }
