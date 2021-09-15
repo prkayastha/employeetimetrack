@@ -1,0 +1,49 @@
+<div class="container">
+<div>
+    <h5>Task Recording</h5>
+</div>
+<div fxLayout="row" fxLayoutAlign="space-between">
+
+
+    <div fxFlex class="taskname">
+        {{data.taskDescription}}
+    </div>
+    <div class="time">
+        {{prettyTime}}
+    </div>
+    <button (click)="startTimer()" [disabled]="isActive" class="btn btn-outline-primary rounded-button">
+        <mat-icon>play_arrow</mat-icon>
+    </button>
+    <button (click)="pauseTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!isActive">
+        <mat-icon>pause</mat-icon>
+    </button>
+    <button (click)="stopTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!canBeStopped">
+        <mat-icon>stop</mat-icon>
+    </button>
+</div>
+
+<button (click)="toggleShow()" type="checkbox">show/hide</button>
+
+<div *ngIf="isShown" class="row container-fluid" id="divshow">
+    <div>
+        <h5>Break Time Recording</h5>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+
+
+        <div fxFlex class="taskname">
+            {{data.taskDescription}}
+        </div>
+        <div class="time">
+            {{prettyTime}}
+        </div>
+        <button (click)="startTimer()" [disabled]="isActive" class="btn btn-outline-primary rounded-button">
+            <mat-icon>play_arrow</mat-icon>
+        </button>
+        <button (click)="stopTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!canBeStopped">
+            <mat-icon>stop</mat-icon>
+        </button>
+    </div>
+
+</div>
+</div>

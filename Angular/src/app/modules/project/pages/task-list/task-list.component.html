@@ -51,7 +51,7 @@
                             [class.hide]="!!editMode" class="btn btn-outline-danger rounded-button">
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <button *ngIf="roles==='EMPLOYEE'"  class="btn btn-outline-primary rounded-button">
+                        <button (click)="openDialog(task.taskDescription,task.id)"*ngIf="roles==='EMPLOYEE'"  class="btn btn-outline-primary rounded-button">
                             <mat-icon>play_arrow</mat-icon>
                         </button>
                     </ng-template>
