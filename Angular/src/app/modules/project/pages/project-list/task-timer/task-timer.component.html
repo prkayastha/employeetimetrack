@@ -1,15 +1,16 @@
+<div>
+    <h5>Task Recording</h5>
+</div>
 <div fxLayout="row" fxLayoutAlign="space-between">
-    <div class="row">
-        <h5>Task Recording</h5>
-    </div>
+
 
     <div fxFlex class="taskname">
         {{data.taskDescription}}
     </div>
-    <div fxFlex>
-
+    <div class="time">
+        {{prettyTime}}
     </div>
-    <button class="btn btn-outline-primary rounded-button">
+    <button  class="btn btn-outline-primary rounded-button">
         <mat-icon>play_arrow</mat-icon>
     </button>
     <button class="btn btn-outline-primary rounded-button">
