@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { ITask } from './models/task';
 import { NotifyService } from 'src/app/modules/workdiary/services/notify.service';
+import { ProjectService } from 'src/app/_services/project.service';
 
 @Component({
   selector: 'app-task-timer',
@@ -10,6 +11,9 @@ import { NotifyService } from 'src/app/modules/workdiary/services/notify.service
 })
 export class TaskTimerComponent implements OnInit {
   task: ITask;
+  action:string;
+  servertimer:any;
+
   // The index of the task within the containing list.
   index: number;
   deleted: EventEmitter<number>;
@@ -25,7 +29,7 @@ export class TaskTimerComponent implements OnInit {
 
  
 
-  constructor(private notifyService: NotifyService, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(public projectService:ProjectService,private notifyService: NotifyService, @Inject(MAT_DIALOG_DATA) public data: any) {
     this.deleted = new EventEmitter<number>();
     this.stopped = new EventEmitter<number>();
 
@@ -119,6 +123,17 @@ export class TaskTimerComponent implements OnInit {
       this.timer = window.setInterval(() => this.increaseTime(dateStarted, timeAlreadyElapsed), 1000);
       this.notifyService.announceTaskStarted(this.task.id);
       this.canBeStopped = true;
+      this.action='start';
+
+      this.projectService.startTimer({taskId:this.task.id,action:this.action}).subscribe(timer => {
+      });
+
+      this.servertimer=setInterval(()=>{
+        this.projectService.startTimer({taskId:this.task.id,action:this.action}).subscribe(timer => {
+        });
+      },120000)
+
+    
     }
   }
 
@@ -140,6 +155,10 @@ export class TaskTimerComponent implements OnInit {
     this.task.dateEnded = new Date();
     this.task.isCurrent = false;
     this.stopped.emit(this.task.id);
+    this.action='stop';
+    this.projectService.startTimer({taskId:this.task.id,action:this.action}).subscribe(timer => {
+      clearInterval(this.servertimer)
+    });
   }
 
   /**

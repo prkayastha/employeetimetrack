@@ -67,4 +67,12 @@ export class ProjectService {
       updateTask
     );
   }
+
+  startTimer(timer:{taskId:number,action:string}){
+    return this.http.post<any>(
+      `${baseUrl}/time/update`,
+      timer
+    );
+
+  }
 }
