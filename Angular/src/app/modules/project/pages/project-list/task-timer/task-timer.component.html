@@ -3,15 +3,13 @@
     <h5>Task Recording</h5>
 </div>
 <div fxLayout="row" fxLayoutAlign="space-between">
-
-
     <div fxFlex class="taskname">
         {{data.taskDescription}}
     </div>
     <div class="time">
         {{prettyTime}}
     </div>
-    <button (click)="startTimer()" [disabled]="isActive" class="btn btn-outline-primary rounded-button">
+    <button (click)="startCaptureScreen($event)" [disabled]="isActive" class="btn btn-outline-primary rounded-button">
         <mat-icon>play_arrow</mat-icon>
     </button>
     <button (click)="pauseTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!isActive">
@@ -21,6 +19,8 @@
         <mat-icon>stop</mat-icon>
     </button>
 </div>
+<button class="btn btn-primary" (click)="startTakingSnapShot()">Take Screenshot</button>
+<div class="alert alert-danger" *ngIf="showError">{{ errorMessage || 'Timer cannot start unless screen is shared.'}}</div>
 
 <button (click)="toggleShow()" type="checkbox">show/hide</button>
 

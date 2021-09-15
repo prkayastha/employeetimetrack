@@ -12,25 +12,25 @@ async function startCapture(displayMediaOptions) {
 
         video.srcObject = captureStream;
 
-        caputerInterval = setInterval(() => {
+        /* caputerInterval = setInterval(() => {
             let base64Img = captureSnapShot(video);
             localStorage.setItem('captureImage', base64Img);
-        }, 5000);
+        }, 5000); */
 
         captureStream.oninactive = () => {
             console.log('Streaming stopped');
             localStorage.removeItem('captureImage')
             stopCapture(video);
-            if (!!caputerInterval) {
+            /* if (!!caputerInterval) {
                 debugger;
                 console.log('clearing interval')
                 clearInterval(caputerInterval);
-            }
+            } */
         };
 
     } catch (err) {
-        console.error("Error: " + err);
         video.remove();
+        throw err;
     }
 
     return [captureStream, video];

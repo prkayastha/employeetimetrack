@@ -10,6 +10,7 @@ const baseUrl = environment.apiUrl;
   providedIn: 'root'
 })
 export class ProjectService {
+  
 
   constructor(
     private http: HttpClient
@@ -73,6 +74,15 @@ export class ProjectService {
       `${baseUrl}/time/update`,
       timer
     );
+  }
 
+  uploadScreenshot(id: any, file: File): Observable<any> {
+    const form = new FormData();
+    form.append("taskId", id);
+    form.append("capture", file);
+    return this.http.post(
+      `${baseUrl}/task/screenshot`,
+      form
+    );
   }
 }
