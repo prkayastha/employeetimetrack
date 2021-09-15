@@ -23,12 +23,14 @@ export class TaskTimerComponent implements OnInit {
   // Determines whether the task can be stopped or whether the timer can be reset.
   canBeStopped: boolean;
 
+ 
+
   constructor(private notifyService: NotifyService, @Inject(MAT_DIALOG_DATA) public data: any) {
     this.deleted = new EventEmitter<number>();
     this.stopped = new EventEmitter<number>();
 
     // Add a task when a new task has been created.
-    debugger;
+  
     this.notifyService.taskAdded.subscribe((task: ITask) => {
       this.task = task;
       this.setPrettyTime();
@@ -48,6 +50,18 @@ export class TaskTimerComponent implements OnInit {
 
 
   ngOnInit() {
+    const atask: ITask = {
+      id: this.data.id,
+      name: this.data.taskDescription,
+      project: '',
+      isCurrent: true,
+      time: {
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+      }
+    };
+    this.notifyService.announceTaskAdded(atask);
     this.isActive = false;
 
   }
@@ -63,7 +77,7 @@ export class TaskTimerComponent implements OnInit {
    * Sets the format of the displayed time.
    */
   determinePrettyTime(): string {
-    debugger;
+  
     return `${this.padTime(this.task.time.hours)}:${this.padTime(this.task.time.minutes)}:${this.padTime(this.task.time.seconds)}`;
   }
 
