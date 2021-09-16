@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, OnInit, EventEmitter, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ITask } from './models/task';
 import { NotifyService } from 'src/app/modules/workdiary/services/notify.service';
@@ -15,6 +15,7 @@ declare function stopCapture(videoElement): any;
 })
 export class TaskTimerComponent implements OnInit {
   task: ITask;
+  breaktask:ITask;
   action: string;
   servertimer: any;
   captureTimer: any;
@@ -27,6 +28,8 @@ export class TaskTimerComponent implements OnInit {
   timer: number;
   // The formatted time to be displayed.
   prettyTime: string;
+  //BreakTime
+  breakTime: string;
   // Show whether the timer is running.
   isActive: boolean;
   // Determines whether the task can be stopped or whether the timer can be reset.
@@ -47,8 +50,11 @@ export class TaskTimerComponent implements OnInit {
 
     this.notifyService.taskAdded.subscribe((task: ITask) => {
       this.task = task;
+      this.breaktask=this.breaktask;
       this.setPrettyTime();
+      this.setBreakTime();
       this.canBeStopped = !(this.task.time.hours === 0 && this.task.time.minutes === 0 && this.task.time.seconds === 0);
+      this.canBeStopped=!(this.breaktask.time.hours===0 && this.breaktask.time.minutes===0 && this.breaktask.time.seconds===0);
       console.log(this.task)
     }, error => {
       console.log(error);
@@ -83,6 +89,15 @@ export class TaskTimerComponent implements OnInit {
    */
   setPrettyTime(): void {
     this.prettyTime = this.determinePrettyTime();
+    
+  }
+
+  setBreakTime(): void{
+    this.breakTime=this.determineBreakTime();
+  }
+
+  determineBreakTime():string{
+    return `${this.padTime(this.task.time.hours)}:${this.padTime(this.task.time.minutes)}:${this.padTime(this.task.time.seconds)}`;
   }
 
   /**
@@ -132,12 +147,6 @@ export class TaskTimerComponent implements OnInit {
     }
   }
 
-  isShown: boolean = false; // hidden by default
-
-
-  toggleShow() {
-    this.isShown = !this.isShown;
-  }
 
   /**
    * Stops the timer and moves a task to the archived list.
@@ -149,6 +158,27 @@ export class TaskTimerComponent implements OnInit {
     this.stopped.emit(this.task.id);
   }
 
+  startBreakTimer(): void{
+    if (!this.isActive) {
+      if (!this.breaktask.dateStarted) {
+        this.breaktask.dateStarted = new Date();
+      }
+
+      this.isActive = true;
+      const dateStarted: Date = new Date();
+      const timeAlreadyElapsed = this.breaktask.time.seconds + this.breaktask.time.minutes * 60 + this.breaktask.time.hours * 3600;
+      this.timer = window.setInterval(() => this.increaseTime(dateStarted, timeAlreadyElapsed), 1000);
+      this.notifyService.announceTaskStarted(this.breaktask.id);
+      this.canBeStopped = true;
+    }
+
+  }
+  stopBreakTimer():void{
+    this.pauseTimer();
+    this.breaktask.dateEnded = new Date();
+    this.breaktask.isCurrent = false;
+    this.stopped.emit(this.breaktask.id);
+  }
   /**
    * Determines the difference in seconds between two dates.
    * @param dateStarted The initial date.

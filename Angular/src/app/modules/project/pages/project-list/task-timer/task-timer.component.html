@@ -1,29 +1,33 @@
 <div class="container">
-<div>
-    <h5>Task Recording</h5>
-</div>
-<div fxLayout="row" fxLayoutAlign="space-between">
-    <div fxFlex class="taskname">
-        {{data.taskDescription}}
-    </div>
-    <div class="time">
-        {{prettyTime}}
-    </div>
-    <button (click)="startCaptureScreen($event)" [disabled]="isActive" class="btn btn-outline-primary rounded-button">
-        <mat-icon>play_arrow</mat-icon>
-    </button>
-    <button (click)="pauseTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!isActive">
-        <mat-icon>pause</mat-icon>
-    </button>
-    <button (click)="stopRecordingTime()" class="btn btn-outline-primary rounded-button" [disabled]="!canBeStopped">
-        <mat-icon>stop</mat-icon>
-    </button>
-</div>
-<div class="alert alert-danger" *ngIf="showError">{{ errorMessage || 'Timer cannot start unless screen is shared.'}}</div>
 
-<button (click)="toggleShow()" type="checkbox">show/hide</button>
+    <div>
+        <h5>Task Recording</h5>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-evenly center">
+        <div fxFlex class="task-name">
+            {{data.taskDescription}}
+        </div>
+        <div class="time">
+            {{prettyTime}}
+        </div>
+        <button (click)="startCaptureScreen($event)" [disabled]="isActive"
+            class="btn btn-outline-primary rounded-button">
+            <mat-icon>play_arrow</mat-icon>
+        </button>
+        <button (click)="pauseTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!isActive">
+            <mat-icon>pause</mat-icon>
+        </button>
+        <button (click)="stopRecordingTime()" class="btn btn-outline-primary rounded-button" [disabled]="!canBeStopped">
+            <mat-icon>stop</mat-icon>
+        </button>
+    </div>
+    <div class="session">
+        <p>Current Session</p>
+    </div>
+    <div class="alert alert-danger" *ngIf="showError">{{ errorMessage || 'Timer cannot start unless screen is shared.'}}
+    </div>
 
-<div *ngIf="isShown" class="row container-fluid" id="divshow">
+
     <div>
         <h5>Break Time Recording</h5>
     </div>
@@ -34,15 +38,8 @@
             {{data.taskDescription}}
         </div>
         <div class="time">
-            {{prettyTime}}
+            {{breakTime}}
         </div>
-        <button (click)="startTimer()" [disabled]="isActive" class="btn btn-outline-primary rounded-button">
-            <mat-icon>play_arrow</mat-icon>
-        </button>
-        <button (click)="stopTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!canBeStopped">
-            <mat-icon>stop</mat-icon>
-        </button>
     </div>
 
-</div>
 </div>

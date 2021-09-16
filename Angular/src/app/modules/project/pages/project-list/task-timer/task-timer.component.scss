@@ -1,9 +1,27 @@
-.rounded-button{
-    height: 38px;
-    width: 38px;
-    border-radius: 50%;
-    padding: 6px;
+.rounded-button {
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+  padding: 6px;
+  margin-left: 10px;
 }
+
 .time {
-    margin-right: 20px;
-  }
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+}
+
+.task-name {
+  font-weight: 500;
+  font-size: 1.3em;
+  margin-bottom: 2px;
+}
+.session{
+    font-size: 10px;
+    margin-left: 325px;
+
+}

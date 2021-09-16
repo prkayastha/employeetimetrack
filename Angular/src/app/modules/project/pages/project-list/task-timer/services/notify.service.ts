@@ -10,9 +10,12 @@ export class NotifyService {
   private taskAddedSource = new Subject<ITask>();
   private taskStartedSource = new Subject<number>();
 
+
+
   search = this.searchSource.asObservable();
   taskAdded = this.taskAddedSource.asObservable();
   taskStarted = this.taskStartedSource.asObservable();
+
 
   /**
    * Notifies subscribers that a search has occured.
@@ -38,3 +41,8 @@ export class NotifyService {
     this.taskAddedSource.next(task);
   }
 }
+
+ 
+
+
+
