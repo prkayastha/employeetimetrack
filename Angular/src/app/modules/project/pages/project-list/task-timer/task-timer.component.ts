@@ -15,10 +15,16 @@ declare function stopCapture(videoElement): any;
 })
 export class TaskTimerComponent implements OnInit {
   task: ITask;
-  breaktask:ITask;
   action: string;
   servertimer: any;
   captureTimer: any;
+
+
+  //breaktime fields
+  breaktime: number = 0;
+  breakdisplay='0:0:0';
+  interval: any;
+  //breaktime fields
 
   // The index of the task within the containing list.
   index: number;
@@ -50,11 +56,8 @@ export class TaskTimerComponent implements OnInit {
 
     this.notifyService.taskAdded.subscribe((task: ITask) => {
       this.task = task;
-      this.breaktask=this.breaktask;
       this.setPrettyTime();
-      this.setBreakTime();
       this.canBeStopped = !(this.task.time.hours === 0 && this.task.time.minutes === 0 && this.task.time.seconds === 0);
-      this.canBeStopped=!(this.breaktask.time.hours===0 && this.breaktask.time.minutes===0 && this.breaktask.time.seconds===0);
       console.log(this.task)
     }, error => {
       console.log(error);
@@ -89,16 +92,11 @@ export class TaskTimerComponent implements OnInit {
    */
   setPrettyTime(): void {
     this.prettyTime = this.determinePrettyTime();
-    
+
   }
 
-  setBreakTime(): void{
-    this.breakTime=this.determineBreakTime();
-  }
 
-  determineBreakTime():string{
-    return `${this.padTime(this.task.time.hours)}:${this.padTime(this.task.time.minutes)}:${this.padTime(this.task.time.seconds)}`;
-  }
+
 
   /**
    * Sets the format of the displayed time.
@@ -134,6 +132,7 @@ export class TaskTimerComponent implements OnInit {
       this.timer = window.setInterval(() => this.increaseTime(dateStarted, timeAlreadyElapsed), 1000);
       this.notifyService.announceTaskStarted(this.task.id);
       this.canBeStopped = true;
+      this.pausebreakTimer();
     }
   }
 
@@ -144,6 +143,7 @@ export class TaskTimerComponent implements OnInit {
     if (this.isActive) {
       this.isActive = false;
       window.clearInterval(this.timer);
+      this.startbreakTimer();
     }
   }
 
@@ -158,27 +158,35 @@ export class TaskTimerComponent implements OnInit {
     this.stopped.emit(this.task.id);
   }
 
-  startBreakTimer(): void{
-    if (!this.isActive) {
-      if (!this.breaktask.dateStarted) {
-        this.breaktask.dateStarted = new Date();
-      }
-
-      this.isActive = true;
-      const dateStarted: Date = new Date();
-      const timeAlreadyElapsed = this.breaktask.time.seconds + this.breaktask.time.minutes * 60 + this.breaktask.time.hours * 3600;
-      this.timer = window.setInterval(() => this.increaseTime(dateStarted, timeAlreadyElapsed), 1000);
-      this.notifyService.announceTaskStarted(this.breaktask.id);
-      this.canBeStopped = true;
+//breaktime functionalities
+startbreakTimer() {
+  console.log("=====>");
+  this.interval = setInterval(() => {
+    if (this.breaktime === 0) {
+      this.breaktime++;
+    } else {
+      this.breaktime++;
     }
+    this.breakdisplay=this.transform( this.breaktime)
+  }, 1000);
+}
+transform(value: number): string {
+  var sec_num = value; 
+  var hours   = Math.floor(sec_num / 3600);
+  var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+  var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-  }
-  stopBreakTimer():void{
-    this.pauseTimer();
-    this.breaktask.dateEnded = new Date();
-    this.breaktask.isCurrent = false;
-    this.stopped.emit(this.breaktask.id);
-  }
+  if (hours   < 10) {hours   = 0;}
+  if (minutes < 10) {minutes = 0;}
+ // if (seconds < 10) {seconds = 0;}
+  return hours+':'+minutes+':'+seconds;
+}
+pausebreakTimer() {
+  clearInterval(this.interval);
+}
+
+//breaktime functionalities
+
   /**
    * Determines the difference in seconds between two dates.
    * @param dateStarted The initial date.
@@ -268,9 +276,9 @@ export class TaskTimerComponent implements OnInit {
 
     const randomNumber = Math.floor(Math.random() * 10);
     const timeout = randomNumber * 60 * 1000;
-    console.log('Taking 1st screenshot in '+randomNumber+' min');
-    
-    setTimeout(function() {
+    console.log('Taking 1st screenshot in ' + randomNumber + ' min');
+
+    setTimeout(function () {
       takeSnapShot();
       this.captureTimer = setInterval(() => {
         console.log('Interval snapshot');
