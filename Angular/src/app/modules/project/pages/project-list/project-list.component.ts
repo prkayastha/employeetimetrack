@@ -120,7 +120,7 @@ export class ProjectListComponent implements OnInit {
   private setUpHeader() {
     this.tableHeader = [...tableHeader];
     this.filterOption.button['callback'] = this.onCreate.bind(this);
-    if (!!this.actionOption) {
+    if (!!this.actionOption && this.userModel.role !== 'EMPLOYEE') {
       this.actionOption['edit'] = this.onEdit.bind(this);
       this.actionOption['delete'] = this.onDelete.bind(this);
     }

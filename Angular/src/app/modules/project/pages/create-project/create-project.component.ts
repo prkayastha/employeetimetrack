@@ -21,6 +21,7 @@ export class CreateProjectComponent implements OnInit, OnChanges {
     @Input('projectId') id: number = 0;
     loading = false;
     submitted = false;
+    isUpdate = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -32,6 +33,7 @@ export class CreateProjectComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (!!changes.id && this.id !== 0) {
+            this.isUpdate = true;
             this.projectService.getProjectDetail(this.id).subscribe((projectDetails: any) => {
                 this.form.patchValue({
                     id: projectDetails.id,
@@ -42,6 +44,8 @@ export class CreateProjectComponent implements OnInit, OnChanges {
                 });
                 this.form.get('assignee').setValue(projectDetails.assignees);
             });
+        } else {
+            this.isUpdate = false;
         }
     }
 
@@ -87,7 +91,8 @@ export class CreateProjectComponent implements OnInit, OnChanges {
         this.projectService.createProject(value)
             .subscribe({
                 next: () => {
-                    this.alertService.success('Account created successfully', { keepAfterRouteChange: true });
+                    const message = this.isUpdate ? 'Project updated successfully' : 'Project created successfully';
+                    this.alertService.success(message, { keepAfterRouteChange: true });
                     this.router.navigate(['/project', 'list']);
                     this.emitAction.emit({ action: 'save' });
                 },
