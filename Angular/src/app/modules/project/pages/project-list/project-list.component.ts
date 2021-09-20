@@ -125,7 +125,7 @@ export class ProjectListComponent implements OnInit {
       this.actionOption['delete'] = this.onDelete.bind(this);
     }
     const projectNameCol = this.tableHeader.find(header => header.headerDef === 'projectName');
-    projectNameCol.onClick = this.onProjectNameClick.bind(this);
+    if (!!projectNameCol) projectNameCol.onClick = this.onProjectNameClick.bind(this);
 
     if (this.userModel.role === 'EMPLOYEE') {
       this.tableHeader.pop();
