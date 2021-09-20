@@ -31,7 +31,7 @@ export class CreateProjectComponent implements OnInit, OnChanges {
     ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (!!changes.id) {
+        if (!!changes.id && this.id !== 0) {
             this.projectService.getProjectDetail(this.id).subscribe((projectDetails: any) => {
                 this.form.patchValue({
                     id: projectDetails.id,
@@ -50,7 +50,7 @@ export class CreateProjectComponent implements OnInit, OnChanges {
             id: [this.id],
             projectName: ['', Validators.required],
             projectManager: [0, this.validateNumber],
-            assignee: [null],
+            assignee: [[]],
             version: [0]
         });
 
