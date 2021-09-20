@@ -117,6 +117,7 @@ export class ProjectListComponent implements OnInit {
 
   createFormAction(action: any) {
     this.actionCreate = false;
+    this.actionProjectId = 0;
     if (action.action !== 'cancel') {
       this.$filter.next(this.filter);
     }
