@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeLast } from 'rxjs/operators';
 import { ProjectService } from 'src/app/_services/project.service';
 import { TableHeader } from '../../../../_components/table/model/header.model';
 import { UserDetails } from '../../../../_models/userDetails';
@@ -31,7 +31,7 @@ const filterOption = {
 })
 export class ProjectListComponent implements OnInit {
   public $projectList: Observable<any>;
-  tableHeader = tableHeader;
+  tableHeader;
   filterOption = filterOption;
   actionOption: any = {};
   filter = {
@@ -50,20 +50,10 @@ export class ProjectListComponent implements OnInit {
     private router: Router,
     private userModel: UserDetails
   ) {
-    this.filterOption.button['callback'] = this.onCreate.bind(this);
-    if (!!this.actionOption) {
-      this.actionOption['edit'] = this.onEdit.bind(this);
-      this.actionOption['delete'] = this.onDelete.bind(this);
-    }
-    const projectNameCol = this.tableHeader.find(header => header.headerDef === 'projectName');
-    projectNameCol.onClick = this.onProjectNameClick.bind(this);
-
-    if (userModel.role === 'EMPLOYEE') {
-      this.tableHeader.pop();
-    }
   }
 
   ngOnInit() {
+    this.setUpHeader();
     this.$filter.pipe(
       debounceTime(300)
     ).subscribe(filter => {
@@ -127,6 +117,18 @@ export class ProjectListComponent implements OnInit {
     this.router.navigate(['/project', 'task', data.id], { queryParams: {name: data.projectName} })
   }
 
-  deleteProject(id: string) {
+  private setUpHeader() {
+    this.tableHeader = [...tableHeader];
+    this.filterOption.button['callback'] = this.onCreate.bind(this);
+    if (!!this.actionOption) {
+      this.actionOption['edit'] = this.onEdit.bind(this);
+      this.actionOption['delete'] = this.onDelete.bind(this);
+    }
+    const projectNameCol = this.tableHeader.find(header => header.headerDef === 'projectName');
+    projectNameCol.onClick = this.onProjectNameClick.bind(this);
+
+    if (this.userModel.role === 'EMPLOYEE') {
+      this.tableHeader.pop();
+    }
   }
 }
