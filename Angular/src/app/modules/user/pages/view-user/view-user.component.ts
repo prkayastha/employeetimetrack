@@ -49,6 +49,7 @@ export class ViewUserComponent implements OnInit {
         return this.role === 'EMPLOYEE';
     }
 
+    //pdf function
     downloadPDF(){
         console.log("downloading pdf");
         const doc=new jsPDF();
