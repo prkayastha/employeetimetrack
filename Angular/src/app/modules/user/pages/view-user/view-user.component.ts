@@ -1,6 +1,7 @@
 import { ThrowStmt } from "@angular/compiler";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import jsPDF from "jspdf";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { flatMap } from "rxjs/operators";
 import { UserDetails } from "../../../../_models/userDetails";
@@ -46,6 +47,14 @@ export class ViewUserComponent implements OnInit {
 
     showViewReport() {
         return this.role === 'EMPLOYEE';
+    }
+
+    downloadPDF(){
+        console.log("downloading pdf");
+        const doc=new jsPDF();
+        doc.text("hello this is the pdf test",10,10);
+        doc.text("Generating Reprt",100,100);
+        doc.save('report.pdf');
     }
 
 
