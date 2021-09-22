@@ -3,3 +3,12 @@
         font-size: 12px;
     }
 }
+
+:host  {
+    alert {
+        position: absolute;
+        bottom: 60px;
+        z-index: 1;
+        width: 100%;
+    }
+}

@@ -20,7 +20,7 @@ module.exports = async function (req, userInfo) {
     const { buffer } = req.file;
     const fileName = `${generateUUID()}.png`;
 
-    await sharp(buffer).resize({width: 720}).png({ quality: 60}).toFile(`${pathName}/${fileName}`);
+    await sharp(buffer).resize({width: 1024}).png({ quality: 80}).toFile(`${pathName}/${fileName}`);
     const url = `${settings.apiURL}/capture/${fileName}`;
 
     const response = SuccessResponse.getSuccessResponse(200, 'Screenshot uploaded with url ' + url)

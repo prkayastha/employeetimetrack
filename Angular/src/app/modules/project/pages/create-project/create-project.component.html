@@ -9,7 +9,7 @@
     <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" class="form-row create-form">
         <div class="form-group col-5">
             <label>Project Name</label>
-            <input type="text" formControlName="projectName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }" />
+            <input type="text" formControlName="projectName" placeholder="Add Project" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.projectName.errors }" />
             <div *ngIf="submitted && f.projectName.errors" class="invalid-feedback">
                 <div *ngIf="f.projectName.errors.required">Project Name is required</div>
             </div>
