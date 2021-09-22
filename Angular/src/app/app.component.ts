@@ -23,10 +23,6 @@ export class AppComponent implements OnInit {
 
     startCapture(displayMediaOptions).then(([stream, video]) => {
       console.log('view value');
-    }) */
-    setTimeout(() => {
-      this.alertService.success('Show success message')
-    }, 2000)
-    
+    }) */    
   }
 }
