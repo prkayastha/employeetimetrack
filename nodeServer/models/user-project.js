@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER
         }
     }, {
-        timestamps: true,
+        timestamps: false,
         version: false
     });
     UserProject.associate = function (models) {
