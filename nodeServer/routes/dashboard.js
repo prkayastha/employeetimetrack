@@ -6,6 +6,16 @@ const errorHandler = require('../controller/errorHandler');
 const jwtDecoder = require('../utils/jwt-decode');
 const momentTz = require('moment-timezone');
 
+router.get('/report/generate', async (req, res) => {
+    const jwtPayload = jwtDecoder(req);
+    try {
+        report.generateReport(32);
+        res.send('Done');
+    } catch (error) {
+        errorHandler(res, error);
+    }
+});
+
 router.get('/report', async (req, res) => {
     const jwtPayload = jwtDecoder(req);
     try {
@@ -27,7 +37,7 @@ router.get('/', async (req, res) => {
             dashbaord.getProjectHrByDay(req.query.userId || jwtPayload.id, localTimeOffset)
         ];
         const [assignedProjects, workedOnProject, projectInvovlement, projectHrByDay] = await Promise.all(queryCollection);
-        res.send({assignedProjects, workedOnProject, projectInvovlement, projectHrByDay});
+        res.send({ assignedProjects, workedOnProject, projectInvovlement, projectHrByDay });
     } catch (error) {
         errorHandler(res, error);
     }
