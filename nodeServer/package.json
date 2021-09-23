@@ -23,6 +23,7 @@
     "node-cache": "^5.1.2",
     "nodemailer": "^6.4.5",
     "oauth": "^0.9.15",
+    "pdfkit": "^0.12.3",
     "randomstring": "^1.1.5",
     "redis": "^3.0.2",
     "redis-server": "^1.2.2",
