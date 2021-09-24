@@ -37,9 +37,10 @@ export class TaskListComponent implements OnInit {
 
   constructor(private projectService: ProjectService,
     private route: ActivatedRoute,
-    private userDetail: UserDetails,public dialog:MatDialog){ }
+    private userDetail: UserDetails, public dialog: MatDialog) { }
 
   ngOnInit() {
+
     this.projectId = this.route.snapshot.params.projectid;
     this.projectName = this.route.snapshot.queryParams.name;
     this.roles = this.userDetail.role;
@@ -117,9 +118,9 @@ export class TaskListComponent implements OnInit {
     this._filter = option;
     this.$filter.next(option);
   }
-  openDialog(taskDescription:string, id: number){
-    this.dialog.open(TaskTimerComponent,{disableClose: true, data:{id,taskDescription}},);
-    console.log(id,taskDescription);
+  openDialog(taskDescription: string, id: number) {
+    this.dialog.open(TaskTimerComponent, { disableClose: true, data: { id, taskDescription } },);
+    console.log(id, taskDescription);
 
   }
 }

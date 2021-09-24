@@ -5,11 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-<<<<<<< HEAD
-import { Account } from '../_models';
-=======
-import { Account,Task} from '../_models';
->>>>>>> a4b0be9c5e8a7c61167854a2988d73a7e616327e
+import { Account, Task } from '../_models';
 import { offset } from 'highcharts';
 import { UserDetails } from '../_models/userDetails';
 
@@ -17,11 +13,7 @@ const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> a4b0be9c5e8a7c61167854a2988d73a7e616327e
     private accountSubject: BehaviorSubject<Account>;
     public account: Observable<Account>;
 
@@ -71,7 +63,6 @@ export class AccountService {
     verifyEmail(token: string) {
         return this.http.post(`${baseUrl}/verify-email`, { token });
     }
-<<<<<<< HEAD
 
     forgotPassword(email: string) {
         return this.http.post(`${baseUrl}/password/reset`, { username: email });
@@ -81,36 +72,17 @@ export class AccountService {
         return this.http.post(`${baseUrl}/password/check/token`, { token });
     }
 
-=======
-    
-    forgotPassword(email: string) {
-        return this.http.post(`${baseUrl}/password/reset`, { username: email });
-    }
-    
-    validateResetToken(token: string) {
-        return this.http.post(`${baseUrl}/password/check/token`, { token });
-    }
-    
->>>>>>> a4b0be9c5e8a7c61167854a2988d73a7e616327e
     resetPassword(token: string, password: string, confirmPassword: string) {
         return this.http.post(`${baseUrl}/password/change`, { reset: token, password, confirmPassword });
     }
 
     getAll(): Observable<any> {
         const option = {
-<<<<<<< HEAD
             offset: 0,
             limit: 100,
             orderBy: "id",
             order: "Desc",
             search: null,
-=======
-           offset:0,
-           limit:100,
-           orderBy:"id",
-           order:"Desc",
-           search:null,
->>>>>>> a4b0be9c5e8a7c61167854a2988d73a7e616327e
         }
         return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
     }
@@ -118,19 +90,11 @@ export class AccountService {
     getById(id: string) {
         return this.http.get<Account>(`${baseUrl}/${id}`);
     }
-<<<<<<< HEAD
 
     create(params) {
         return this.http.put('${baseUrl}', params);
     }
 
-=======
-    
-    create(params) {
-        return this.http.put('${baseUrl}',params);
-    }
-    
->>>>>>> a4b0be9c5e8a7c61167854a2988d73a7e616327e
     update(id, params) {
         return this.http.put(`${baseUrl}/user/update/${id}`, params)
             .pipe(map((account: any) => {
@@ -143,11 +107,6 @@ export class AccountService {
                 return account;
             }));
     }
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> a4b0be9c5e8a7c61167854a2988d73a7e616327e
     delete(id: string) {
         return this.http.delete(`${baseUrl}/user/delete/${id}`)
             .pipe(finalize(() => {
@@ -157,17 +116,11 @@ export class AccountService {
             }));
     }
 
-<<<<<<< HEAD
 
 
     // Create Project
     createProject(params) {
         return this.http.put('${baseUrl}/Project/upsert ', params);
-=======
-    // Create Project
-    createProject(params) {
-        return this.http.put('${baseUrl}/Project/upsert ',params);
->>>>>>> a4b0be9c5e8a7c61167854a2988d73a7e616327e
     }
 
     //delete Project
@@ -193,28 +146,10 @@ export class AccountService {
                 return account;
             }));
     }
-<<<<<<< HEAD
 
-    // Task List
-    getAllTask() {
-        const option = {
-            offset: 0,
-            limit: 5,
-            orderBy: "id",
-            order: "Desc",
-            search: null,
-        }
-        return this.http.post<Account[]>(`${baseUrl}/user/list`, option);
-    }
     // Create Task
     createTask(params) {
         return this.http.put('${baseUrl}', params);
-=======
-    
-     // Create Task
-     createTask(params) {
-        return this.http.put('${baseUrl}',params);
->>>>>>> a4b0be9c5e8a7c61167854a2988d73a7e616327e
     }
 
     //delete Task

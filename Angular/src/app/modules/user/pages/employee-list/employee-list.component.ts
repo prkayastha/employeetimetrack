@@ -36,12 +36,12 @@ export class EmployeeListComponent implements OnInit {
   _filter: any;
   $filter: Subject<any> = new BehaviorSubject(null);
 
-  @ViewChild('paginator', {static: true}) paginator: MatPaginator;
+  @ViewChild('paginator', { static: true }) paginator: MatPaginator;
 
   constructor(
     private userService: UserService,
     private router: Router
-  ) { 
+  ) {
     const nameCol = this.tableHeader.find(header => header.headerDef === 'name');
     nameCol.onClick = function (data: any) {
       this.router.navigate(['/user', data.id]);
@@ -49,6 +49,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this._filter = {
       offset: 0,
       limit: 10,

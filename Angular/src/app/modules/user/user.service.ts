@@ -25,6 +25,8 @@ export class UserService {
     }
 
     getAllUsers(option: any): Observable<any> {
+
+
         return this.http.post<any>(`${baseUrl}/user/list`, option).pipe(
             map((response) => {
                 response.collection = response.collection.map(user => {
