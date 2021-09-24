@@ -43,10 +43,11 @@ router.get('/', async (req, res) => {
             dashbaord.getAssignedProject(req.query.userId || jwtPayload.id),
             dashbaord.getWorkedOnProject(req.query.userId || jwtPayload.id),
             dashbaord.getProjectInvolvementForWeek(req.query.userId || jwtPayload.id, localTimeOffset),
-            dashbaord.getProjectHrByDay(req.query.userId || jwtPayload.id, localTimeOffset)
+            dashbaord.getProjectHrByDay(req.query.userId || jwtPayload.id, localTimeOffset),
+            dashbaord.getBreaks(req.query.userId || jwtPayload.id)
         ];
-        const [assignedProjects, workedOnProject, projectInvovlement, projectHrByDay] = await Promise.all(queryCollection);
-        res.send({ assignedProjects, workedOnProject, projectInvovlement, projectHrByDay });
+        const [assignedProjects, workedOnProject, projectInvovlement, projectHrByDay, breaks] = await Promise.all(queryCollection);
+        res.send({ assignedProjects, workedOnProject, projectInvovlement, projectHrByDay, breaks });
     } catch (error) {
         errorHandler(res, error);
     }

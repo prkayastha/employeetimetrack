@@ -6,6 +6,7 @@ const moment = require('moment');
 const getReport = require('./getReport');
 const instertIntoDB = require('./insertReportInfo');
 const user = require('../../controller/user');
+const breaks = require('../dashboard/getBreaks');
 
 const average = (list) => list.reduce((prev, curr) => prev + curr) / list.length;
 
@@ -23,6 +24,7 @@ async function generateReportByUserId(userId) {
 
     const userInformation = await getUserById(userId);
     const reportInfo = await getReport(userId);
+    const breakInfo = await breaks(userId);
 
     const doc = new PDFDocument({
         size: 'A4',
@@ -50,7 +52,7 @@ async function generateReportByUserId(userId) {
 
     setTableHeader(doc, 180);
 
-    setTableRow(doc, reportInfo)
+    setTableRow(doc, reportInfo, breakInfo)
 
     doc.end();
 
@@ -108,7 +110,7 @@ function setTableHeader(doc, y) {
         .stroke();
 }
 
-function setTableRow(doc, information) {
+function setTableRow(doc, information, breakInfo) {
     doc.font('Helvetica');
     const top = 220
     let totalTime = 0;
@@ -152,9 +154,11 @@ function setTableRow(doc, information) {
         console.log(error)
     }
     doc.text(`Total Time Recorded: ${totalTime}`, 80, doc.y + 50, { width: 510, align: 'left' });
+    doc.text(`Total Breaks This Week: ${breakInfo.weekly}`, 80, doc.y, { width: 510, align: 'left' });
     doc.text(`Total Recorded Productive Screens: ${totalProductiveScreen}`, 80, doc.y, { width: 510, align: 'left' });
     doc.text(`Total Recorded Unproductive Screens: ${totalUnproductiveScreen}`, 80, doc.y, { width: 510, align: 'left' });
     doc.text(`Total Productive Rate: ${(1 - averageProd) * 100}%`, 80, doc.y, { width: 510, align: 'left' });
+    
 }
 
 function getDates() {
