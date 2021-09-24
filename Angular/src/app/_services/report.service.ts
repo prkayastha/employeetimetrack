@@ -98,4 +98,9 @@ export class ReportService {
             `${baseUrl}/dashboard?userId=32`,
         )
     }
+    getEmployeeReport():Observable<any>{
+        return this.http.get(
+            `${baseUrl}/dashboard/report?userId=32`,
+        )
+    }
 }
