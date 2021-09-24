@@ -7,10 +7,10 @@ export interface PeriodicElement {
   date: string;
 }
 const ELEMENT_DATA: PeriodicElement[] = [
-  { name: 'Project 1', date: '24/12/2012' },
-  { name: 'Project 2', date: '14/10/2016' },
-  { name: 'Project 3', date:'11/12/2021'},
-  { name: 'Project 4', date:'14/06/2022' }
+  { name: 'SpaceX', date: '22/09/2021' },
+  { name: 'Alibaba', date: '20/09/2021' },
+  { name: 'Cloud Security', date:'20/09/2021'},
+  { name: 'Sprint3', date:'23/09/2021' }
 ];
 
 @Component({
@@ -19,6 +19,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  data=[];
 
   bigChart = [];
   pieChart = [];
@@ -37,6 +38,7 @@ export class DashboardComponent implements OnInit {
     this.pieChart = this.dashboardService.pieChart();
 
     this.dataSource1.paginator = this.paginator;
+
   }
 
 }

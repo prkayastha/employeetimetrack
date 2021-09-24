@@ -92,4 +92,10 @@ export class ReportService {
             screenInfo
         )
     }
+
+    getPDFReport(): Observable<any> {
+        return this.http.get(
+            `${baseUrl}/dashboard?userId=32`,
+        )
+    }
 }

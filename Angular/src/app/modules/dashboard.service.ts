@@ -23,18 +23,18 @@ export class DashboardService {
 
   pieChart() {
     return [{
-      name: 'Project 1',
+      name: 'SpaceX',
       y: 60,
       sliced: true,
       selected: true
     }, {
-      name: 'Project 2',
+      name: 'Alibaba',
       y: 10
     }, {
-      name: 'Project 3',
+      name: 'Cloud Security',
       y: 25
     }, {
-      name: 'Project 4',
+      name: 'Sprint 3',
       y: 5
     }];
   }

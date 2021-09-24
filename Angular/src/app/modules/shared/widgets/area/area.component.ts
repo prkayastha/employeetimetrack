@@ -36,7 +36,7 @@ export class AreaComponent implements OnInit {
     },
     yAxis: {
         title: {
-            text: 'Weekly Hours'
+            text: 'Hours'
         },
     },
       tooltip: {
