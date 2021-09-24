@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeLast } from 'rxjs/operators';
 import { ProjectService } from 'src/app/_services/project.service';
 import { TableHeader } from '../../../../_components/table/model/header.model';
+import { UserDetails } from '../../../../_models/userDetails';
 
 const tableHeader: TableHeader[] = [
   { headerDef: 'id', headerLabel: 'Id', colName: 'id' },
   { headerDef: 'projectName', headerLabel: 'ProjectName', colName: 'projectName', headerCss: 'px-3' },
   { headerDef: 'taskCount', headerLabel: 'Number of Task', colName: 'taskCount' },
+  { headerDef: 'createdAt', headerLabel: 'Date Created', colName: 'createdAt'}
 ];
 
 const filterOption = {
@@ -29,7 +31,7 @@ const filterOption = {
 })
 export class ProjectListComponent implements OnInit {
   public $projectList: Observable<any>;
-  tableHeader = tableHeader;
+  tableHeader;
   filterOption = filterOption;
   actionOption: any = {};
   filter = {
@@ -45,18 +47,13 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private router: Router
+    private router: Router,
+    private userModel: UserDetails
   ) {
-    this.filterOption.button['callback'] = this.onCreate.bind(this);
-    if (!!this.actionOption) {
-      this.actionOption['edit'] = this.onEdit.bind(this);
-      this.actionOption['delete'] = this.onDelete.bind(this);
-    }
-    const projectNameCol = this.tableHeader.find(header => header.headerDef === 'projectName');
-    projectNameCol.onClick = this.onProjectNameClick.bind(this);
   }
 
   ngOnInit() {
+    this.setUpHeader();
     this.$filter.pipe(
       debounceTime(300)
     ).subscribe(filter => {
@@ -110,16 +107,28 @@ export class ProjectListComponent implements OnInit {
 
   createFormAction(action: any) {
     this.actionCreate = false;
+    this.actionProjectId = 0;
     if (action.action !== 'cancel') {
       this.$filter.next(this.filter);
     }
   }
 
   onProjectNameClick(data: any) {
-    this.router.navigate(['/project', 'task'])
+    this.router.navigate(['/project', 'task', data.id], { queryParams: {name: data.projectName} })
   }
 
+  private setUpHeader() {
+    this.tableHeader = [...tableHeader];
+    this.filterOption.button['callback'] = this.onCreate.bind(this);
+    if (!!this.actionOption && this.userModel.role !== 'EMPLOYEE') {
+      this.actionOption['edit'] = this.onEdit.bind(this);
+      this.actionOption['delete'] = this.onDelete.bind(this);
+    }
+    const projectNameCol = this.tableHeader.find(header => header.headerDef === 'projectName');
+    if (!!projectNameCol) projectNameCol.onClick = this.onProjectNameClick.bind(this);
 
-  deleteProject(id: string) {
+    if (this.userModel.role === 'EMPLOYEE') {
+      this.tableHeader.pop();
+    }
   }
 }

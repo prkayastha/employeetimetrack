@@ -1,8 +1,10 @@
 import { ThrowStmt } from "@angular/compiler";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable } from "rxjs";
+import jsPDF from "jspdf";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { flatMap } from "rxjs/operators";
+import { UserDetails } from "../../../../_models/userDetails";
 import { UserService } from "../../user.service";
 
 @Component({
@@ -12,21 +14,25 @@ import { UserService } from "../../user.service";
 })
 export class ViewUserComponent implements OnInit {
     userId: number;
-    $userInformation: Observable<any>;
+    $userInformation: Subject<any> = new BehaviorSubject(null);
+    role: string;
 
     constructor(
         private route: ActivatedRoute,
         private rotuer: Router,
-        private userService: UserService
+        private userService: UserService,
     ){}
 
     ngOnInit(): void {
-        this.$userInformation = this.route.paramMap.pipe(
+        this.route.paramMap.pipe(
             flatMap((params) => {
                 this.userId = +params.get('userId');
                 return this.userService.getUserById(this.userId);
             })
-        );
+        ).subscribe((userDetails) => {
+            this.$userInformation.next(userDetails);
+            this.role = userDetails.roles[0].role;
+        });
     }
 
     onDelete() {
@@ -37,6 +43,19 @@ export class ViewUserComponent implements OnInit {
 
     onEdit() {
         this.rotuer.navigate(['/user', 'update', this.userId]);
+    }
+
+    showViewReport() {
+        return this.role === 'EMPLOYEE';
+    }
+
+    //pdf function
+    downloadPDF(){
+        console.log("downloading pdf");
+        const doc=new jsPDF();
+        doc.text("hello this is the pdf test",10,10);
+        doc.text("Generating Reprt",100,100);
+        doc.save('report.pdf');
     }
 
 

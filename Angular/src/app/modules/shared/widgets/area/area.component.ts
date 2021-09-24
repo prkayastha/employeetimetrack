@@ -28,6 +28,17 @@ export class AreaComponent implements OnInit {
       subtitle: {
         text: ''
       },
+      xAxis: {
+        categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        title:{
+            text:'Day'
+        },
+    },
+    yAxis: {
+        title: {
+            text: 'Weekly Hours'
+        },
+    },
       tooltip: {
         split: true,
         valueSuffix: ' hours'

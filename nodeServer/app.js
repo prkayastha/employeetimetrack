@@ -16,6 +16,7 @@ const project = require('./routes/project');
 const task = require('./routes/task');
 const time = require('./routes/time');
 const workdiary = require('./routes/workdiary');
+const dashboard = require('./routes/dashboard');
 const errorHandler = require('./controller/errorHandler');
 var app = express();
 
@@ -55,6 +56,7 @@ app.use('/project', project);
 app.use('/task', task);
 app.use('/time', time);
 app.use('/workdiary', workdiary);
+app.use('/dashboard', dashboard);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

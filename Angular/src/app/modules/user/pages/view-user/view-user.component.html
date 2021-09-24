@@ -39,7 +39,7 @@
                     <div class="col label">Skills</div>
                     <div class="col">
                         <ng-container 
-                            *ngIf="!($userInformation | async)?.skills.length">
+                            *ngIf="!($userInformation | async)?.skills?.length">
                             N/A</ng-container>
                         <span 
                             *ngFor="let skill of ($userInformation | async)?.skills" 
@@ -56,9 +56,14 @@
                         <button type="button" class="btn btn-danger btn-sm btn-block" (click)="onDelete()">Delete</button>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="showViewReport()">
                     <div class="col">
-                        <button type="button" class="btn btn-info btn-sm btn-block">View Reports</button>
+                        <a type="button" class="btn btn-info btn-sm btn-block" [routerLink]="['/workdiary']" [queryParams]="{ userId: ($userInformation | async).id, name: ($userInformation | async).firstname}">View {{($userInformation | async).firstname}}'s Diary</a>
+                    </div>
+                </div>
+                <div class="row" *ngIf="showViewReport()">
+                    <div class="col">
+                        <button type="button" (click)="downloadPDF()" class="btn btn-info btn-sm btn-block">View Reports</button>
                     </div>
                 </div>
             </div>

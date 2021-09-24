@@ -6,7 +6,11 @@ import { first } from 'rxjs/operators';
 import { AccountService, AlertService } from '../../../../_services';
 import { MustMatch } from '../../../../_helpers';
 
-@Component({ templateUrl: 'register.component.html' })
+@Component({ 
+    selector: 'app-register-user',
+    styleUrls: ['./register.component.scss'],
+    templateUrl: 'register.component.html' 
+})
 export class RegisterComponent implements OnInit {
     form: FormGroup;
     loading = false;
@@ -26,7 +30,7 @@ export class RegisterComponent implements OnInit {
             firstname: ['', Validators.required],
             lastname: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(8)]],
+            password: ['', [Validators.required, Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[-@$!%*?&])[A-Za-z\\d@$!%*?&-]{8,}")]],
             confirmPassword: ['', Validators.required],
             acceptTerms: [false, Validators.requiredTrue]
         }, {

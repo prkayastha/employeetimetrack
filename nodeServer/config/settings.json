@@ -29,12 +29,12 @@
             "autoUnlockAfter": 180,
             "hashSalt": "!==qwerty//poiu",
             "maxPasswordLife": 90,
-            "tokenLife": 20
+            "tokenLife": 120
         },
         "tokenSecret": "My Secret Key"
     },
     "production": {
-        "apiURL": "http://3.144.106.114:3000",
+        "apiURL": "http://3.142.156.200:3000",
         "appUrl": "http://localhost:4200",
         "seperateUsername": false,
         "sendConfirmationEmail": false,
@@ -46,7 +46,7 @@
             "autoUnlockAfter": 180,
             "hashSalt": "!==qwerty//poiu",
             "maxPasswordLife": 90,
-            "tokenLife": 20
+            "tokenLife": 120
         },
         "tokenSecret": "My Secret Key"
     }

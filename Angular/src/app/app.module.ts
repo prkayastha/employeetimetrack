@@ -17,9 +17,12 @@ import { TaskComponent } from './modules/workdiary/task/task.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { AlertComponent } from './_components';
 import { DefaultModule } from './_components/default/default.module';
-import { TableComponent } from './_components/table/table.component';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { ProjectService } from './_services/project.service';
+import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
+import { ReportService } from './_services/report.service';
+import { ViewCaptureComponent } from './modules/workdiary/component/view-capture.component';
+import { TaskTimerComponent } from './modules/project/pages/project-list/task-timer/task-timer.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,8 @@ import { ProjectService } from './_services/project.service';
     ArchiveListComponent,
     ArchiveTaskComponent,
     PostsComponent, //TODO: refactor
+    ViewCaptureComponent,
+    TaskTimerComponent
   ],
   imports: [
     BrowserModule,
@@ -43,16 +48,21 @@ import { ProjectService } from './_services/project.service';
     DefaultModule,
     ReactiveFormsModule,
     SharedModule,
-    NgxLocalStorageModule.forRoot()
+    NgxLocalStorageModule.forRoot(),
+    BsDatepickerModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     LocalStorageService,
-    ProjectService
+    ProjectService,
+    ReportService,
+    BsDatepickerConfig,
+    BsDaterangepickerConfig
   ],
   entryComponents: [
-    CreateTaskComponent
+    TaskTimerComponent,
+    ViewCaptureComponent
   ],
   bootstrap: [AppComponent],
 

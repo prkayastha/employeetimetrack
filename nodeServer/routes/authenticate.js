@@ -3,6 +3,13 @@ var router = express.Router();
 
 const auth = require('../controller/authenticate');
 const errorHandler = require('../controller/errorHandler');
+const jwtDecoder = require('../utils/jwt-decode');
+
+router.get('/checkValid', (req, res) => {
+    const jwtPayload = jwtDecoder(req);
+
+    res.send(jwtPayload);
+});
 
 /**
  * method: post

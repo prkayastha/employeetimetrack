@@ -39,4 +39,50 @@ export class ProjectService {
     );
   }
 
+  addTask(taskname: string, id: any, userid: number): Observable<any> {
+    const obj = {
+      id: 0,
+      taskDescription: taskname,
+      projectId: id,
+      assigneedUserId: userid,
+      version: 0
+    }
+
+    return this.http.post<any>(
+      `${baseUrl}/task/upsert`, obj)
+  }
+
+  getAllTask(tasklist: any, projectId: number) {
+    return this.http.post<any>(
+      `${baseUrl}/task/${projectId}`, tasklist)
+  }
+
+  deleteTask(id: number) {
+    return this.http.delete<any>(
+      `${baseUrl}/task/delete/${id}`)
+  }
+
+  updateTask(updateTask: { id: any; taskDescription: string; projectId: number; assigneeUserId: number; version: any; }): Observable<any> {
+    return this.http.post<any>(
+      `${baseUrl}/task/upsert`,
+      updateTask
+    );
+  }
+
+  startTimer(timer:{taskId:number,action:string}){
+    return this.http.post<any>(
+      `${baseUrl}/time/update`,
+      timer
+    );
+  }
+
+  uploadScreenshot(id: any, file: File): Observable<any> {
+    const form = new FormData();
+    form.append("taskId", id);
+    form.append("capture", file);
+    return this.http.post(
+      `${baseUrl}/task/screenshot`,
+      form
+    );
+  }
 }

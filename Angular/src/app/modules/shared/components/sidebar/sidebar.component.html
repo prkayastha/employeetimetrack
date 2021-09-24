@@ -2,12 +2,17 @@
 
     <h2 matSubheader>Pages</h2>
 
-    <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/']">Dashboard</a>
-    <a mat-list-item *ngIf="user.role === 'EMPLOYEE'" routerLinkActive="list-item-active" routerLink="workdiary">Work Diary</a>
-    <a mat-list-item  routerLinkActive="list-item-active" [routerLink]="['/project', 'list']">Projects</a>
-    <a mat-list-item *ngIf="user.role === 'ADMIN' || user.role === 'MANAGER'" routerLinkActive="list-item-active" [routerLink]="['/user', 'list']">Employee</a>
+    <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/']"><mat-icon>dashboard</mat-icon>Dashboard</a>
+    <a mat-list-item *ngIf="user.role === 'EMPLOYEE'" routerLinkActive="list-item-active" [routerLink]="['/workdiary']"><mat-icon>work_outline</mat-icon>Work Diary</a>
+    <a mat-list-item  routerLinkActive="list-item-active" [routerLink]="['/project', 'list']"><mat-icon>collections</mat-icon>Projects</a>
+    <a mat-list-item *ngIf="user.role=='ADMIN'|| user.role=='MANAGER'" routerLinkActive="list-item-active" [routerLink]="['/user', 'list']"><mat-icon>people_outline</mat-icon>Employee</a>
+
 
     <mat-divider></mat-divider>
-
+    <div fxLayout="column" class="info" fxLayoutAlign="space-between center" >
+    <div> 
+         <h4><mat-icon>person</mat-icon>{{user.fullName}}</h4></div>
+    <span>{{user.role}}</span>
+    </div>
 
 </mat-nav-list>
