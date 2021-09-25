@@ -19,6 +19,7 @@ const workdiary = require('./routes/workdiary');
 const dashboard = require('./routes/dashboard');
 const errorHandler = require('./controller/errorHandler');
 var app = express();
+const cronJobs = require('./cron');
 
 var db = require('./models');
 
