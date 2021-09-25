@@ -43,6 +43,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/capture', express.static(path.join(__dirname, 'public/captures')));
+app.use('/report', express.static(path.join(__dirname, 'public/reports')));
 app.use(cors());
 
 db.sync();

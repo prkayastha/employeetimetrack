@@ -15,6 +15,16 @@ router.get('/report/generate', async (req, res) => {
     }
 });
 
+router.get('/report/list', async (req, res) => {
+    const userId = req.query.userId;
+    try {
+        const list = await report.list(userId);
+        res.send(list);
+    } catch (error) {
+        errorHandler(res, error);
+    }
+});
+
 router.get('/report', async (req, res) => {
     const jwtPayload = jwtDecoder(req);
     try {

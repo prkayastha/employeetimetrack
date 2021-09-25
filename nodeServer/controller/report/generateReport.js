@@ -34,7 +34,7 @@ async function generateReportByUserId(userId) {
         ...dates,
         fullName: `${userInformation['firstname']} ${userInformation['lastname']}`
     };
-    const fileName = `${headerInformation.fullName.replace(/s+/g, ' ').replace('-')}-${dates.year}-${dates.month}-Week-${dates.weekNo}.pdf`;
+    const fileName = `${headerInformation.fullName.replace(/\s+/g, '-')}-${dates.year}-${dates.month}-Week-${dates.weekNo}.pdf`;
     const writeStream = fs.createWriteStream(`./public/reports/${fileName}`);
 
     writeStream.on('finish', async function() {
