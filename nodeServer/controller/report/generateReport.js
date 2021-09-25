@@ -4,11 +4,22 @@ const fs = require('fs');
 
 const moment = require('moment');
 const getReport = require('./getReport');
+const instertIntoDB = require('./insertReportInfo');
 const user = require('../../controller/user');
 
 const average = (list) => list.reduce((prev, curr) => prev + curr) / list.length;
 
-module.exports = async function (userId) {
+module.exports = async function () {
+    const employees = await user.listUserByRole(3);
+
+    for (let i = 0; i < employees.length; i++) {
+        await generateReportByUserId(employees[i]['id']);
+    }
+
+    console.log('Report Generation Completed');
+}
+
+async function generateReportByUserId(userId) {
 
     const userInformation = await getUserById(userId);
     const reportInfo = await getReport(userId);
@@ -17,13 +28,23 @@ module.exports = async function (userId) {
         size: 'A4',
         margins: 50
     });
-    doc.pipe(fs.createWriteStream('./public/reports/Demo.pdf'));
 
     const dates = getDates();
     const headerInformation = {
         ...dates,
         fullName: `${userInformation['firstname']} ${userInformation['lastname']}`
     };
+    const fileName = `${headerInformation.fullName.replace(/s+/g, ' ').replace('-')}-${dates.year}-${dates.month}-Week-${dates.weekNo}.pdf`;
+    const writeStream = fs.createWriteStream(`./public/reports/${fileName}`);
+
+    writeStream.on('finish', async function() {
+        await instertIntoDB(this.fileName, this.userId);
+    }.bind({
+        fileName,
+        userId
+    }));
+
+    doc.pipe(writeStream);
 
     generateHeader(doc, headerInformation);
 
@@ -109,25 +130,53 @@ function setTableRow(doc, information) {
         doc.text(row.totalScreen == 0 ? 'N/A' : 1 - (row.unproductive / row.totalScreen), 460, top + (i * 35));
         doc.lineWidth(0.5);
         doc.lineCap('butt')
-            .moveTo(80, doc.y+20)
-            .lineTo(510, doc.y+20)
+            .moveTo(80, doc.y + 20)
+            .lineTo(510, doc.y + 20)
+            .stroke();
+    }
+
+    if (!information || !information.length) {
+        doc.text(`No Records found for the week`, 60, doc.y + 50, { width: 510, align: 'center' });
+        doc.lineWidth(0.5);
+        doc.lineCap('butt')
+            .moveTo(80, doc.y + 20)
+            .lineTo(510, doc.y + 20)
             .stroke();
     }
 
     totalTime = secToTime(totalTime);
-    const averageProd = average(productive);
-    doc.text(`Total Time Recorded: ${totalTime}`, 80,doc.y+50, {width: 510, align: 'left'});
-    doc.text(`Total Recorded Productive Screens: ${totalProductiveScreen}`, 80,doc.y, {width: 510, align: 'left'});
-    doc.text(`Total Recorded Unproductive Screens: ${totalUnproductiveScreen}`, 80,doc.y, {width: 510, align: 'left'});
-    doc.text(`Total Productive Rate: ${(1 - averageProd)*100}%`, 80,doc.y, {width: 510, align: 'left'});
+    let averageProd = 0;
+    try {
+        if (!!productive && !!productive.length) averageProd = average(productive);
+    } catch (error) {
+        console.log(error)
+    }
+    doc.text(`Total Time Recorded: ${totalTime}`, 80, doc.y + 50, { width: 510, align: 'left' });
+    doc.text(`Total Recorded Productive Screens: ${totalProductiveScreen}`, 80, doc.y, { width: 510, align: 'left' });
+    doc.text(`Total Recorded Unproductive Screens: ${totalUnproductiveScreen}`, 80, doc.y, { width: 510, align: 'left' });
+    doc.text(`Total Productive Rate: ${(1 - averageProd) * 100}%`, 80, doc.y, { width: 510, align: 'left' });
 }
 
 function getDates() {
     const formatDate = 'DD/MM/YYYY'
     const today = moment();
-    const startDate = today.startOf('week').format(formatDate);
-    const endDate = today.endOf('week').format(formatDate);
-    return { startDate, endDate }
+    const weekNo = weekOfMonth(today.clone()) - 1;
+    const month = today.clone().subtract(1, 'week').startOf('week').format('MMM');
+    const year = today.clone().format('YYYY');
+    // const startDate = today.clone().startOf('week').add(1, 'days').format(formatDate);
+    // const endDate = today.clone().endOf('week').add(1, 'days').format(formatDate);
+    const startDate = today.clone().subtract(1, 'week').startOf('week').add(1, 'days').format(formatDate);
+    const endDate = today.clone().subtract(1, 'week').endOf('week').add(1, 'days').format(formatDate);
+    return { startDate, endDate, weekNo, month, year }
+}
+
+function weekOfMonth(input) {
+    const firstDayOfMonth = input.clone().startOf('month');
+    const firstDayOfWeek = firstDayOfMonth.clone().startOf('week');
+
+    const offset = firstDayOfMonth.diff(firstDayOfWeek, 'days');
+
+    return Math.ceil((input.date() + offset - 1) / 7);
 }
 
 async function getUserById(userId) {
@@ -138,17 +187,17 @@ async function getUserById(userId) {
 function timeToSec(time) {
     if (time === '00:00:00') return 0;
     const splited = time.split(':');
-    return parseInt(splited[0])*3600+parseInt(splited[1])*60+parseInt(splited[2]);
+    return parseInt(splited[0]) * 3600 + parseInt(splited[1]) * 60 + parseInt(splited[2]);
 }
 
 function secToTime(sec) {
     if (sec == 0) return '00:00:00';
 
     const parted = [];
-    parted.push((sec%60).toLocaleString('en-US', {minimumIntegerDigits: 2}));
-    let minutes = Math.floor(sec/60);
-    parted.push((minutes%60).toLocaleString('en-US', {minimumIntegerDigits: 2}));
-    let hour = Math.floor(minutes/60);
-    parted.push(hour.toLocaleString('en-US', {minimumIntegerDigits: 2}));
+    parted.push((sec % 60).toLocaleString('en-US', { minimumIntegerDigits: 2 }));
+    let minutes = Math.floor(sec / 60);
+    parted.push((minutes % 60).toLocaleString('en-US', { minimumIntegerDigits: 2 }));
+    let hour = Math.floor(minutes / 60);
+    parted.push(hour.toLocaleString('en-US', { minimumIntegerDigits: 2 }));
     return parted.reverse().join(':')
 }

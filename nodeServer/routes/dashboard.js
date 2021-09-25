@@ -7,9 +7,8 @@ const jwtDecoder = require('../utils/jwt-decode');
 const momentTz = require('moment-timezone');
 
 router.get('/report/generate', async (req, res) => {
-    const jwtPayload = jwtDecoder(req);
     try {
-        report.generateReport(32);
+        report.generateReport();
         res.send('Done');
     } catch (error) {
         errorHandler(res, error);
