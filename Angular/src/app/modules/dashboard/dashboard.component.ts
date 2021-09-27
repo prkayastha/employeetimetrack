@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['name', 'date'];
   //dataSource1 = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   dataSource1=new MatTableDataSource<PeriodicElement>([]);
-
+  dataSource2=new MatTableDataSource<PeriodicElement>([]);
 
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -43,16 +43,38 @@ export class DashboardComponent implements OnInit {
     this.pieChart = this.dashboardService.pieChart();
 
     this.dataSource1.paginator = this.paginator;
+    this.dataSource2.paginator = this.paginator;
 
     this.report.dashboard(this.user.id).subscribe(dashboard => {
       const workingOnData=dashboard.workedOnProject.map(row=>{
         return{
           name:row.projectName,
-          date:row.lastWorkedAt,
+          date:row.lastWorkedAt
         }
       })
       this.dataSource1=new MatTableDataSource<PeriodicElement>(workingOnData)
-    
+
+      const assignedProject=dashboard.assignedProjects.map(row=>{
+        return{
+          name:row.projectName,
+          date:row.assignedDate
+        }
+      })
+      this.dataSource2=new MatTableDataSource<PeriodicElement>(assignedProject)
+
+      const projectInolvement=dashboard.projectInolvement.map(row=>{
+        return{
+          name:row.id,
+          time:row.timeForProject,
+        }
+      })
+
+      const projectHrByDay=dashboard.projectHrByDay.map(row=>{
+        return{
+          day:row.day,
+          duration:row.duration
+        }
+      })
   });
 
   }

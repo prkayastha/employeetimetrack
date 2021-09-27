@@ -94,9 +94,9 @@ export class ReportService {
     }
 
 
-    getEmployeeReport(): Observable<any> {
+    getEmployeeReport(id:number): Observable<any> {
         return this.http.get(
-            `${baseUrl}/dashboard/report?userId=32`,
+            `${baseUrl}/dashboard/report?userId=${id}`,
         )
     }
 
