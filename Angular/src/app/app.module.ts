@@ -23,6 +23,7 @@ import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 
 import { ReportService } from './_services/report.service';
 import { ViewCaptureComponent } from './modules/workdiary/component/view-capture.component';
 import { TaskTimerComponent } from './modules/project/pages/project-list/task-timer/task-timer.component';
+import { ReportComponent } from './modules/user/pages/view-user/report/report.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { TaskTimerComponent } from './modules/project/pages/project-list/task-ti
     ArchiveTaskComponent,
     PostsComponent, //TODO: refactor
     ViewCaptureComponent,
-    TaskTimerComponent
+    TaskTimerComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,
