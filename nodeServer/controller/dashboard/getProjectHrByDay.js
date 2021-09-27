@@ -4,7 +4,7 @@ SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(\`timer\`.\`endedAt\`, \`timer\`.\`startedA
 DAYOFWEEK(\`timer\`.\`startedAt\`) AS \`dayOfWeek\`
 FROM
 Timers \`timer\`
-    LEFT JOIN
+    INNER JOIN
 Tasks \`task\` ON \`timer\`.\`taskId\` = \`task\`.\`id\`
 WHERE
 \`timer\`.\`userId\` = :userId
