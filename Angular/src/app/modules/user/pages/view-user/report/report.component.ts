@@ -8,12 +8,18 @@ import { ReportService } from 'src/app/_services/report.service';
 })
 export class ReportComponent implements OnInit {
 reports=[];
+pdfreport=[];
   constructor(public report:ReportService) { }
 
   ngOnInit() {
     this.report.getEmployeeReport().subscribe(reports => {
       this.reports= reports 
-      console.log(reports) 
+  });
+  }
+  listPDFReport(){
+    this.report.getPDFReport().subscribe(pdfreport => {
+      this.pdfreport= pdfreport
+      console.log(pdfreport) 
   });
   }
 

@@ -15,7 +15,7 @@
                 <!-- Weight Column -->
                 <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef> Last Worked At</th>
-                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.date| date}} </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
