@@ -100,9 +100,9 @@ export class ReportService {
         )
     }
 
-    getPDFReport(): Observable<any> {
+    getPDFReport(id:number): Observable<any> {
         return this.http.get(
-            `${baseUrl}/dashboard/report/list?userId=32`,
+            `${baseUrl}/dashboard/report/list?userId=${id}`,
         )
     }
 

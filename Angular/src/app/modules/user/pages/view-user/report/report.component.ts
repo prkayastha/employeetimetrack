@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { UserDetails } from 'src/app/_models/userDetails';
 import { ReportService } from 'src/app/_services/report.service';
+import { MatDialog } from '@angular/material';
+import { PdfreportComponent } from './pdfreport/pdfreport.component';
 
 @Component({
   selector: 'app-report',
@@ -8,20 +11,25 @@ import { ReportService } from 'src/app/_services/report.service';
   styleUrls: ['./report.component.scss']
 })
 export class ReportComponent implements OnInit {
-reports=[];
-pdfreport=[];
-  constructor(public report:ReportService,public user:UserDetails) { }
+  reports = [];
+  pdfreport = [];
+  name: string;
+  userID:number;
+  constructor(public report: ReportService, public user: UserDetails, public route: ActivatedRoute, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.report.getEmployeeReport(this.user.id).subscribe(reports => {
-      this.reports= reports 
-  });
+    this.userID = this.route.snapshot.params.id;
+    this.name = this.route.snapshot.queryParams.name;
+    this.report.getEmployeeReport(this.userID).subscribe(reports => {
+      this.reports = reports
+    });
   }
-  listPDFReport(){
-    this.report.getPDFReport().subscribe(pdfreport => {
-      this.pdfreport= pdfreport
-      console.log(pdfreport) 
-  });
+ 
+
+  openDialog(id: number){
+    this.dialog.open(PdfreportComponent,{disableClose: true, data:{id}},);
+    console.log(id);
+
   }
 
 }

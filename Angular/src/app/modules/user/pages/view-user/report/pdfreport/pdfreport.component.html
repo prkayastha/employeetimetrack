@@ -1,0 +1,18 @@
+<div class="constainer">
+    <h6>Weekley Reports</h6>
+    <table class="table table-striped">  
+        <thead>  
+            <tr>  
+              <th>Report Name</th>  
+              <th>Report Url</th>  
+            </tr>  
+        </thead>  
+        <tbody>  
+          <tr *ngFor="let report of reports">  
+            <td>{{report.name }}</td>  
+            <td>{{report.url }}</td>  
+          </tr>  
+        </tbody>  
+      </table>
+
+</div>

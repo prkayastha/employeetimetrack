@@ -3,6 +3,7 @@ import { DashboardService } from '../dashboard.service';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { ReportService } from 'src/app/_services/report.service';
 import { UserDetails } from 'src/app/_models/userDetails';
+import { map } from 'rxjs/operators';
 
 export interface PeriodicElement {
   name: string;
@@ -21,22 +22,22 @@ export interface PeriodicElement {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  data=[];
-  dashboard=[];
-  ELEMENT_DATA: PeriodicElement[]=[];
+  data = [];
+  dashboard = [];
+  ELEMENT_DATA: PeriodicElement[] = [];
 
   bigChart = [];
   pieChart = [];
 
   displayedColumns: string[] = ['name', 'date'];
   //dataSource1 = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  dataSource1=new MatTableDataSource<PeriodicElement>([]);
-  dataSource2=new MatTableDataSource<PeriodicElement>([]);
+  dataSource1 = new MatTableDataSource<PeriodicElement>([]);
+  dataSource2 = new MatTableDataSource<PeriodicElement>([]);
 
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private dashboardService: DashboardService,public report:ReportService,public user:UserDetails) { }
+  constructor(private dashboardService: DashboardService, public report: ReportService, public user: UserDetails) { }
 
   ngOnInit() {
     this.bigChart = this.dashboardService.bigChart();
@@ -45,38 +46,46 @@ export class DashboardComponent implements OnInit {
     this.dataSource1.paginator = this.paginator;
     this.dataSource2.paginator = this.paginator;
 
-    this.report.dashboard(this.user.id).subscribe(dashboard => {
-      const workingOnData=dashboard.workedOnProject.map(row=>{
-        return{
-          name:row.projectName,
-          date:row.lastWorkedAt
-        }
-      })
-      this.dataSource1=new MatTableDataSource<PeriodicElement>(workingOnData)
+    this.report.dashboard(this.user.id).pipe(
+      map(dashboard => {
+        dashboard.timeForProject
+        return dashboard
 
-      const assignedProject=dashboard.assignedProjects.map(row=>{
-        return{
-          name:row.projectName,
-          date:row.assignedDate
+      })
+    ).subscribe(dashboard => {
+      const workingOnData = dashboard.workedOnProject.map(row => {
+        return {
+          name: row.projectName,
+          date: row.lastWorkedAt
         }
       })
-      this.dataSource2=new MatTableDataSource<PeriodicElement>(assignedProject)
+      this.dataSource1 = new MatTableDataSource<PeriodicElement>(workingOnData)
 
-      const projectInolvement=dashboard.projectInolvement.map(row=>{
-        return{
-          name:row.id,
-          time:row.timeForProject,
+      const assignedProject = dashboard.assignedProjects.map(row => {
+        return {
+          name: row.projectName,
+          date: row.assignedDate
+        }
+      })
+      this.dataSource2 = new MatTableDataSource<PeriodicElement>(assignedProject)
+
+      const projectInolvement = dashboard.projectInolvement.map(row => {
+        return {
+          name: row.projectName,
+          time: row.timeForProject,
         }
       })
 
-      const projectHrByDay=dashboard.projectHrByDay.map(row=>{
-        return{
-          day:row.day,
-          duration:row.duration
+      const projectHrByDay = dashboard.projectHrByDay.map(row => {
+        return {
+          day: row.day,
+          duration: row.duration
         }
       })
-  });
+    });
 
   }
+
+ 
 
 }
