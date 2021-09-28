@@ -12,8 +12,7 @@
       <div class="label">Choose a day</div>
       <span>
         <input [formControl]="date" type="text" placeholder="Datepicker" class="form-control" bsDatepicker
-          placement="bottom left" data-date-format='dd/mm/yyyy'>
-        <!-- [maxDate]="today" //add for prod -->
+          placement="bottom left" data-date-format='dd/mm/yyyy' [maxDate]="today" [bsConfig]="{showWeekNumbers: false}">
       </span>
     </div>
     <div class="mt-4"></div>
