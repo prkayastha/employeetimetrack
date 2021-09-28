@@ -1,23 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DashboardService } from '../dashboard.service';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
-import { ReportService } from 'src/app/_services/report.service';
-import { UserDetails } from 'src/app/_models/userDetails';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { map } from 'rxjs/operators';
-import { Project } from '../../_models/project';
+import { UserDetails } from 'src/app/_models/userDetails';
+import { ReportService } from 'src/app/_services/report.service';
+import { DashboardService } from '../dashboard.service';
+import { AreaComponent } from '../shared/widgets/area/area.component';
 import { PieComponent } from '../shared/widgets/pie/pie.component';
-import { BehaviorSubject } from 'rxjs';
 
 export interface PeriodicElement {
   name: string;
   date: string;
 }
-/*const ELEMENT_DATA: PeriodicElement[] = [
-  { name: 'SpaceX', date: '22/09/2021' },
-  { name: 'Alibaba', date: '20/09/2021' },
-  { name: 'Cloud Security', date:'20/09/2021'},
-  { name: 'Sprint3', date:'23/09/2021' }
-]; */
 
 @Component({
   selector: 'app-dashboard',
@@ -33,18 +26,18 @@ export class DashboardComponent implements OnInit {
   pieChartData = [];
 
   displayedColumns: string[] = ['name', 'date'];
-  //dataSource1 = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   dataSource1 = new MatTableDataSource<PeriodicElement>([]);
   dataSource2 = new MatTableDataSource<PeriodicElement>([]);
 
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('pieChart', {static: true}) pieChartComp: PieComponent;
+  @ViewChild('areaChart', {static: true}) areaChart: AreaComponent;
 
   constructor(private dashboardService: DashboardService, public report: ReportService, public user: UserDetails) { }
 
   ngOnInit() {
-    this.bigChart = this.dashboardService.bigChart();
+    // this.bigChart = this.dashboardService.bigChart();
     // this.pieChartData = this.dashboardService.pieChart();
 
     this.dataSource1.paginator = this.paginator;
@@ -52,14 +45,6 @@ export class DashboardComponent implements OnInit {
 
     this.report.dashboard(this.user.id).pipe(
       map(dashboard => {
-        /*
-        {
-          totalTime: 7200
-          collection: [
-            { id: 1, projectName: 'Web App', percentage: 56 }
-          ]
-        }
-        */
         dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
 
         dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
@@ -83,17 +68,11 @@ export class DashboardComponent implements OnInit {
       })
       this.dataSource2 = new MatTableDataSource<PeriodicElement>(assignedProject);
 
-      // this.pieChart.next(this.dashboardService.pieChart());
-
       this.pieChartData = dashboard.projectInvovlement;
       this.pieChartComp.updateData(this.pieChartData);
 
-      /* const projectInolvement = dashboard.projectInolvement.map(row => {
-        return {
-          name: row.projectName,
-          time: row.timeForProject,
-        }
-      }) */
+      this.bigChart = dashboard.projectHrByDay;
+      this.areaChart.updateData(this.bigChart);
 
       /*const projectHrByDay = dashboard.projectHrByDay.map(row => {
         return {
@@ -111,13 +90,24 @@ export class DashboardComponent implements OnInit {
           row = { day: i, duration: '00:00:00' }
           project.durationByDay.push({ day: i, duration: '00:00:00', timeInSec: 0 });
         } else {
-          row['timeInSec'] = this.timeToSec(row.duration);
+          row['timeInHr'] = this.timeToSec(row.duration) / 3600;
         }
       }
-
+      project.durationByDay.sort((a, b) => {
+        return a.day > b.day ? 1 : -1;
+      });
     });
 
-    return projectHrByDay;
+    return projectHrByDay.map(project => {
+      return {
+        name: project.projectName,
+        data: project.durationByDay.map(duration => this.roundOff(duration.timeInHr || 0))
+      }
+    });
+  }
+
+  private roundOff(digit) {
+    return Math.round(digit * 100) / 100;
   }
 
   private timeToSec(time: string): number {

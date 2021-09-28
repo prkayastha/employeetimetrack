@@ -11,10 +11,7 @@ export class DashboardService {
     return [{
       name: 'Project 1',
       data: [4, 6, 8, 9, 10, 11, 5]
-    }, {
-      name: 'Project 2',
-      data: [10, 10, 11, 13, 2, 7, 9]
-    }, ];
+    } ];
   }
 
   cards() {
