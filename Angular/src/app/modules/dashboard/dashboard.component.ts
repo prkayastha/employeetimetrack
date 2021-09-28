@@ -5,6 +5,8 @@ import { ReportService } from 'src/app/_services/report.service';
 import { UserDetails } from 'src/app/_models/userDetails';
 import { map } from 'rxjs/operators';
 import { Project } from '../../_models/project';
+import { PieComponent } from '../shared/widgets/pie/pie.component';
+import { BehaviorSubject } from 'rxjs';
 
 export interface PeriodicElement {
   name: string;
@@ -28,7 +30,7 @@ export class DashboardComponent implements OnInit {
   ELEMENT_DATA: PeriodicElement[] = [];
 
   bigChart = [];
-  pieChart = [];
+  pieChartData = [];
 
   displayedColumns: string[] = ['name', 'date'];
   //dataSource1 = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
@@ -37,12 +39,13 @@ export class DashboardComponent implements OnInit {
 
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild('pieChart', {static: true}) pieChartComp: PieComponent;
 
   constructor(private dashboardService: DashboardService, public report: ReportService, public user: UserDetails) { }
 
   ngOnInit() {
     this.bigChart = this.dashboardService.bigChart();
-    this.pieChart = this.dashboardService.pieChart();
+    // this.pieChartData = this.dashboardService.pieChart();
 
     this.dataSource1.paginator = this.paginator;
     this.dataSource2.paginator = this.paginator;
@@ -57,7 +60,7 @@ export class DashboardComponent implements OnInit {
           ]
         }
         */
-        dashboard.projectInolvement = this.mapForPieChart(dashboard.projectInvovlement);
+        dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
 
         dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
         return dashboard
@@ -78,16 +81,21 @@ export class DashboardComponent implements OnInit {
           date: row.assignedDate
         }
       })
-      this.dataSource2 = new MatTableDataSource<PeriodicElement>(assignedProject)
+      this.dataSource2 = new MatTableDataSource<PeriodicElement>(assignedProject);
+
+      // this.pieChart.next(this.dashboardService.pieChart());
+
+      this.pieChartData = dashboard.projectInvovlement;
+      this.pieChartComp.updateData(this.pieChartData);
 
       /* const projectInolvement = dashboard.projectInolvement.map(row => {
         return {
           name: row.projectName,
           time: row.timeForProject,
         }
-      })
+      }) */
 
-      const projectHrByDay = dashboard.projectHrByDay.map(row => {
+      /*const projectHrByDay = dashboard.projectHrByDay.map(row => {
         return {
           day: row.day,
           duration: row.duration
@@ -129,7 +137,7 @@ export class DashboardComponent implements OnInit {
       project['percent'] = Math.round(project['inSeconds'] / total * 100);
       return { id: project.projectId, projectName: project.projectName, percentage: project.percent };
     });
-    return { totalTime: total, collection: mapped };
+    return mapped.map(project => ({name: project.projectName, y: project.percentage}));;
   }
 
 }
