@@ -3,7 +3,6 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { UserDetails } from 'src/app/_models/userDetails';
 import { ReportService } from 'src/app/_services/report.service';
-import { DashboardService } from '../dashboard.service';
 import { AreaComponent } from '../shared/widgets/area/area.component';
 import { PieComponent } from '../shared/widgets/pie/pie.component';
 
@@ -34,7 +33,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('pieChart', {static: true}) pieChartComp: PieComponent;
   @ViewChild('areaChart', {static: true}) areaChart: AreaComponent;
 
-  constructor(private dashboardService: DashboardService, public report: ReportService, public user: UserDetails) { }
+  constructor(public report: ReportService, public user: UserDetails) { }
 
   ngOnInit() {
     // this.bigChart = this.dashboardService.bigChart();

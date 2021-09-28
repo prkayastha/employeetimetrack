@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { MatSidenavModule, MatDividerModule, MatCardModule, MatPaginatorModule, MatTableModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { DashboardService } from 'src/app/modules/dashboard.service';
 
 @NgModule({
   declarations: [
@@ -25,7 +24,6 @@ import { DashboardService } from 'src/app/modules/dashboard.service';
     MatTableModule
   ],
   providers: [
-    DashboardService
   ]
 })
 export class DefaultModule { }
