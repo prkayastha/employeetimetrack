@@ -277,7 +277,7 @@ pausebreakTimer() {
       });
     }
 
-    const randomNumber = Math.floor(Math.random() * 10);
+    const randomNumber = this.randomIntFromInterval(3,10);
     const timeout = randomNumber * 60 * 1000;
     console.log('Taking 1st screenshot in ' + randomNumber + ' min');
 
@@ -310,5 +310,9 @@ pausebreakTimer() {
     }
 
     return new File([u8arr], filename, { type: mime });
+  }
+
+  private randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)
   }
 }

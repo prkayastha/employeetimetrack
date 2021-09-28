@@ -1,7 +1,6 @@
 import { ThrowStmt } from "@angular/compiler";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import jsPDF from "jspdf";
 import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { flatMap } from "rxjs/operators";
 import { UserDetails } from "../../../../_models/userDetails";
