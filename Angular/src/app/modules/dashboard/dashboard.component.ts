@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { UserDetails } from 'src/app/_models/userDetails';
 import { ReportService } from 'src/app/_services/report.service';
 import { AreaComponent } from '../shared/widgets/area/area.component';
 import { PieComponent } from '../shared/widgets/pie/pie.component';
+import { PdfreportComponent } from '../user/pages/view-user/report/pdfreport/pdfreport.component';
 
 export interface PeriodicElement {
   name: string;
@@ -33,7 +34,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('pieChart', {static: true}) pieChartComp: PieComponent;
   @ViewChild('areaChart', {static: true}) areaChart: AreaComponent;
 
-  constructor(public report: ReportService, public user: UserDetails) { }
+  constructor(public report: ReportService, public user: UserDetails, public dialog: MatDialog) { }
 
   ngOnInit() {
     // this.bigChart = this.dashboardService.bigChart();
@@ -127,6 +128,10 @@ export class DashboardComponent implements OnInit {
       return { id: project.projectId, projectName: project.projectName, percentage: project.percent };
     });
     return mapped.map(project => ({name: project.projectName, y: project.percentage}));;
+  }
+
+  downloadPdf() {
+    this.dialog.open(PdfreportComponent,{data:{id: this.user.id}});
   }
 
 }

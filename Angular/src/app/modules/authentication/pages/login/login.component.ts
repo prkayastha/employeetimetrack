@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '../../../../_services';
+import { UserDetails } from '../../../../_models/userDetails';
 
 @Component(
     {
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private user: UserDetails
     ) { }
 
     ngOnInit() {
@@ -52,6 +54,10 @@ export class LoginComponent implements OnInit {
                 next: () => {
                     // get return url from query parameters or default to home page
                     const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
+                    if (this.user.role !== 'EMPLOYEE') {
+                        this.router.navigate(['/user', 'list']);
+                        return;
+                    }
                     this.router.navigateByUrl(returnUrl);
                 },
                 error: error => {

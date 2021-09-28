@@ -27,7 +27,7 @@ export class ReportComponent implements OnInit {
  
 
   openDialog(id: number){
-    this.dialog.open(PdfreportComponent,{disableClose: true, data:{id}},);
+    this.dialog.open(PdfreportComponent,{data:{id}});
     console.log(id);
 
   }

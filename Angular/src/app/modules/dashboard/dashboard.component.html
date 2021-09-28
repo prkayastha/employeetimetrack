@@ -1,10 +1,13 @@
-<h1> Working On</h1>
-<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
-    <div fxFlex="60">
-        <div class="mat-elevation-z8">
+<div class="container">
+    <div fxLayout="row-reverse">
+        <button type="button" class="btn btn-primary" (click)="downloadPdf()">Download PDF for past weeks</button>
+    </div>
+    <div fxLayout="row">
+        <div fxFlex>
+            <h3> Working On</h3>
             <table mat-table [dataSource]="dataSource1">
 
-               <th mat-header-cell *matHeaderCellDef>hello</th>
+                <th mat-header-cell *matHeaderCellDef>hello</th>
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
@@ -21,30 +24,12 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
-
         </div>
-
-    </div>
-<div>
-    <app-widget-area [data]="bigChart" #areaChart></app-widget-area>
-</div>
-</div>
-
-<br>
-
-<mat-divider></mat-divider>
-
-<br>
-
-<br>
-<h2> Assigned Projects</h2 >
-<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
-    
-    <div fxFlex="60">
-        <div class="mat-elevation-z8">
+        <div fxFlex>
+            <h3> Assigned Projects</h3>
             <table mat-table [dataSource]="dataSource2">
 
-               <th mat-header-cell *matHeaderCellDef>hello</th>
+                <th mat-header-cell *matHeaderCellDef>hello</th>
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
@@ -61,17 +46,14 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
-
-           
         </div>
-
     </div>
-    <div fxFlex="60">
-        <app-widget-pie [data]="pieChartData" #pieChart></app-widget-pie>
+    <div fxLayout="row">
+        <div fxFlex>
+            <app-widget-area [data]="bigChart" #areaChart></app-widget-area>
+        </div>
+        <div fxFlex>
+            <app-widget-pie [data]="pieChartData" #pieChart></app-widget-pie>
+        </div>
     </div>
 </div>
-
-
-<br>
-<br>
-<br>

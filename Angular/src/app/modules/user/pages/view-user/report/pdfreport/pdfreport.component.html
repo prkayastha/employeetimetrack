@@ -3,14 +3,12 @@
     <table class="table table-hover">  
         <thead>  
             <tr>  
-              <th>Report Name</th>  
-              <th>Report Url</th>  
+              <th>Report Name</th>
             </tr>  
         </thead>  
         <tbody>  
           <tr *ngFor="let report of reports">  
-            <td>{{report.name }}</td>  
-            <td><a href="{{report.url}}">{{report.url }}</a></td>  
+            <td><a href="{{report.url}}" target="_blank">{{report.name }}</a></td>  
           </tr>  
         </tbody>  
       </table>

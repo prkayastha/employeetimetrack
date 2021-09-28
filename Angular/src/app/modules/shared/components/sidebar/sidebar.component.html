@@ -4,7 +4,7 @@
 
         <h2 matSubheader>Pages</h2>
 
-        <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/']">
+        <a *ngIf="user.role === 'EMPLOYEE'" mat-list-item routerLinkActive="list-item-active" [routerLink]="['/']">
             <mat-icon>dashboard</mat-icon>Dashboard
         </a>
         <a mat-list-item *ngIf="user.role === 'EMPLOYEE'" routerLinkActive="list-item-active"
