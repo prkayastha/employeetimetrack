@@ -26,7 +26,7 @@
 
     </div>
 <div>
-    <app-widget-area [data]="bigChart"></app-widget-area>
+    <app-widget-area [data]="bigChart" #areaChart></app-widget-area>
 </div>
 </div>
 
@@ -67,7 +67,7 @@
 
     </div>
     <div fxFlex="60">
-        <app-widget-pie [data]="pieChart"></app-widget-pie>
+        <app-widget-pie [data]="pieChartData" #pieChart></app-widget-pie>
     </div>
 </div>
 

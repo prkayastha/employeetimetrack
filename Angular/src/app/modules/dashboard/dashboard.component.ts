@@ -1,21 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DashboardService } from '../dashboard.service';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
-import { ReportService } from 'src/app/_services/report.service';
-import { UserDetails } from 'src/app/_models/userDetails';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { map } from 'rxjs/operators';
-import { Project } from '../../_models/project';
+import { UserDetails } from 'src/app/_models/userDetails';
+import { ReportService } from 'src/app/_services/report.service';
+import { AreaComponent } from '../shared/widgets/area/area.component';
+import { PieComponent } from '../shared/widgets/pie/pie.component';
 
 export interface PeriodicElement {
   name: string;
   date: string;
 }
-/*const ELEMENT_DATA: PeriodicElement[] = [
-  { name: 'SpaceX', date: '22/09/2021' },
-  { name: 'Alibaba', date: '20/09/2021' },
-  { name: 'Cloud Security', date:'20/09/2021'},
-  { name: 'Sprint3', date:'23/09/2021' }
-]; */
 
 @Component({
   selector: 'app-dashboard',
@@ -28,36 +22,29 @@ export class DashboardComponent implements OnInit {
   ELEMENT_DATA: PeriodicElement[] = [];
 
   bigChart = [];
-  pieChart = [];
+  pieChartData = [];
 
   displayedColumns: string[] = ['name', 'date'];
-  //dataSource1 = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   dataSource1 = new MatTableDataSource<PeriodicElement>([]);
   dataSource2 = new MatTableDataSource<PeriodicElement>([]);
 
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild('pieChart', {static: true}) pieChartComp: PieComponent;
+  @ViewChild('areaChart', {static: true}) areaChart: AreaComponent;
 
-  constructor(private dashboardService: DashboardService, public report: ReportService, public user: UserDetails) { }
+  constructor(public report: ReportService, public user: UserDetails) { }
 
   ngOnInit() {
-    this.bigChart = this.dashboardService.bigChart();
-    this.pieChart = this.dashboardService.pieChart();
+    // this.bigChart = this.dashboardService.bigChart();
+    // this.pieChartData = this.dashboardService.pieChart();
 
     this.dataSource1.paginator = this.paginator;
     this.dataSource2.paginator = this.paginator;
 
     this.report.dashboard(this.user.id).pipe(
       map(dashboard => {
-        /*
-        {
-          totalTime: 7200
-          collection: [
-            { id: 1, projectName: 'Web App', percentage: 56 }
-          ]
-        }
-        */
-        dashboard.projectInolvement = this.mapForPieChart(dashboard.projectInvovlement);
+        dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
 
         dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
         return dashboard
@@ -78,16 +65,15 @@ export class DashboardComponent implements OnInit {
           date: row.assignedDate
         }
       })
-      this.dataSource2 = new MatTableDataSource<PeriodicElement>(assignedProject)
+      this.dataSource2 = new MatTableDataSource<PeriodicElement>(assignedProject);
 
-      /* const projectInolvement = dashboard.projectInolvement.map(row => {
-        return {
-          name: row.projectName,
-          time: row.timeForProject,
-        }
-      })
+      this.pieChartData = dashboard.projectInvovlement;
+      this.pieChartComp.updateData(this.pieChartData);
 
-      const projectHrByDay = dashboard.projectHrByDay.map(row => {
+      this.bigChart = dashboard.projectHrByDay;
+      this.areaChart.updateData(this.bigChart);
+
+      /*const projectHrByDay = dashboard.projectHrByDay.map(row => {
         return {
           day: row.day,
           duration: row.duration
@@ -103,13 +89,24 @@ export class DashboardComponent implements OnInit {
           row = { day: i, duration: '00:00:00' }
           project.durationByDay.push({ day: i, duration: '00:00:00', timeInSec: 0 });
         } else {
-          row['timeInSec'] = this.timeToSec(row.duration);
+          row['timeInHr'] = this.timeToSec(row.duration) / 3600;
         }
       }
-
+      project.durationByDay.sort((a, b) => {
+        return a.day > b.day ? 1 : -1;
+      });
     });
 
-    return projectHrByDay;
+    return projectHrByDay.map(project => {
+      return {
+        name: project.projectName,
+        data: project.durationByDay.map(duration => this.roundOff(duration.timeInHr || 0))
+      }
+    });
+  }
+
+  private roundOff(digit) {
+    return Math.round(digit * 100) / 100;
   }
 
   private timeToSec(time: string): number {
@@ -129,7 +126,7 @@ export class DashboardComponent implements OnInit {
       project['percent'] = Math.round(project['inSeconds'] / total * 100);
       return { id: project.projectId, projectName: project.projectName, percentage: project.percent };
     });
-    return { totalTime: total, collection: mapped };
+    return mapped.map(project => ({name: project.projectName, y: project.percentage}));;
   }
 
 }

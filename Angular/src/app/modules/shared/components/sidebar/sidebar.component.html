@@ -1,18 +1,33 @@
-<mat-nav-list>
+<mat-nav-list fxLayout="row">
 
-    <h2 matSubheader>Pages</h2>
+    <div class="nav-list-container" fxFlex>
 
-    <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/']"><mat-icon>dashboard</mat-icon>Dashboard</a>
-    <a mat-list-item *ngIf="user.role === 'EMPLOYEE'" routerLinkActive="list-item-active" [routerLink]="['/workdiary']"><mat-icon>work_outline</mat-icon>Work Diary</a>
-    <a mat-list-item  routerLinkActive="list-item-active" [routerLink]="['/project', 'list']"><mat-icon>collections</mat-icon>Projects</a>
-    <a mat-list-item *ngIf="user.role=='ADMIN'|| user.role=='MANAGER'" routerLinkActive="list-item-active" [routerLink]="['/user', 'list']"><mat-icon>people_outline</mat-icon>Employee</a>
+        <h2 matSubheader>Pages</h2>
+
+        <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/']">
+            <mat-icon>dashboard</mat-icon>Dashboard
+        </a>
+        <a mat-list-item *ngIf="user.role === 'EMPLOYEE'" routerLinkActive="list-item-active"
+            [routerLink]="['/workdiary']">
+            <mat-icon>work_outline</mat-icon>Work Diary
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" [routerLink]="['/project', 'list']">
+            <mat-icon>collections</mat-icon>Projects
+        </a>
+        <a mat-list-item *ngIf="user.role=='ADMIN'|| user.role=='MANAGER'" routerLinkActive="list-item-active"
+            [routerLink]="['/user', 'list']">
+            <mat-icon>people_outline</mat-icon>Employee
+        </a>
 
 
-    <mat-divider></mat-divider>
-    <div fxLayout="column" class="info" fxLayoutAlign="space-between center" >
-    <div> 
-         <h4><mat-icon>person</mat-icon>{{user.fullName}}</h4></div>
-    <span>{{user.role}}</span>
+        <mat-divider></mat-divider>
+        <div fxLayout="column" class="info" fxLayoutAlign="space-between center">
+            <div>
+                <mat-icon>person</mat-icon>{{user.fullName}}
+            </div>
+            <span>{{user.role}}</span>
+        </div>
+
     </div>
 
 </mat-nav-list>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 
@@ -15,10 +15,31 @@ export class AreaComponent implements OnInit {
 
   Highcharts = Highcharts;
 
+  chart: Highcharts.Chart;
+
+  chartCallback: Highcharts.ChartCallbackFunction = (chart) => {
+    this.chart = chart;
+  }
+
   constructor() { }
 
   ngOnInit() {
-    this.chartOptions = {
+    this.chartOptions = this.getOptions();
+  }
+
+  updateData(data: any[]) {
+    // this.data = data;
+    // this.chart.series[0].remove(true);
+    for (let i=0; i < data.length; i++) {
+      this.chart.addSeries(data[i]);
+    }
+    this.chart.update({
+        series: this.data
+      });
+  }
+
+  private getOptions() {
+    return {
       chart: {
         type: 'area'
       },
@@ -30,15 +51,15 @@ export class AreaComponent implements OnInit {
       },
       xAxis: {
         categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        title:{
-            text:'Day'
-        },
-    },
-    yAxis: {
         title: {
-            text: 'Hours'
+          text: 'Day'
         },
-    },
+      },
+      yAxis: {
+        title: {
+          text: 'Hours'
+        },
+      },
       tooltip: {
         split: true,
         valueSuffix: ' hours'
@@ -47,18 +68,10 @@ export class AreaComponent implements OnInit {
         enabled: false
       },
       exporting: {
-        enabled: true,
+        enabled: false,
       },
       series: this.data
     };
-
-    HC_exporting(Highcharts);
-
-    setTimeout(() => {
-      window.dispatchEvent(
-        new Event('resize')
-      );
-    }, 300);
   }
 
 }

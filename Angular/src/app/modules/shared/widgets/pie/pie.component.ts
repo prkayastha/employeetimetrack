@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import HC_exporting from 'highcharts/modules/exporting';
 
 @Component({
   selector: 'app-widget-pie',
@@ -10,14 +9,25 @@ import HC_exporting from 'highcharts/modules/exporting';
 export class PieComponent implements OnInit {
 
   Highcharts = Highcharts;
-  chartOptions = {};
+  chartOptions: any = {};
+
 
   @Input() data = [];
+  @ViewChild('pieChart', {static: true}) pieChart: any;
 
   constructor() { }
 
   ngOnInit() {
-    this.chartOptions = {
+    this.chartOptions = this.getChartOption();
+  }
+
+  updateData(data: any[]) {
+    this.data = data;
+    this.chartOptions = this.getChartOption();
+  }
+
+  private getChartOption() {
+    return {
       chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,
@@ -41,7 +51,7 @@ export class PieComponent implements OnInit {
         }
       },
       exporting: {
-        enabled: true
+        enabled: false
       },
       credits: {
         enabled: false
@@ -52,14 +62,6 @@ export class PieComponent implements OnInit {
         data: this.data
       }]
     };
-
-    HC_exporting(Highcharts);
-
-    setTimeout(() => {
-      window.dispatchEvent(
-        new Event('resize')
-      );
-    }, 300);
   }
 
 }

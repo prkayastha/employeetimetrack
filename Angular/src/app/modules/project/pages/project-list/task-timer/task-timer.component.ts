@@ -143,6 +143,9 @@ export class TaskTimerComponent implements OnInit {
     if (this.isActive) {
       this.isActive = false;
       window.clearInterval(this.timer);
+      this.action = 'pause';
+      this.projectService.startTimer({ taskId: this.task.id, action: this.action }).subscribe(timer => {
+    });
       this.startbreakTimer();
     }
   }

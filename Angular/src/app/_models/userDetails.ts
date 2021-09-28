@@ -34,6 +34,7 @@ export class UserDetails {
         this.roleId = details.roleId;
         this.role = details.role;
         this.token = details.token;
+        this.fullName=details.fullName;
     }
 
     clearDetails() {
