@@ -4,6 +4,7 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { ReportService } from 'src/app/_services/report.service';
 import { UserDetails } from 'src/app/_models/userDetails';
 import { map } from 'rxjs/operators';
+import { Project } from '../../_models/project';
 
 export interface PeriodicElement {
   name: string;
@@ -48,7 +49,17 @@ export class DashboardComponent implements OnInit {
 
     this.report.dashboard(this.user.id).pipe(
       map(dashboard => {
-        dashboard.timeForProject
+        /*
+        {
+          totalTime: 7200
+          collection: [
+            { id: 1, projectName: 'Web App', percentage: 56 }
+          ]
+        }
+        */
+        dashboard.projectInolvement = this.mapForPieChart(dashboard.projectInvovlement);
+
+        dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
         return dashboard
 
       })
@@ -69,7 +80,7 @@ export class DashboardComponent implements OnInit {
       })
       this.dataSource2 = new MatTableDataSource<PeriodicElement>(assignedProject)
 
-      const projectInolvement = dashboard.projectInolvement.map(row => {
+      /* const projectInolvement = dashboard.projectInolvement.map(row => {
         return {
           name: row.projectName,
           time: row.timeForProject,
@@ -81,11 +92,44 @@ export class DashboardComponent implements OnInit {
           day: row.day,
           duration: row.duration
         }
-      })
+      }) */
+    });
+  }
+  mapForLineChart(projectHrByDay: any): any {
+    projectHrByDay.forEach(project => {
+      for (let i = 1; i <= 7; i++) {
+        let row = project.durationByDay.find(day => day.day == i);
+        if (!row) {
+          row = { day: i, duration: '00:00:00' }
+          project.durationByDay.push({ day: i, duration: '00:00:00', timeInSec: 0 });
+        } else {
+          row['timeInSec'] = this.timeToSec(row.duration);
+        }
+      }
+
     });
 
+    return projectHrByDay;
   }
 
- 
+  private timeToSec(time: string): number {
+    const splitted = time.split(':');
+    return (+splitted[0]) * 3600 + (+splitted[1]) * 60 + (+splitted[2]);
+  }
+
+  private mapForPieChart(list) {
+    let total = 0;
+    let mapped = list.map(project => {
+      project['inSeconds'] = this.timeToSec(project.timeForProject);
+      total = total + project['inSeconds'];
+      return project;
+    })
+
+    mapped = mapped.map(project => {
+      project['percent'] = Math.round(project['inSeconds'] / total * 100);
+      return { id: project.projectId, projectName: project.projectName, percentage: project.percent };
+    });
+    return { totalTime: total, collection: mapped };
+  }
 
 }

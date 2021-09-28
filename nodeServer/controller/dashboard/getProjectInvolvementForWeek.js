@@ -1,13 +1,15 @@
 const sqlQuery = `SELECT 
-projectId, SEC_TO_TIME(SUM(durationTask)) as timeForProject
+projectId, projectName, SEC_TO_TIME(SUM(durationTask)) as timeForProject
 FROM
 (SELECT DISTINCT
     (\`timer\`.\`taskId\`),
         \`task\`.\`projectId\`,
+        \`project\`.\`projectName\`,
         TIME_TO_SEC(DURATION(\`timer\`.\`taskId\`, :userId, :offset)) AS durationTask
 FROM
     Timers \`timer\`
-LEFT JOIN Tasks \`task\` ON \`timer\`.\`taskId\` = \`task\`.\`id\`
+INNER JOIN Tasks \`task\` ON \`timer\`.\`taskId\` = \`task\`.\`id\`
+INNER JOIN Projects \`project\` ON \`task\`.\`projectId\` = \`project\`.\`id\`
 WHERE
     \`timer\`.\`userId\` = :userId) AS distinctTask
 GROUP BY projectId;`;
