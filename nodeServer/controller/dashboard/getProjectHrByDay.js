@@ -1,10 +1,10 @@
 const sqlQuery = `SELECT 
 \`task\`.\`projectId\`,
-SEC_TO_TIME((TIME_TO_SEC(TIMEDIFF(\`timer\`.\`endedAt\`, \`timer\`.\`startedAt\`)))) AS \`duration\`,
+SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(\`timer\`.\`endedAt\`, \`timer\`.\`startedAt\`)))) AS \`duration\`,
 DAYOFWEEK(\`timer\`.\`startedAt\`) AS \`dayOfWeek\`
 FROM
 Timers \`timer\`
-    LEFT JOIN
+    INNER JOIN
 Tasks \`task\` ON \`timer\`.\`taskId\` = \`task\`.\`id\`
 WHERE
 \`timer\`.\`userId\` = :userId

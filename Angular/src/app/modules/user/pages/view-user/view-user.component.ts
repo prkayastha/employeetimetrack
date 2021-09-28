@@ -22,9 +22,9 @@ export class ViewUserComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private rotuer: Router,
-        private report:ReportService,
+        private report: ReportService,
         private userService: UserService,
-    ){}
+    ) { }
 
     ngOnInit(): void {
         this.route.paramMap.pipe(
@@ -51,7 +51,4 @@ export class ViewUserComponent implements OnInit {
     showViewReport() {
         return this.role === 'EMPLOYEE';
     }
-
-
-
 }

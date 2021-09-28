@@ -5,9 +5,9 @@ distinct(\`project\`.\`id\`),
 max(\`timer\`.\`startedAt\`) as lastWorkedAt
 FROM
 Timers \`timer\`
-    LEFT JOIN
+    INNER JOIN
 Tasks \`task\` ON \`timer\`.\`taskId\` = \`task\`.\`id\`
-    LEFT JOIN
+    INNER JOIN
 Projects \`project\` ON \`task\`.\`projectId\` = \`project\`.\`id\`
 WHERE
 \`timer\`.\`userId\` = ?
