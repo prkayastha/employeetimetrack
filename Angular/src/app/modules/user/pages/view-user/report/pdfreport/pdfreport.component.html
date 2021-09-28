@@ -10,7 +10,7 @@
         <tbody>  
           <tr *ngFor="let report of reports">  
             <td>{{report.name }}</td>  
-            <td>{{report.url }}</td>  
+            <td><a href="{{report.url}}">{{report.url }}</a></td>  
           </tr>  
         </tbody>  
       </table>
