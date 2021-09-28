@@ -24,6 +24,7 @@ import { ReportService } from './_services/report.service';
 import { ViewCaptureComponent } from './modules/workdiary/component/view-capture.component';
 import { TaskTimerComponent } from './modules/project/pages/project-list/task-timer/task-timer.component';
 import { ReportComponent } from './modules/user/pages/view-user/report/report.component';
+import { PdfreportComponent } from './modules/user/pages/view-user/report/pdfreport/pdfreport.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ReportComponent } from './modules/user/pages/view-user/report/report.co
     PostsComponent, //TODO: refactor
     ViewCaptureComponent,
     TaskTimerComponent,
-    ReportComponent
+    ReportComponent,
+    PdfreportComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +66,8 @@ import { ReportComponent } from './modules/user/pages/view-user/report/report.co
   ],
   entryComponents: [
     TaskTimerComponent,
-    ViewCaptureComponent
+    ViewCaptureComponent,
+    PdfreportComponent
   ],
   bootstrap: [AppComponent],
 

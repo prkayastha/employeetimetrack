@@ -22,9 +22,9 @@ export class ViewUserComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private rotuer: Router,
-        private report:ReportService,
+        private report: ReportService,
         private userService: UserService,
-    ){}
+    ) { }
 
     ngOnInit(): void {
         this.route.paramMap.pipe(
@@ -53,25 +53,25 @@ export class ViewUserComponent implements OnInit {
     }
 
     //pdf function
-    downloadPDF(){
+    downloadPDF() {
         console.log("downloading pdf");
-        const doc=new jsPDF();
-       //     this.report.getPDFReport().subscribe(pdf => {
-       //         this.pdf=pdf
-              
-      //      });
-       doc.text("Employee Name: Santosh Devkota  \nPosition: Front End Developer ",10,10);
-       doc.text("_____________________________________________________________________________________________",0,30);
-       doc.text("Project Name: Space X \nTime for Project: 00:00:53 \nunproductive screens: 12 \ntotal screens: 40",10,40);
-       doc.text("Project Name: Alibaba \nTime for Project: 01:00:53 \nunproductive screens: 2 \ntotal screens: 4",10,80);
-       doc.text("Project Name: Sprint3 X \nTime for Project: 10:00:53 \nunproductive screens: 8 \ntotal screens: 19",10,120);
-       doc.save('report.pdf');
+        const doc = new jsPDF();
+        //     this.report.getPDFReport().subscribe(pdf => {
+        //         this.pdf=pdf
+
+        //      });
+        doc.text("Employee Name: Santosh Devkota  \nPosition: Front End Developer ", 10, 10);
+        doc.text("_____________________________________________________________________________________________", 0, 30);
+        doc.text("Project Name: Space X \nTime for Project: 00:00:53 \nunproductive screens: 12 \ntotal screens: 40", 10, 40);
+        doc.text("Project Name: Alibaba \nTime for Project: 01:00:53 \nunproductive screens: 2 \ntotal screens: 4", 10, 80);
+        doc.text("Project Name: Sprint3 X \nTime for Project: 10:00:53 \nunproductive screens: 8 \ntotal screens: 19", 10, 120);
+        doc.save('report.pdf');
     }
 
-    getPDF(){
-        this.report.getPDFReport().subscribe(pdf => {
-                    this.pdf= pdf  
-                });
+    getPDF() {
+        this.report.getPDFReport(this.userId).subscribe(pdf => {
+            this.pdf = pdf
+        });
     }
 
 

@@ -4,10 +4,10 @@
             <h6> Report: Weekly </h6>
         </div>
         <div>
-            <h6> Employee Name: Saroj Aryal </h6>
+            <h6> Employee Name: {{name}}</h6>
         </div>
             <div>
-                <a class="button">Download Report</a>
+                <a type="button"  (click)="openDialog(userID)"class="btn btn-primary">Download Report</a>
             </div>
     </div>
 

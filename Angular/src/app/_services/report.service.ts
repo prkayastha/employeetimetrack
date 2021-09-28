@@ -93,14 +93,23 @@ export class ReportService {
         )
     }
 
-    getPDFReport(): Observable<any> {
+
+    getEmployeeReport(id:number): Observable<any> {
         return this.http.get(
-            `${baseUrl}/dashboard?userId=32`,
+            `${baseUrl}/dashboard/report?userId=${id}`,
         )
     }
-    getEmployeeReport():Observable<any>{
+
+    getPDFReport(id:number): Observable<any> {
         return this.http.get(
-            `${baseUrl}/dashboard/report?userId=32`,
+            `${baseUrl}/dashboard/report/list?userId=${id}`,
         )
     }
+
+        dashboard(id:number): Observable<any> {
+        return this.http.get(
+            `${baseUrl}/dashboard?userId=${id}`,
+        )
+    }
+    
 }
