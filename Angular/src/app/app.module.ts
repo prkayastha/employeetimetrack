@@ -26,6 +26,7 @@ import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { ProjectService } from './_services/project.service';
 import { ReportService } from './_services/report.service';
 import { SharedDataService } from './_services/shared-data.service';
+import { SpinnerService } from './_services/spinner.service';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { SharedDataService } from './_services/shared-data.service';
     ReportService,
     BsDatepickerConfig,
     BsDaterangepickerConfig,
-    SharedDataService
+    SharedDataService,
+    SpinnerService
   ],
   entryComponents: [
     TaskTimerComponent,
