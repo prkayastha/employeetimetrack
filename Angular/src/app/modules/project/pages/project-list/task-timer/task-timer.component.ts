@@ -22,7 +22,7 @@ export class TaskTimerComponent implements OnInit {
 
   //breaktime fields
   breaktime: number = 0;
-  breakdisplay='0:0:0';
+  breakdisplay = '00:00:00';
   interval: any;
   //breaktime fields
 
@@ -143,11 +143,19 @@ export class TaskTimerComponent implements OnInit {
     if (this.isActive) {
       this.isActive = false;
       window.clearInterval(this.timer);
+    }
+  }
+
+  //BreakTime running both timers
+  breakTimer() {
+    if (this.isActive) {
+      this.isActive = false;
       this.action = 'pause';
       this.projectService.startTimer({ taskId: this.task.id, action: this.action }).subscribe(timer => {
-    });
+      });
       this.startbreakTimer();
     }
+
   }
 
 
@@ -161,34 +169,35 @@ export class TaskTimerComponent implements OnInit {
     this.stopped.emit(this.task.id);
   }
 
-//breaktime functionalities
-startbreakTimer() {
-  console.log("=====>");
-  this.interval = setInterval(() => {
-    if (this.breaktime === 0) {
-      this.breaktime++;
-    } else {
-      this.breaktime++;
-    }
-    this.breakdisplay=this.transform( this.breaktime)
-  }, 1000);
-}
-transform(value: number): string {
-  var sec_num = value; 
-  var hours   = Math.floor(sec_num / 3600);
-  var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-  var seconds = sec_num - (hours * 3600) - (minutes * 60);
+  //breaktime functionalities
+  startbreakTimer() {
+    console.log("=====>");
+    this.interval = setInterval(() => {
+      if (this.breaktime === 0) {
+        this.breaktime++;
+      } else {
+        this.breaktime++;
+      }
+      this.breakdisplay = this.transform(this.breaktime)
+    }, 1000);
+  }
+  transform(value: number): string {
+    var sec_num = value;
+    var hours = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-  if (hours   < 10) {hours   = 0;}
-  if (minutes < 10) {minutes = 0;}
- // if (seconds < 10) {seconds = 0;}
-  return hours+':'+minutes+':'+seconds;
-}
-pausebreakTimer() {
-  clearInterval(this.interval);
-}
+    if (hours < 10) { hours = 0; }
+    if (minutes < 10) { minutes = 0; }
+    // if (seconds < 10) {seconds = 0;}
+    return hours + ':' + minutes + ':' + seconds;
 
-//breaktime functionalities
+  }
+  pausebreakTimer() {
+    clearInterval(this.interval);
+  }
+
+  //breaktime functionalities
 
   /**
    * Determines the difference in seconds between two dates.
@@ -277,7 +286,7 @@ pausebreakTimer() {
       });
     }
 
-    const randomNumber = this.randomIntFromInterval(3,10);
+    const randomNumber = this.randomIntFromInterval(3, 10);
     const timeout = randomNumber * 60 * 1000;
     console.log('Taking 1st screenshot in ' + randomNumber + ' min');
 

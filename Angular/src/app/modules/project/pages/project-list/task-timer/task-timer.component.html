@@ -14,7 +14,7 @@
             class="btn btn-outline-primary rounded-button">
             <mat-icon>play_arrow</mat-icon>
         </button>
-        <button (click)="pauseTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!isActive">
+        <button (click)="breakTimer()" class="btn btn-outline-primary rounded-button" [disabled]="!isActive">
             <mat-icon>pause</mat-icon>
         </button>
         <button (click)="stopRecordingTime()" class="btn btn-outline-primary rounded-button" [disabled]="!canBeStopped">
