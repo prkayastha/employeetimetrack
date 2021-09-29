@@ -22,7 +22,7 @@ export class TaskTimerComponent implements OnInit {
 
   //breaktime fields
   breaktime: number = 0;
-  secondsElapsed:number=0;
+  secondsElapsed: number = 0;
   breakdisplay = '00:00:00';
   interval: any;
   //breaktime fields
@@ -112,7 +112,7 @@ export class TaskTimerComponent implements OnInit {
    */
   padTime(time: number): string {
     if (time < 10) {
-      return `0${time}`; 
+      return `0${time}`;
     }
 
     return `${time}`;
@@ -133,6 +133,17 @@ export class TaskTimerComponent implements OnInit {
       this.timer = window.setInterval(() => this.increaseTime(dateStarted, timeAlreadyElapsed), 1000);
       this.notifyService.announceTaskStarted(this.task.id);
       this.canBeStopped = true;
+      /* screen capturing demos*/
+      if (this.startCaptureScreen) {
+        this.startCaptureScreen();
+        console.log('capturing')
+      }
+      else
+      {
+        this.startCaptureScreen
+        console.log('hi')
+      }
+      /*--------*/
       this.pausebreakTimer();
     }
   }
@@ -187,7 +198,7 @@ export class TaskTimerComponent implements OnInit {
     var hours = Math.floor(sec_num / 3600);
     var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
     var seconds = sec_num - (hours * 3600) - (minutes * 60);
-    
+
     return `${this.padTime(hours)}:${this.padTime(minutes)}:${this.padTime(seconds)}`;
 
 
@@ -248,7 +259,7 @@ export class TaskTimerComponent implements OnInit {
     });
   }
 
-  startCaptureScreen(event: Event) {
+  startCaptureScreen() {
     const displayMediaOptions = {
       cursor: 'always',
       displaySurface: 'monitor'
@@ -326,10 +337,6 @@ export class TaskTimerComponent implements OnInit {
 
   private randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
-  }
-
-  hello(){
-    
   }
 }
 
