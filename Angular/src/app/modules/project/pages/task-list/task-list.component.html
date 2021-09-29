@@ -43,6 +43,9 @@
                             {{task.taskDescription}}
                             <span class="task-date">Created on: {{task.createdAt | date: 'dd/MM/yyyy'}}</span>
                         </div>
+                        <div class="time" *ngIf="roles==='EMPLOYEE'">
+                            {{task.timeDuration || '00:00:00'}} spent this week
+                        </div>
                         <button *ngIf="(roles==='MANAGER'|| roles==='ADMIN')" class="btn btn-outline-primary rounded-button"
                             [class.hide]="!!editMode" (click)="editTask(task.id)">
                             <mat-icon>edit</mat-icon>
