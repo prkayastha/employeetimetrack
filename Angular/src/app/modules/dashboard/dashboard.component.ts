@@ -48,6 +48,8 @@ export class DashboardComponent implements OnInit {
         dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
 
         dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
+
+        dashboard.breaks = this.mapForBreak(dashboard.breaks);
         return dashboard
 
       })
@@ -73,15 +75,16 @@ export class DashboardComponent implements OnInit {
 
       this.bigChart = dashboard.projectHrByDay;
       this.areaChart.updateData(this.bigChart);
-
-      /*const projectHrByDay = dashboard.projectHrByDay.map(row => {
-        return {
-          day: row.day,
-          duration: row.duration
-        }
-      }) */
     });
   }
+
+  mapForBreak(breaks: any): any {
+    return {
+      today: this.roundOff(this.timeToSec(breaks.today) / 3600),
+      weekly: this.roundOff(this.timeToSec(breaks.weekly) / 3600)
+    }
+  }
+
   mapForLineChart(projectHrByDay: any): any {
     projectHrByDay.forEach(project => {
       for (let i = 1; i <= 7; i++) {
