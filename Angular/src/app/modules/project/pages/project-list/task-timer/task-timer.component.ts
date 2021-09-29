@@ -111,7 +111,7 @@ export class TaskTimerComponent implements OnInit {
    */
   padTime(time: number): string {
     if (time < 10) {
-      return `0${time}`;
+      return `0${time}`; 
     }
 
     return `${time}`;
@@ -186,11 +186,9 @@ export class TaskTimerComponent implements OnInit {
     var hours = Math.floor(sec_num / 3600);
     var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
     var seconds = sec_num - (hours * 3600) - (minutes * 60);
+    
+    return `${this.padTime(hours)}:${this.padTime(minutes)}:${this.padTime(seconds)}`;
 
-    if (hours < 10) { hours = 0; }
-    if (minutes < 10) { minutes = 0; }
-    // if (seconds < 10) {seconds = 0;}
-    return hours + ':' + minutes + ':' + seconds;
 
   }
   pausebreakTimer() {
