@@ -22,6 +22,7 @@ export class TaskTimerComponent implements OnInit {
 
   //breaktime fields
   breaktime: number = 0;
+  secondsElapsed:number=0;
   breakdisplay = '00:00:00';
   interval: any;
   //breaktime fields
@@ -211,12 +212,16 @@ export class TaskTimerComponent implements OnInit {
    * @param dateStarted The date the timer was started.
    * @param timeAlreadyElapsed Any time already elapsed on the task.
    */
-  private increaseTime(dateStarted: Date, timeAlreadyElapsed: number): void {
-    let secondsElapsed = this.determineDifferenceInTime(dateStarted, new Date()) + timeAlreadyElapsed;
-    this.task.time.hours = Math.floor(secondsElapsed / 3600);
-    secondsElapsed %= 3600;
-    this.task.time.minutes = Math.floor(secondsElapsed / 60);
-    this.task.time.seconds = secondsElapsed % 60;
+  private increaseTime(dateStarted: any, timeAlreadyElapsed: number): void {
+    if (this.secondsElapsed === 0) {
+      this.secondsElapsed++;
+    } else {
+      this.secondsElapsed++;
+    }
+    this.task.time.hours = Math.floor(this.secondsElapsed / 3600);
+    this.secondsElapsed %= 3600;
+    this.task.time.minutes = Math.floor(this.secondsElapsed / 60);
+    this.task.time.seconds = this.secondsElapsed % 60;
     this.setPrettyTime();
   }
 
