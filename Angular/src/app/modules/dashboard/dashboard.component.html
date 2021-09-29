@@ -1,10 +1,10 @@
 <spinner></spinner>
 <div fxLayout="column" fxLayoutGap="20px">
-    <div fxLayout="row-reverse" *ngIf="user.role === 'EMPLOYEE'">
+    <div class="dash-row" fxLayout="row-reverse" *ngIf="user.role === 'EMPLOYEE'">
         <button type="button" class="btn btn-primary" (click)="downloadPdf()">Download Reports For Past Weeks</button>
     </div>
-    <div fxLayout="row" fxLayoutGap="20px">
-        <div class="card shadow" fxFlex>
+    <div fxLayout="row wrap" fxLayoutGap="20px">
+        <div class="row-item card shadow" fxFlex>
             <div class="card-body">
                 <h5 class="card-title"> Working On</h5>
                 <div class="card-text">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="card shadow" fxFlex>
+        <div class="row-item card shadow" fxFlex>
             <div class="card-body">
                 <h5 class="card-title"> Assigned Projects</h5>
                 <div class="card-text">
@@ -57,15 +57,15 @@
             </div>
         </div>
     </div>
-    <div fxLayout="row" fxLayoutGap="20px">
-        <div class="card shadow" fxFlex>
+    <div class="dash-row" fxLayout="row wrap" fxLayoutGap="20px">
+        <div class="row-item card shadow" fxFlex>
             <div class="card-body">
                 <div class="card-text" fxLayout="row" fxLayoutAlign="center center">
                     <app-widget-area [data]="bigChart" #areaChart></app-widget-area>
                 </div>
             </div>
         </div>
-        <div class="card shadow" fxFlex>
+        <div class="row-item card shadow" fxFlex>
             <div class="card-body">
                 <div class="card-text" fxLayout="row" fxLayoutAlign="center center">
                     <app-widget-pie [data]="pieChartData" #pieChart></app-widget-pie>
@@ -73,8 +73,8 @@
             </div>
         </div>
     </div>
-    <div fxLayout="row" fxLayoutGap="20px">
-        <div class="break" fxFlex="50">
+    <div class="dash-row" fxLayout="row wrap" fxLayoutGap="20px">
+        <div class="break row-item" fxFlex>
             <div class="card shadow" >
                 <div class="card-body">
                     <h5 class="card-title">Breaks Taken</h5>
