@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { map, tap } from 'rxjs/operators';
 import { UserDetails } from 'src/app/_models/userDetails';
@@ -19,6 +19,7 @@ export interface PeriodicElement {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  @Input() userId: number;
   data = [];
   dashboard = [];
   ELEMENT_DATA: PeriodicElement[] = [];
@@ -47,16 +48,33 @@ export class DashboardComponent implements OnInit {
     this.dataSource1.paginator = this.paginator;
     this.dataSource2.paginator = this.paginator;
 
-    this.report.dashboard(this.user.id).pipe(
-      map(dashboard => {
-        dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
+    let obs = null;
 
-        dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
+    if (this.user.role === 'EMPLOYEE') {
+      obs = this.report.dashboard(this.user.id).pipe(
+        map(dashboard => {
+          dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
+  
+          dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
+  
+          dashboard.breaks = this.mapForBreak(dashboard.breaks);
+          return dashboard
+        })
+      )
+    } else {
+      obs = this.report.dashboard(this.userId).pipe(
+        map(dashboard => {
+          dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
+  
+          dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
+  
+          dashboard.breaks = this.mapForBreak(dashboard.breaks);
+          return dashboard
+        })
+      )
+    }
 
-        dashboard.breaks = this.mapForBreak(dashboard.breaks);
-        return dashboard
-      })
-    ).subscribe(dashboard => {
+    obs.subscribe(dashboard => {
       const workingOnData = dashboard.workedOnProject.map(row => {
         return {
           name: row.projectName,

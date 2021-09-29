@@ -1,6 +1,6 @@
 <spinner></spinner>
 <div fxLayout="column" fxLayoutGap="20px">
-    <div fxLayout="row-reverse">
+    <div fxLayout="row-reverse" *ngIf="user.role === 'EMPLOYEE'">
         <button type="button" class="btn btn-primary" (click)="downloadPdf()">Download Reports For Past Weeks</button>
     </div>
     <div fxLayout="row" fxLayoutGap="20px">
