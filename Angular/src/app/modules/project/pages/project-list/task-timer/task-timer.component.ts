@@ -327,4 +327,9 @@ export class TaskTimerComponent implements OnInit {
   private randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
+
+  hello(){
+    
+  }
 }
+
