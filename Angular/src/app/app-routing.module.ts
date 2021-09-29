@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { ProjectListComponent } from './modules/project/pages/project-list/project-list.component';
-import { TaskListComponent } from './modules/workdiary/task-list/task-list.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { DefaultComponent } from './_components/default/default.component';
 import { TableComponent } from './_components/table/table.component';

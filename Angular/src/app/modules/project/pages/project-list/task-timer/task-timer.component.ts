@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ITask } from './models/task';
-import { NotifyService } from 'src/app/modules/workdiary/services/notify.service';
+import { NotifyService } from 'src/app/modules/project/pages/project-list/task-timer/services/notify.service';
 import { ProjectService } from 'src/app/_services/project.service';
 
 declare function startCapture(displayMediaOptions, callback): any;
@@ -22,7 +22,8 @@ export class TaskTimerComponent implements OnInit {
 
   //breaktime fields
   breaktime: number = 0;
-  breakdisplay='0:0:0';
+  secondsElapsed: number = 0;
+  breakdisplay = '00:00:00';
   interval: any;
   //breaktime fields
 
@@ -132,6 +133,17 @@ export class TaskTimerComponent implements OnInit {
       this.timer = window.setInterval(() => this.increaseTime(dateStarted, timeAlreadyElapsed), 1000);
       this.notifyService.announceTaskStarted(this.task.id);
       this.canBeStopped = true;
+      /* screen capturing demos*/
+      if (this.startCaptureScreen) {
+        this.startCaptureScreen();
+        console.log('capturing')
+      }
+      else
+      {
+        this.startCaptureScreen
+        console.log('hi')
+      }
+      /*--------*/
       this.pausebreakTimer();
     }
   }
@@ -143,11 +155,19 @@ export class TaskTimerComponent implements OnInit {
     if (this.isActive) {
       this.isActive = false;
       window.clearInterval(this.timer);
+    }
+  }
+
+  //BreakTime running both timers
+  breakTimer() {
+    if (this.isActive) {
+      this.isActive = false;
       this.action = 'pause';
       this.projectService.startTimer({ taskId: this.task.id, action: this.action }).subscribe(timer => {
-    });
+      });
       this.startbreakTimer();
     }
+
   }
 
 
@@ -161,34 +181,33 @@ export class TaskTimerComponent implements OnInit {
     this.stopped.emit(this.task.id);
   }
 
-//breaktime functionalities
-startbreakTimer() {
-  console.log("=====>");
-  this.interval = setInterval(() => {
-    if (this.breaktime === 0) {
-      this.breaktime++;
-    } else {
-      this.breaktime++;
-    }
-    this.breakdisplay=this.transform( this.breaktime)
-  }, 1000);
-}
-transform(value: number): string {
-  var sec_num = value; 
-  var hours   = Math.floor(sec_num / 3600);
-  var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-  var seconds = sec_num - (hours * 3600) - (minutes * 60);
+  //breaktime functionalities
+  startbreakTimer() {
+    console.log("=====>");
+    this.interval = setInterval(() => {
+      if (this.breaktime === 0) {
+        this.breaktime++;
+      } else {
+        this.breaktime++;
+      }
+      this.breakdisplay = this.transform(this.breaktime)
+    }, 1000);
+  }
+  transform(value: number): string {
+    var sec_num = value;
+    var hours = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-  if (hours   < 10) {hours   = 0;}
-  if (minutes < 10) {minutes = 0;}
- // if (seconds < 10) {seconds = 0;}
-  return hours+':'+minutes+':'+seconds;
-}
-pausebreakTimer() {
-  clearInterval(this.interval);
-}
+    return `${this.padTime(hours)}:${this.padTime(minutes)}:${this.padTime(seconds)}`;
 
-//breaktime functionalities
+
+  }
+  pausebreakTimer() {
+    clearInterval(this.interval);
+  }
+
+  //breaktime functionalities
 
   /**
    * Determines the difference in seconds between two dates.
@@ -204,12 +223,16 @@ pausebreakTimer() {
    * @param dateStarted The date the timer was started.
    * @param timeAlreadyElapsed Any time already elapsed on the task.
    */
-  private increaseTime(dateStarted: Date, timeAlreadyElapsed: number): void {
-    let secondsElapsed = this.determineDifferenceInTime(dateStarted, new Date()) + timeAlreadyElapsed;
-    this.task.time.hours = Math.floor(secondsElapsed / 3600);
-    secondsElapsed %= 3600;
-    this.task.time.minutes = Math.floor(secondsElapsed / 60);
-    this.task.time.seconds = secondsElapsed % 60;
+  private increaseTime(dateStarted: any, timeAlreadyElapsed: number): void {
+    if (this.secondsElapsed === 0) {
+      this.secondsElapsed++;
+    } else {
+      this.secondsElapsed++;
+    }
+    this.task.time.hours = Math.floor(this.secondsElapsed / 3600);
+    this.secondsElapsed %= 3600;
+    this.task.time.minutes = Math.floor(this.secondsElapsed / 60);
+    this.task.time.seconds = this.secondsElapsed % 60;
     this.setPrettyTime();
   }
 
@@ -236,7 +259,7 @@ pausebreakTimer() {
     });
   }
 
-  startCaptureScreen(event: Event) {
+  startCaptureScreen() {
     const displayMediaOptions = {
       cursor: 'always',
       displaySurface: 'monitor'
@@ -277,7 +300,7 @@ pausebreakTimer() {
       });
     }
 
-    const randomNumber = this.randomIntFromInterval(3,10);
+    const randomNumber = this.randomIntFromInterval(3, 10);
     const timeout = randomNumber * 60 * 1000;
     console.log('Taking 1st screenshot in ' + randomNumber + ' min');
 
@@ -316,3 +339,4 @@ pausebreakTimer() {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
 }
+

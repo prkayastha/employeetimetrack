@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { CreateTaskComponent } from './create-task/create-task.component';
-import { NotifyService } from './services/notify.service';
 import * as moment from 'moment-timezone';
 import { ReportService } from '../../_services/report.service';
 import { BehaviorSubject } from 'rxjs';
@@ -30,7 +28,6 @@ export class WorkdiaryComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private notifyService: NotifyService,
     private report: ReportService,
     private route: ActivatedRoute,
     private user: UserDetails,
@@ -113,22 +110,5 @@ export class WorkdiaryComponent implements OnInit {
     this.report.markScreen({ id: captureId, markUnproductive: markedUnproductive }).subscribe((result) => {
       //no action
     });
-  }
-
-  /**
-   * Opens a dialog to create a new task.
-   */
-  openCreateDialog(): void {
-    this.notifyService.announceTaskStarted(-1);
-    this.dialog.open(CreateTaskComponent, { width: '400px' });
-    this.searchTerm = '';
-    this.search();
-  }
-
-  /**
-   * Notifies subscribed components that a search has occured.
-   */
-  search() {
-    this.notifyService.announceSearch(this.searchTerm);
   }
 }

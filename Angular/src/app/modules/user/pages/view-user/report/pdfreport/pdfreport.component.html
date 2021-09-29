@@ -1,16 +1,19 @@
-<div class="constainer">
-    <h6>Weekley Reports</h6>
-    <table class="table table-hover">  
-        <thead>  
-            <tr>  
-              <th>Report Name</th>
-            </tr>  
-        </thead>  
-        <tbody>  
-          <tr *ngFor="let report of reports">  
-            <td><a href="{{report.url}}" target="_blank">{{report.name }}</a></td>  
-          </tr>  
-        </tbody>  
-      </table>
+<button mat-icon-button class="close-button" [mat-dialog-close]="true">
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</button>
+<div class="container">
+  <h6>Weekley Reports</h6>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Report Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let report of reports">
+        <td><a href="{{report.url}}" target="_blank">{{report.name }}</a></td>
+      </tr>
+    </tbody>
+  </table>
 
 </div>
