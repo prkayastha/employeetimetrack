@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ITask } from './models/task';
-import { NotifyService } from 'src/app/modules/workdiary/services/notify.service';
+import { NotifyService } from 'src/app/modules/project/pages/project-list/task-timer/services/notify.service';
 import { ProjectService } from 'src/app/_services/project.service';
 
 declare function startCapture(displayMediaOptions, callback): any;
