@@ -6,7 +6,7 @@
         <div>
             <h6> Employee Name: {{name}}</h6>
         </div>
-            <div>
+            <div class="map">
                 <a type="button"  (click)="openDialog(userID)"class="btn btn-primary">View PDF Report</a>
             </div>
     </div>
@@ -17,8 +17,10 @@
               <th>Project ID</th>  
               <th>Project Name</th>  
               <th>Time for Project</th>  
+              <th>Time for Break</th>
               <th>Unproductive Screen</th>  
               <th>Total Screen</th>
+           <!----  <th>Productivity</th> -->
             </tr>  
         </thead>  
         <tbody>  
@@ -26,9 +28,12 @@
             <td>{{report.projectId }}</td>  
             <td>{{report.projectName }}</td>  
             <td>{{report.timeForProject }}</td>  
+            <td>{{report.timeForBreak}}</td>
             <td>{{report.unproductive }}</td> 
             <td>{{report.totalScreen}}</td> 
+           <!---- <th>{{(report.totalScreen-report.unproductive)/(report.totalScreen-report.unproductive)*100}}</th> -->
           </tr>  
         </tbody>  
       </table>
+  <!----   <h6>Note: Productivity is calclated by the formula:Productive Screen/(Productive Screen+Unproductive Screen)* 100</h6> -->
 </div>

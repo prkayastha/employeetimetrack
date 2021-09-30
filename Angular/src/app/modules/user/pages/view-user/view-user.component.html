@@ -68,7 +68,7 @@
                 </div>
                 <div class="row" *ngIf="showViewReport()">
                     <div class="col">
-                        <a type="button" [routerLink]="['/',userId]" [queryParams]="{name:($userInformation | async)?.fullname}" class="btn btn-info btn-sm btn-block">Dashboard</a>
+                        <a type="button" [routerLink]="['',userId]" [queryParams]="{name:($userInformation | async)?.fullname}" class="btn btn-info btn-sm btn-block">Dashboard</a>
                     </div>
                 </div>
             </div>

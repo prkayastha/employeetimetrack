@@ -20,6 +20,7 @@ import { ViewCaptureComponent } from './modules/workdiary/component/view-capture
 import { TaskTimerComponent } from './modules/project/pages/project-list/task-timer/task-timer.component';
 import { ReportComponent } from './modules/user/pages/view-user/report/report.component';
 import { PdfreportComponent } from './modules/user/pages/view-user/report/pdfreport/pdfreport.component';
+import { UserModule } from './modules/user/user.module';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { PdfreportComponent } from './modules/user/pages/view-user/report/pdfrep
     DefaultModule,
     ReactiveFormsModule,
     SharedModule,
+    UserModule,
     NgxLocalStorageModule.forRoot(),
     BsDatepickerModule.forRoot(),
   ],
