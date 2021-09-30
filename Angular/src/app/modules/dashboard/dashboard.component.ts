@@ -165,4 +165,8 @@ export class DashboardComponent implements OnInit {
     this.dialog.open(PdfreportComponent,{data:{id: this.user.id}});
   }
 
+  getPercent(value, total) {
+    return Math.floor((value/total)*100);
+  }
+
 }
