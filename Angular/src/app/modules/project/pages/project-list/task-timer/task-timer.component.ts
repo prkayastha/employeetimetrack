@@ -133,18 +133,6 @@ export class TaskTimerComponent implements OnInit {
       this.timer = window.setInterval(() => this.increaseTime(dateStarted, timeAlreadyElapsed), 1000);
       this.notifyService.announceTaskStarted(this.task.id);
       this.canBeStopped = true;
-      /* screen capturing demos*/
-      if (this.startCaptureScreen) {
-        this.startCaptureScreen();
-        console.log('capturing')
-      }
-      else
-      {
-        this.startCaptureScreen
-        console.log('hi')
-      }
-      /*--------*/
-      this.pausebreakTimer();
     }
   }
 
@@ -251,6 +239,7 @@ export class TaskTimerComponent implements OnInit {
   stopRecordingTime() {
     this.action = 'stop';
     stopCapture(this.videoElement);
+    this.videoElement = null;
     this.projectService.startTimer({ taskId: this.task.id, action: this.action }).subscribe(timer => {
       this.stopTimer();
       clearInterval(this.servertimer);
@@ -260,6 +249,15 @@ export class TaskTimerComponent implements OnInit {
   }
 
   startCaptureScreen() {
+    if (!!this.videoElement) {
+      this.action = 'start';
+      this.projectService.startTimer({ taskId: this.task.id, action: this.action }).subscribe(timer => {
+      });
+      this.isActive = true;
+      this.pausebreakTimer();
+      return;
+    }
+    
     const displayMediaOptions = {
       cursor: 'always',
       displaySurface: 'monitor'
