@@ -1,2 +1,7 @@
-<highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions" style="width: 100%; display: block;" #pieChart>
-</highcharts-chart>
+<div class="chart-container">
+    <highcharts-chart 
+        [Highcharts]="Highcharts" 
+        [options]="chartOptions" 
+        [callbackFunction]="chartCallback"#pieChart>
+        </highcharts-chart>
+</div>

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { first, tap } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '../../../../_services';
 import { MustMatch } from '../../../../_helpers';
 import { UserDetails } from '../../../../_models/userDetails';
+import { SpinnerService } from '../../../../_services/spinner.service';
 
 @Component({
     selector: 'app-update-user',
@@ -26,12 +27,14 @@ export class UpdateUserComponent implements OnInit {
         private router: Router,
         private accountService: AccountService,
         private alertService: AlertService,
-        private userModel: UserDetails
+        private userModel: UserDetails,
+        private spinner: SpinnerService
     ) { 
         this.operatorRole = this.userModel.role;
     }
 
     ngOnInit() {
+        this.spinner.show = true;
         this.id = this.route.snapshot.params['userId'];
         this.form = this.getForm();
         this.getUserInfo(+this.id);
@@ -74,7 +77,10 @@ export class UpdateUserComponent implements OnInit {
     }
 
     private getUserInfo(userId: number) {
-        this.accountService.getUser(userId).subscribe((user) => {
+        
+        this.accountService.getUser(userId).pipe(
+            tap(() => this.spinner.show = false)
+        ).subscribe((user) => {
             const preFillValue = {
                 firstName: user.firstname,
                 lastName: user.lastname,

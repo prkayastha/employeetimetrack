@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 import { TableHeader } from '../../../../_components/table/model/header.model';
+import { SpinnerService } from '../../../../_services/spinner.service';
 import { UserService } from '../../user.service';
 
 
@@ -40,7 +41,8 @@ export class EmployeeListComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private spinner: SpinnerService
   ) { 
     const nameCol = this.tableHeader.find(header => header.headerDef === 'name');
     nameCol.onClick = function (data: any) {
@@ -49,6 +51,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.spinner.show = true;
     this._filter = {
       offset: 0,
       limit: 10,
@@ -61,7 +64,9 @@ export class EmployeeListComponent implements OnInit {
     this.$filter.pipe(
       debounceTime(300)
     ).subscribe(filter => {
-      this.$userList = this.userService.getAllUsers(filter);
+      this.$userList = this.userService.getAllUsers(filter).pipe(
+        tap(() => this.spinner.show = false)
+      );
     });
   }
 

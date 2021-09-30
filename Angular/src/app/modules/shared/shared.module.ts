@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatDividerModule, MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule,
-  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule, MatTableModule, MatSortModule, MatPaginatorModule, MatDialogModule
+  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule, MatTableModule, MatSortModule, MatPaginatorModule, MatDialogModule, MatProgressSpinnerModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
@@ -20,6 +20,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxLocalStorageModule } from 'ngx-localstorage';
 import { TableComponent } from '../../_components/table/table.component';
 import { FilterOptionComponent } from '../../_components/filterOption/filter-option.component';
+import { SpinnerComponent } from '../../_components/spinner/spinner.component';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 const matModules = [
   MatDividerModule,
@@ -35,7 +37,8 @@ const matModules = [
   MatSortModule,
   MatPaginatorModule,
   MatIconModule,
-  MatDialogModule
+  MatDialogModule,
+  MatProgressSpinnerModule
 ];
 
 const declareComponent = [
@@ -47,7 +50,9 @@ const declareComponent = [
   PieComponent,
   SearchableDropdownComponent,
   TableComponent,
-  FilterOptionComponent
+  FilterOptionComponent,
+  SpinnerComponent,
+  DashboardComponent
 ]
 
 @NgModule({

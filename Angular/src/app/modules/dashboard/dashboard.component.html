@@ -1,59 +1,93 @@
-<div class="container">
-    <div fxLayout="row-reverse">
-        <button type="button" class="btn btn-primary" (click)="downloadPdf()">Download PDF for past weeks</button>
+<spinner></spinner>
+<div fxLayout="column" fxLayoutGap="20px">
+    <div class="dash-row" fxLayout="row-reverse" *ngIf="user.role === 'EMPLOYEE'">
+        <button type="button" class="btn btn-primary" (click)="downloadPdf()">Download Reports For Past Weeks</button>
     </div>
-    <div fxLayout="row">
-        <div fxFlex>
-            <h3> Working On</h3>
-            <table mat-table [dataSource]="dataSource1">
+    <div fxLayout="row wrap" fxLayoutGap="20px">
+        <div class="row-item card shadow" fxFlex>
+            <div class="card-body">
+                <h5 class="card-title"> Working On</h5>
+                <div class="card-text">
+                    <table mat-table [dataSource]="dataSource1">
 
-                <th mat-header-cell *matHeaderCellDef>hello</th>
+                        <th mat-header-cell *matHeaderCellDef>hello</th>
 
-                <!-- Name Column -->
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>Project Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>Project Name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        </ng-container>
 
-                <!-- Weight Column -->
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef> Last Worked At</th>
-                    <td mat-cell *matCellDef="let element"> {{element.date| date}} </td>
-                </ng-container>
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef> Last Worked At</th>
+                            <td mat-cell *matCellDef="let element"> {{element.date| date}} </td>
+                        </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div fxFlex>
-            <h3> Assigned Projects</h3>
-            <table mat-table [dataSource]="dataSource2">
+        <div class="row-item card shadow" fxFlex>
+            <div class="card-body">
+                <h5 class="card-title"> Assigned Projects</h5>
+                <div class="card-text">
+                    <table mat-table [dataSource]="dataSource2">
 
-                <th mat-header-cell *matHeaderCellDef>hello</th>
+                        <th mat-header-cell *matHeaderCellDef>hello</th>
 
-                <!-- Name Column -->
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>Project Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>Project Name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        </ng-container>
 
-                <!-- Weight Column -->
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef>Assigned Date </th>
-                    <td mat-cell *matCellDef="let element"> {{element.date| date}} </td>
-                </ng-container>
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>Assigned Date </th>
+                            <td mat-cell *matCellDef="let element"> {{element.date| date}} </td>
+                        </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-    <div fxLayout="row">
-        <div fxFlex>
-            <app-widget-area [data]="bigChart" #areaChart></app-widget-area>
+    <div class="dash-row" fxLayout="row wrap" fxLayoutGap="20px">
+        <div class="row-item card shadow" fxFlex>
+            <div class="card-body">
+                <div class="card-text" fxLayout="row" fxLayoutAlign="center center">
+                    <app-widget-area [data]="bigChart" #areaChart></app-widget-area>
+                </div>
+            </div>
         </div>
-        <div fxFlex>
-            <app-widget-pie [data]="pieChartData" #pieChart></app-widget-pie>
+        <div class="row-item card shadow" fxFlex>
+            <div class="card-body">
+                <div class="card-text" fxLayout="row" fxLayoutAlign="center center">
+                    <app-widget-pie [data]="pieChartData" #pieChart></app-widget-pie>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dash-row" fxLayout="row wrap" fxLayoutGap="20px">
+        <div class="break row-item" fxFlex>
+            <div class="card shadow" >
+                <div class="card-body">
+                    <h5 class="card-title">Breaks Taken</h5>
+                    <div class="card-text" fxLayout="column">
+                        <div>
+                            <span class="hour">0hrs</span> of 0.5 hrs today
+                        </div>
+                        <div>
+                            <span class="hour">0hrs</span> of 2.5 hrs this week
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

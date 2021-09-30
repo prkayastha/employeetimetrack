@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ViewCaptureComponent } from './component/view-capture.component';
 import { UserDetails } from '../../_models/userDetails';
 import { ActivatedRoute } from '@angular/router';
+import { SpinnerService } from '../../_services/spinner.service';
 
 @Component({
   selector: 'app-workdiary',
@@ -29,8 +30,10 @@ export class WorkdiaryComponent implements OnInit {
     public dialog: MatDialog,
     private report: ReportService,
     private route: ActivatedRoute,
-    private user: UserDetails) {
+    private user: UserDetails,
+    private spinner: SpinnerService) {
     this.role = this.user.role;
+    this.spinner.show = true;
     this.date.valueChanges.subscribe((date) => {
       const zone = moment.tz.guess();
       const dateMoment = moment.tz(date, zone);
@@ -68,6 +71,9 @@ export class WorkdiaryComponent implements OnInit {
     requestHook.subscribe((response) => {
       //perform ops
       this.$workDiary.next(response);
+      this.spinner.show = false;
+    }, error => {
+      this.spinner.show = false;
     });
   }
 

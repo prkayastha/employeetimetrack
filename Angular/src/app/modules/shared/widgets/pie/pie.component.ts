@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import { SharedDataService } from '../../../../_services/shared-data.service';
 
 @Component({
   selector: 'app-widget-pie',
@@ -7,15 +8,29 @@ import * as Highcharts from 'highcharts';
   styleUrls: ['./pie.component.scss']
 })
 export class PieComponent implements OnInit {
-
+  chartId: string = 'pieChart';
   Highcharts = Highcharts;
   chartOptions: any = {};
+  chart: Highcharts.Chart;
+  chartCallback: Highcharts.ChartCallbackFunction = (chart) => {
+    this.chart = chart;
+  }
 
 
   @Input() data = [];
   @ViewChild('pieChart', {static: true}) pieChart: any;
 
-  constructor() { }
+  constructor(private sharedData: SharedDataService) { 
+    const observable = this.sharedData.addObs(this.chartId);
+    observable.subscribe((isCollapse) => {
+      console.log('Resize pie chart');
+      setTimeout(() => {
+        const width = isCollapse ? 540 : 430;
+        this.chart.setSize(width, 400)
+        this.chart.redraw();
+      }, 100)
+    });
+  }
 
   ngOnInit() {
     this.chartOptions = this.getChartOption();
@@ -29,9 +44,6 @@ export class PieComponent implements OnInit {
   private getChartOption() {
     return {
       chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
         type: 'pie'
       },
       title: {

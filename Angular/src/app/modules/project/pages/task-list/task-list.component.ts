@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { UserDetails } from 'src/app/_models/userDetails';
 import { ProjectService } from 'src/app/_services/project.service';
+import { SpinnerService } from '../../../../_services/spinner.service';
 import { TaskTimerComponent } from '../project-list/task-timer/task-timer.component';
 
 @Component({
@@ -37,9 +38,12 @@ export class TaskListComponent implements OnInit {
 
   constructor(private projectService: ProjectService,
     private route: ActivatedRoute,
-    private userDetail: UserDetails,public dialog:MatDialog){ }
+    private userDetail: UserDetails,
+    public dialog:MatDialog,
+    public spinner: SpinnerService){ }
 
   ngOnInit() {
+    this.spinner.show = true;
     this.projectId = this.route.snapshot.params.projectid;
     this.projectName = this.route.snapshot.queryParams.name;
     this.roles = this.userDetail.role;
@@ -61,7 +65,10 @@ export class TaskListComponent implements OnInit {
 
   getTask(options: any) {
     this.projectService.getAllTask(options, this.projectId).subscribe(task => {
-      this.$taskList.next(task)
+      this.$taskList.next(task);
+      this.spinner.show = false;
+    }, error => {
+      this.spinner.show = false;
     });
   }
 

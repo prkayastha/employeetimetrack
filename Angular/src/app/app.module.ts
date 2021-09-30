@@ -3,24 +3,33 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { LocalStorageService, NgxLocalStorageModule } from 'ngx-localstorage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LayoutComponent } from './modules/layout/layout.component';
 import { PostsComponent } from './modules/posts/posts.component';
+import { TaskTimerComponent } from './modules/project/pages/project-list/task-timer/task-timer.component';
 import { SharedModule } from './modules/shared/shared.module';
+import { PdfreportComponent } from './modules/user/pages/view-user/report/pdfreport/pdfreport.component';
+import { ReportComponent } from './modules/user/pages/view-user/report/report.component';
+import { ViewCaptureComponent } from './modules/workdiary/component/view-capture.component';
 import { WorkdiaryComponent } from './modules/workdiary/workdiary.component';
 import { AlertComponent } from './_components';
 import { DefaultModule } from './_components/default/default.module';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { ProjectService } from './_services/project.service';
-import { BsDatepickerConfig, BsDatepickerModule, BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ReportService } from './_services/report.service';
+<<<<<<< HEAD
 import { ViewCaptureComponent } from './modules/workdiary/component/view-capture.component';
 import { TaskTimerComponent } from './modules/project/pages/project-list/task-timer/task-timer.component';
 import { ReportComponent } from './modules/user/pages/view-user/report/report.component';
 import { PdfreportComponent } from './modules/user/pages/view-user/report/pdfreport/pdfreport.component';
 import { UserModule } from './modules/user/user.module';
+=======
+import { SharedDataService } from './_services/shared-data.service';
+import { SpinnerService } from './_services/spinner.service';
+>>>>>>> 2efb037e148508793f29c6881a1b08d8f848d49d
 
 @NgModule({
   declarations: [
@@ -54,7 +63,9 @@ import { UserModule } from './modules/user/user.module';
     ProjectService,
     ReportService,
     BsDatepickerConfig,
-    BsDaterangepickerConfig
+    BsDaterangepickerConfig,
+    SharedDataService,
+    SpinnerService
   ],
   entryComponents: [
     TaskTimerComponent,

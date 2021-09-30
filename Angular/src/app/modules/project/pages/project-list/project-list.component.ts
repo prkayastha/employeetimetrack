@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { debounceTime, takeLast } from 'rxjs/operators';
+import { debounceTime, takeLast, tap } from 'rxjs/operators';
 import { ProjectService } from 'src/app/_services/project.service';
 import { TableHeader } from '../../../../_components/table/model/header.model';
 import { UserDetails } from '../../../../_models/userDetails';
+import { SpinnerService } from '../../../../_services/spinner.service';
 
 const tableHeader: TableHeader[] = [
   { headerDef: 'id', headerLabel: 'Id', colName: 'id' },
@@ -48,16 +49,20 @@ export class ProjectListComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private router: Router,
-    private userModel: UserDetails
+    private userModel: UserDetails,
+    private spinner: SpinnerService
   ) {
   }
 
   ngOnInit() {
+    this.spinner.show = true;
     this.setUpHeader();
     this.$filter.pipe(
       debounceTime(300)
     ).subscribe(filter => {
-      this.$projectList = this.projectService.getAllProject(filter);
+      this.$projectList = this.projectService.getAllProject(filter).pipe(
+        tap(() => this.spinner.show = false)
+      );
     });
     this.$filter.next(this.filter);
   }

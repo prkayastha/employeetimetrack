@@ -4,6 +4,21 @@
   }
 }
 
+.row-item {
+  min-width: 420px;
+}
+
+.break {
+  .card {
+    margin-right: 10px;
+  }
+
+  .hour {
+    font-size: 32px;
+    font-weight: 600;
+  }
+}
+
 table {
   width: 100%;
 }

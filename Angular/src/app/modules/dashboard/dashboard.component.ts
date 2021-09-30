@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { UserDetails } from 'src/app/_models/userDetails';
 import { ReportService } from 'src/app/_services/report.service';
+import { SpinnerService } from '../../_services/spinner.service';
 import { AreaComponent } from '../shared/widgets/area/area.component';
 import { PieComponent } from '../shared/widgets/pie/pie.component';
 import { PdfreportComponent } from '../user/pages/view-user/report/pdfreport/pdfreport.component';
@@ -18,6 +19,7 @@ export interface PeriodicElement {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  @Input() userId: number;
   data = [];
   dashboard = [];
   ELEMENT_DATA: PeriodicElement[] = [];
@@ -34,24 +36,45 @@ export class DashboardComponent implements OnInit {
   @ViewChild('pieChart', {static: true}) pieChartComp: PieComponent;
   @ViewChild('areaChart', {static: true}) areaChart: AreaComponent;
 
-  constructor(public report: ReportService, public user: UserDetails, public dialog: MatDialog) { }
+  constructor(public report: ReportService, 
+    public user: UserDetails, 
+    public dialog: MatDialog,
+    public spinner: SpinnerService) { }
 
   ngOnInit() {
     // this.bigChart = this.dashboardService.bigChart();
     // this.pieChartData = this.dashboardService.pieChart();
-
+    this.spinner.show = true
     this.dataSource1.paginator = this.paginator;
     this.dataSource2.paginator = this.paginator;
 
-    this.report.dashboard(this.user.id).pipe(
-      map(dashboard => {
-        dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
+    let obs = null;
 
-        dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
-        return dashboard
+    if (this.user.role === 'EMPLOYEE') {
+      obs = this.report.dashboard(this.user.id).pipe(
+        map(dashboard => {
+          dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
+  
+          dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
+  
+          dashboard.breaks = this.mapForBreak(dashboard.breaks);
+          return dashboard
+        })
+      )
+    } else {
+      obs = this.report.dashboard(this.userId).pipe(
+        map(dashboard => {
+          dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
+  
+          dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
+  
+          dashboard.breaks = this.mapForBreak(dashboard.breaks);
+          return dashboard
+        })
+      )
+    }
 
-      })
-    ).subscribe(dashboard => {
+    obs.subscribe(dashboard => {
       const workingOnData = dashboard.workedOnProject.map(row => {
         return {
           name: row.projectName,
@@ -73,15 +96,19 @@ export class DashboardComponent implements OnInit {
 
       this.bigChart = dashboard.projectHrByDay;
       this.areaChart.updateData(this.bigChart);
-
-      /*const projectHrByDay = dashboard.projectHrByDay.map(row => {
-        return {
-          day: row.day,
-          duration: row.duration
-        }
-      }) */
+      this.spinner.show = false;
+    }, error => {
+      this.spinner.show = false;
     });
   }
+
+  mapForBreak(breaks: any): any {
+    return {
+      today: this.roundOff(this.timeToSec(breaks.today) / 3600),
+      weekly: this.roundOff(this.timeToSec(breaks.weekly) / 3600)
+    }
+  }
+
   mapForLineChart(projectHrByDay: any): any {
     projectHrByDay.forEach(project => {
       for (let i = 1; i <= 7; i++) {
