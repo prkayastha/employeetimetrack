@@ -27,7 +27,6 @@ export class AreaComponent implements OnInit {
   constructor(private sharedData: SharedDataService) {
     const observable = this.sharedData.addObs(this.chartId);
     observable.subscribe((isCollapse) => {
-      console.log('Resize Area chart');
       setTimeout(() => {
         const width = isCollapse ? 540 : 430;
         this.chart.setSize(width, 400)

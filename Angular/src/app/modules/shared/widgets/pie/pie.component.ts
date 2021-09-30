@@ -23,7 +23,6 @@ export class PieComponent implements OnInit {
   constructor(private sharedData: SharedDataService) { 
     const observable = this.sharedData.addObs(this.chartId);
     observable.subscribe((isCollapse) => {
-      console.log('Resize pie chart');
       setTimeout(() => {
         const width = isCollapse ? 540 : 430;
         this.chart.setSize(width, 400)
