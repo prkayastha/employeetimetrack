@@ -91,5 +91,22 @@
                 </div>
             </div>
         </div>
+        <div class="break row-item" fxFlex>
+            <div class="card shadow" >
+                <div class="card-body">
+                    <h5 class="card-title">Activity Today</h5>
+                    <div class="card-text" fxLayout="column">
+                        <div class="progress-container">
+                            <mat-progress-bar [color]="'primary'" [value]="getPercent(workingHrs.today, 9)" [mode]="'determinate'"></mat-progress-bar>
+                            <span class="hour">{{workingHrs.today}}hrs</span> of 9 hrs today
+                        </div>
+                        <div class="progress-container">
+                            <mat-progress-bar [color]="'primary'" [value]="getPercent(workingHrs.today, 45)" [mode]="'determinate'"></mat-progress-bar>
+                            <span class="hour">{{workingHrs.weekly}}hrs</span> of 45 hrs this week
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

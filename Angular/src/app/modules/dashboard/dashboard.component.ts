@@ -32,6 +32,7 @@ export class DashboardComponent implements OnInit {
   dataSource2 = new MatTableDataSource<PeriodicElement>([]);
 
   break: any = {today: 0, weekly: 0}
+  workingHrs: any = {today: 0, weekly: 0}
 
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -60,6 +61,8 @@ export class DashboardComponent implements OnInit {
           dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
   
           dashboard.breaks = this.mapForBreak(dashboard.breaks);
+
+          dashboard.workingHrs = this.mapForBreak(dashboard.workingHrs);
           return dashboard
         })
       )
@@ -71,6 +74,8 @@ export class DashboardComponent implements OnInit {
           dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
   
           dashboard.breaks = this.mapForBreak(dashboard.breaks);
+
+          dashboard.workingHrs = this.mapForBreak(dashboard.workingHrs);
           return dashboard
         })
       )
@@ -100,6 +105,8 @@ export class DashboardComponent implements OnInit {
       this.areaChart.updateData(this.bigChart);
 
       this.break = dashboard.breaks;
+
+      this.workingHrs = dashboard.workingHrs;
       this.spinner.show = false;
     }, error => {
       this.spinner.show = false;
