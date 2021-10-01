@@ -78,7 +78,7 @@ const set = (value, userId) => {
 		});
 		return taskCache;
 	} else if (!myCache.has(cacheId) && isBreak) {
-		const cachedTask = get(cacheId.slice(0,-1));
+		const cachedTask = get(cacheId.slice(0, -1));
 		if (!cachedTask) {
 			throw Error('Task not started yet');
 		}
@@ -95,23 +95,25 @@ const set = (value, userId) => {
 		});
 
 		cachedTask.endTime = currentTimeStamp;
-		myCache.ttl(cacheId.slice(0,-1), timeInMin);
+		myCache.ttl(cacheId.slice(0, -1), timeInMin);
 
 		return taskCache;
 	} else {
 		const cachedData = get(cacheId);
-		cachedData.endTime = currentTimeStamp;
+		cachedData['endTime'] = currentTimeStamp;
 		myCache.ttl(cacheId, timeInMin);
 
 		if (isBreak) {
-			const mainTask = get(cacheId.slice(0,-1));
-			mainTask.endTime = currentTimeStamp;
-			myCache.ttl(cacheId, timeInMin);
+			const mainTask = get(cacheId.slice(0, -1));
+			if (!!mainTask) {
+				mainTask['endTime'] = currentTimeStamp;
+				myCache.ttl(cacheId, timeInMin);
+			}
 		} else {
-			const breakTask = get(cacheId+'B');
+			const breakTask = get(cacheId + 'B');
 			if (!!breakTask) {
-				breakTask.endTime = currentTimeStamp;
-				myCache.del(cacheId+'B');
+				breakTask['endTime'] = currentTimeStamp;
+				myCache.del(cacheId + 'B');
 			}
 		}
 		return cachedData;

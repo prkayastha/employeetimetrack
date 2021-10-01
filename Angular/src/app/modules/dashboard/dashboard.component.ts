@@ -31,6 +31,8 @@ export class DashboardComponent implements OnInit {
   dataSource1 = new MatTableDataSource<PeriodicElement>([]);
   dataSource2 = new MatTableDataSource<PeriodicElement>([]);
 
+  break: any = {today: 0, weekly: 0}
+
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('pieChart', {static: true}) pieChartComp: PieComponent;
@@ -96,6 +98,8 @@ export class DashboardComponent implements OnInit {
 
       this.bigChart = dashboard.projectHrByDay;
       this.areaChart.updateData(this.bigChart);
+
+      this.break = dashboard.breaks;
       this.spinner.show = false;
     }, error => {
       this.spinner.show = false;
@@ -159,6 +163,10 @@ export class DashboardComponent implements OnInit {
 
   downloadPdf() {
     this.dialog.open(PdfreportComponent,{data:{id: this.user.id}});
+  }
+
+  getPercent(value, total) {
+    return Math.floor((value/total)*100);
   }
 
 }

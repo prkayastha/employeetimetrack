@@ -79,11 +79,13 @@
                 <div class="card-body">
                     <h5 class="card-title">Breaks Taken</h5>
                     <div class="card-text" fxLayout="column">
-                        <div>
-                            <span class="hour">0hrs</span> of 0.5 hrs today
+                        <div class="progress-container">
+                            <mat-progress-bar [color]="'primary'" [value]="getPercent(break.today, 0.5)" [mode]="'determinate'"></mat-progress-bar>
+                            <span class="hour">{{break.today}}hrs</span> of 0.5 hrs today
                         </div>
-                        <div>
-                            <span class="hour">0hrs</span> of 2.5 hrs this week
+                        <div class="progress-container">
+                            <mat-progress-bar [color]="'primary'" [value]="getPercent(break.today, 2.5)" [mode]="'determinate'"></mat-progress-bar>
+                            <span class="hour">{{break.weekly}}hrs</span> of 2.5 hrs this week
                         </div>
                     </div>
                 </div>

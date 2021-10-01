@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertService } from './_services';
+import { environment } from 'src/environments/environment';
 
 declare function startCapture(displayMediaOptions): any;
+
+const baseUrl = environment.apiUrl;
 
 @Component({
   selector: 'app-root',
@@ -16,13 +19,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /* const displayMediaOptions = {
-      cursor: 'always',
-      displaySurface: 'monitor'
-    };
-
-    startCapture(displayMediaOptions).then(([stream, video]) => {
-      console.log('view value');
-    }) */    
+      console.log('Server Info: ', baseUrl); 
   }
 }

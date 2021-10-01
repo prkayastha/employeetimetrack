@@ -6,7 +6,7 @@ const models = require('../../models');
 const momentTz = require('moment-timezone');
 
 module.exports = async function (userId) {
-    const today = momentTz(momentTz.tz.guess());
+    const today = momentTz(momentTz(), momentTz.tz.guess());
     const startDate = today.clone().startOf('week').format('YYYY-MM-DD');
     const endDate = today.clone().endOf('week').format('YYYY-MM-DD');
     const weeklyBreak = models.sequelize.query(
