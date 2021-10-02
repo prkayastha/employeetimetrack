@@ -20,16 +20,9 @@ import { DefaultModule } from './_components/default/default.module';
 import { ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { ProjectService } from './_services/project.service';
 import { ReportService } from './_services/report.service';
-<<<<<<< HEAD
-import { ViewCaptureComponent } from './modules/workdiary/component/view-capture.component';
-import { TaskTimerComponent } from './modules/project/pages/project-list/task-timer/task-timer.component';
-import { ReportComponent } from './modules/user/pages/view-user/report/report.component';
-import { PdfreportComponent } from './modules/user/pages/view-user/report/pdfreport/pdfreport.component';
 import { UserModule } from './modules/user/user.module';
-=======
 import { SharedDataService } from './_services/shared-data.service';
 import { SpinnerService } from './_services/spinner.service';
->>>>>>> 2efb037e148508793f29c6881a1b08d8f848d49d
 
 @NgModule({
   declarations: [
