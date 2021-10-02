@@ -1,4 +1,11 @@
 <div fxLayout="row-reverse" fxLayoutGap="10px">
+    <button
+        *ngIf="showTrelloImport"
+        class="btn btn-primary"
+        type="button"
+        (click)="option['trelloCallback']()">
+        Import from trello
+    </button>
     <button 
         *ngIf="!!option && !!option['button']" 
         class="btn btn-primary" 

@@ -10,6 +10,7 @@ import { debounceTime } from "rxjs/operators";
 export class FilterOptionComponent implements OnInit {
     searchValue: FormControl = new FormControl();
     @Input() option: any;
+    @Input() showTrelloImport: boolean = false;
     @Output('onSearch') search = new EventEmitter();
 
     ngOnInit(): void {
