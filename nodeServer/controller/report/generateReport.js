@@ -7,6 +7,7 @@ const getReport = require('./getReport');
 const instertIntoDB = require('./insertReportInfo');
 const user = require('../../controller/user');
 const breaks = require('../dashboard/getBreaks');
+const activity = require('./getActivity');
 
 const average = (list) => list.reduce((prev, curr) => prev + curr) / list.length;
 
@@ -23,12 +24,13 @@ module.exports = async function () {
 async function generateReportByUserId(userId) {
 
     const userInformation = await getUserById(userId);
-    const reportInfo = await getReport(userId);
-    const breakInfo = await breaks(userId);
+    const reportInfo = await getReport(userId, true);
+    const breakInfo = await breaks(userId, true);
+    const activityLog = await activity(userId);
 
     const doc = new PDFDocument({
         size: 'A4',
-        margins: 50
+        margin: 50
     });
 
     const dates = getDates();
@@ -53,6 +55,19 @@ async function generateReportByUserId(userId) {
     setTableHeader(doc, 180);
 
     setTableRow(doc, reportInfo, breakInfo)
+
+    doc.font('Helvetica-Bold');
+
+    doc.moveDown();
+    doc.moveDown();
+    doc.text('Activity Log', 80, doc.y);
+    doc.moveDown();
+    doc.moveDown();
+    doc.moveDown();
+
+    setActivityTableHeader(doc, doc.y);
+
+    setActivityTableRows(doc, activityLog);
 
     doc.end();
 
@@ -100,24 +115,25 @@ function setTableHeader(doc, y) {
     doc.font('Helvetica-Bold');
     doc.text('Project Name', 80, y, { width: 150 });
     doc.text('Time Spent', 230, y, { width: 100 });
-    doc.text('Productive', 310, y).moveDown().text('Screen', 310);
-    doc.text('Unproductive', 380, y).moveDown().text('Screen', 380);
-    doc.text('Productivity', 460, y);
+    doc.text('Productive Screen', 310, y, {width: 50});
+    doc.text('Unproductive Screen', 380, y, {width: 60});
+    doc.text('Productivity', 460, y, {width: 60});
     doc.lineWidth(1);
     doc.lineCap('butt')
-        .moveTo(80, y + 25)
-        .lineTo(510, y + 25)
+        .moveTo(80, y + 30)
+        .lineTo(510, y + 30)
         .stroke();
 }
 
 function setTableRow(doc, information, breakInfo) {
     doc.font('Helvetica');
-    const top = 220
     let totalTime = 0;
     let totalProductiveScreen = 0;
     let totalUnproductiveScreen = 0;
     let productive = [];
+    doc.moveDown(); doc.moveDown();
     for (let i = 0; i < information.length; i++) {
+        doc.moveDown(); doc.moveDown();
         const row = information[i];
         totalTime = totalTime + timeToSec(row.timeForProject);
         totalProductiveScreen = totalProductiveScreen + (row.totalScreen - row.unproductive);
@@ -125,15 +141,22 @@ function setTableRow(doc, information, breakInfo) {
         if (row.totalScreen > 0) {
             productive.push(row.unproductive / row.totalScreen)
         }
-        doc.text(row.projectName, 80, top + (i * 35), { width: 150 });
-        doc.text(row.timeForProject, 230, top + (i * 35), { width: 100 });
-        doc.text(row.totalScreen - row.unproductive, 310, top + (i * 35));
-        doc.text(row.unproductive, 380, top + (i * 35));
-        doc.text(row.totalScreen == 0 ? 'N/A' : 1 - (row.unproductive / row.totalScreen), 460, top + (i * 35));
+        let rowLine = doc.y;
+        if ((rowLine + 20) > 750) {
+            doc.addPage({size: 'A4', margin:80});
+            rowLine = doc.y
+        }
+        doc.text(trimStr(row.projectName, 40), 80, rowLine, { width: 150 });
+        doc.text(row.timeForProject, 230, rowLine, { width: 100 });
+        doc.text(row.totalScreen - row.unproductive, 310, rowLine);
+        doc.text(row.unproductive, 380, rowLine);
+        doc.text(row.totalScreen == 0 ? 'N/A' : 1 - roundOff((row.unproductive / row.totalScreen)), 460, rowLine);
+        doc.moveDown(); doc.moveDown();
+        rowLine = doc.y;
         doc.lineWidth(0.5);
         doc.lineCap('butt')
-            .moveTo(80, doc.y + 20)
-            .lineTo(510, doc.y + 20)
+            .moveTo(80, rowLine)
+            .lineTo(510, rowLine)
             .stroke();
     }
 
@@ -157,8 +180,52 @@ function setTableRow(doc, information, breakInfo) {
     doc.text(`Total Breaks This Week: ${breakInfo.weekly}`, 80, doc.y, { width: 510, align: 'left' });
     doc.text(`Total Recorded Productive Screens: ${totalProductiveScreen}`, 80, doc.y, { width: 510, align: 'left' });
     doc.text(`Total Recorded Unproductive Screens: ${totalUnproductiveScreen}`, 80, doc.y, { width: 510, align: 'left' });
-    doc.text(`Total Productive Rate: ${(1 - averageProd) * 100}%`, 80, doc.y, { width: 510, align: 'left' });
+    const rate = roundOff(1 - averageProd)
+    doc.text(`Total Productive Rate: ${rate * 100}%`, 80, doc.y, { width: 510, align: 'left' });
     
+}
+
+function setActivityTableHeader(doc, y) {
+    doc.font('Helvetica-Bold');
+    doc.text('Task Description', 80, y, { width: 150 });
+    doc.text('Project Name', 230, y, { width: 100 });
+    doc.text('Started At', 310, y);
+    doc.text('Ended At', 380, y);
+    doc.text('Duration', 460, y);
+    doc.moveDown();
+    const rowLine = doc.y;
+    doc.lineWidth(1);
+    doc.lineCap('butt')
+        .moveTo(80, rowLine)
+        .lineTo(510, rowLine)
+        .stroke();
+}
+
+function setActivityTableRows(doc, information) {
+    doc.font('Helvetica');
+    for (let i = 0; i < information.length; i++) {
+        const row = information[i];
+        doc.moveDown();doc.moveDown();
+        let lineCor = doc.y;
+        if ((lineCor + 20) > 750) {
+            doc.addPage({size: 'A4', margin:80});
+            lineCor = doc.y
+        }
+        const startedAtDate = moment(row.startedAt).format('YYYY-MM-DD HH:mm:ss Z');
+        const endedAtDate = moment(row.endedAt).format('YYYY-MM-DD HH:mm:ss Z');
+        doc.text(trimStr(row.taskDescription, 70), 80, lineCor, { width: 150 });
+        doc.text(trimStr(row.projectName, 25), 230,lineCor , { width: 100 });
+        doc.text(startedAtDate, 310, lineCor, {width: 50});
+        doc.text(endedAtDate, 380, lineCor, {width: 50});
+        doc.text(row.duration, 460, lineCor);
+        doc.lineWidth(0.5);
+        doc.moveDown();doc.moveDown();doc.moveDown();doc.moveDown();
+        lineCor = doc.y;
+        doc.lineCap('butt')
+            .moveTo(80, lineCor)
+            .lineTo(510, lineCor)
+            .stroke();
+    }
 }
 
 function getDates() {
@@ -204,4 +271,16 @@ function secToTime(sec) {
     let hour = Math.floor(minutes / 60);
     parted.push(hour.toLocaleString('en-US', { minimumIntegerDigits: 2 }));
     return parted.reverse().join(':')
+}
+
+function roundOff(num) {
+    return (Math.floor(num*100))/100;
+}
+
+function trimStr(value, length) {
+    if (value.length <= length) {
+        return value;
+    }
+
+    return value.substring(0,length)+'...';
 }

@@ -2,8 +2,11 @@ const sqlQuery = `SELECT \`distinctTask\`.\`projectId\`, \`distinctTask\`.\`proj
 const models = require('../../models');
 const momentTz = require('moment-timezone');
 
-module.exports = async function (userId) {
+module.exports = async function (userId, previousweek = false) {
     const today = momentTz(momentTz(), momentTz.tz.guess());
+    if (previousweek) {
+        today.subtract(1, 'week');
+    }
     const startDate = today.clone().startOf('week').format('YYYY-MM-DD');
     const endDate = today.clone().endOf('week').format('YYYY-MM-DD');
     const result = await models.sequelize.query(

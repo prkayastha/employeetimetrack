@@ -5,8 +5,11 @@ const todaySQLQuery = `SELECT SEC_TO_TIME(SUM(time_to_sec(TIMEDIFF(\`break\`.\`e
 const models = require('../../models');
 const momentTz = require('moment-timezone');
 
-module.exports = async function (userId) {
+module.exports = async function (userId, previousweek = false) {
     const today = momentTz(momentTz(), momentTz.tz.guess());
+    if (previousweek) {
+        today.subtract(1, 'week');
+    }
     const startDate = today.clone().startOf('week').format('YYYY-MM-DD');
     const endDate = today.clone().endOf('week').format('YYYY-MM-DD');
     const weeklyBreak = models.sequelize.query(
