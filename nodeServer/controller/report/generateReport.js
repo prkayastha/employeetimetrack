@@ -176,13 +176,16 @@ function setTableRow(doc, information, breakInfo) {
     } catch (error) {
         console.log(error)
     }
+    doc.moveUp(2);
     doc.text(`Total Time Recorded: ${totalTime}`, 80, doc.y + 50, { width: 510, align: 'left' });
     doc.text(`Total Breaks This Week: ${breakInfo.weekly}`, 80, doc.y, { width: 510, align: 'left' });
     doc.text(`Total Recorded Productive Screens: ${totalProductiveScreen}`, 80, doc.y, { width: 510, align: 'left' });
     doc.text(`Total Recorded Unproductive Screens: ${totalUnproductiveScreen}`, 80, doc.y, { width: 510, align: 'left' });
     const rate = roundOff(1 - averageProd)
     doc.text(`Total Productive Rate: ${rate * 100}%`, 80, doc.y, { width: 510, align: 'left' });
-    
+    doc.moveDown(2);
+    doc.font('Helvetica-Bold').fillColor('#000', 0.4)
+    doc.text('NOTE: Productivity = Productive Screen / Total Screen * 100').fillColor('#000', 1)
 }
 
 function setActivityTableHeader(doc, y) {
