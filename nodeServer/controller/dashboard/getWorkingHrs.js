@@ -33,7 +33,15 @@ module.exports = async function(userId) {
         }
     );
 
-    const [ todayRes, weeklyRes ] = await Promise.all([dailyHrPromise, weeklyHrPromise]);
+    let [ todayRes, weeklyRes ] = await Promise.all([dailyHrPromise, weeklyHrPromise]);
 
-    return { today: todayRes[0].workingHr, weekly: weeklyRes[0].workingHr };
+    if (!todayRes.length) {
+        todayRes = [{ workingHr: '00:00:00', userId}];
+    }
+
+    if (!weeklyRes.length) {
+        weeklyRes = [{ workingHr: '00:00:00', userId}];
+    }
+
+    return { today: todayRes[0].workingHr || '00:00:00', weekly: weeklyRes[0].workingHr || '00:00:00'};
 }
