@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
         },
         isDelete: {
             type: DataTypes.BOOLEAN
+        },
+        trelloBoardId: {
+            type: DataTypes.STRING
         }
     }, {
         version: true

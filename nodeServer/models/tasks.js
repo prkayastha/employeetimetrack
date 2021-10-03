@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
         isDelete: {
             default: false,
             type: DataTypes.BOOLEAN
+        },
+        trelloCardId: {
+            type: DataTypes.STRING
         }
     }, {});
     Task.associate = function (models) {

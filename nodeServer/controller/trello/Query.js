@@ -60,7 +60,7 @@ Query.prototype.getBoardLists = function (boardIdAndTokenInfo) {
         oauth.get(
             /*api to gets lists in a given board of a particular user:
             https://api.trello.com/1/boards/<boardId>/lists */
-            `${self.uri}/1/boards/${boardIdAndTokenInfo.boardId}/lists`,
+            `${self.uri}/1/boards/${boardIdAndTokenInfo.boardId}/lists?fields=name,id`,
             boardIdAndTokenInfo.tokenInfo.accToken,
             boardIdAndTokenInfo.tokenInfo.accTokenSecret,
             function (err, data, response) {
@@ -76,12 +76,12 @@ Query.prototype.getBoardLists = function (boardIdAndTokenInfo) {
     return boardlistsPromise;
 };
 
-Query.prototype.getCardsOnList = function (boardListAndTokenInfo) {
+Query.prototype.getCardsOnBoard = function (boardListAndTokenInfo) {
     var self = this;
     var cardsOnListPromise = new Promise(function (resolve, reject) {
         oauth.get(
             /*api to gets cards in a given list, in a given board of a particular user: https://api.trello.com/1/lists/<listId>/cards */
-            `${self.uri}/1/lists/${boardListAndTokenInfo.listId}/cards`,
+            `${self.uri}/1/board/${boardListAndTokenInfo.id}/cards/open?fields=name,id`,
             boardListAndTokenInfo.tokenInfo.accToken,
             boardListAndTokenInfo.tokenInfo.accTokenSecret,
             function (err, data, response) {
@@ -95,3 +95,22 @@ Query.prototype.getCardsOnList = function (boardListAndTokenInfo) {
     });
     return cardsOnListPromise;
 };
+
+Query.prototype.getBoardInfo = function(tokenInfo, boardId) {
+    var self = this;
+    var boardPromise = new Promise((resolve, reject) => {
+        oauth.get(
+            /*api to gets cards in a given list, in a given board of a particular user: https://api.trello.com/1/lists/<listId>/cards */
+            `${self.uri}/1/boards/${boardId}?fields=name,id`,
+            tokenInfo.accToken,
+            tokenInfo.accTokenSecret,
+            function (err, data, response) {
+                if (err) {
+                    return reject({ 'error': err });
+                }
+                return resolve(data);
+            }
+        );
+    });
+    return boardPromise;
+}

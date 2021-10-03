@@ -112,6 +112,25 @@ router.post('/api/board/list', async (req, res) => {
     }
 });
 
+router.post('/sync', async (req, res) => {
+    const jwtToken = req.headers.authorization.split(" ")[1];
+    const data = authHelper.data(jwtToken);
+    try {
+        const boardId = req.body.id;
+        let result = await trello.importProject(data.id, boardId)
+        res.send(result);
+    } catch (error) {
+        if (error.name==='DuplicateProject') {
+            res.status(400).send({
+                status: 400,
+                message: 'The project has been imported by another user. Please ask system administrator for transfer of ownership.',
+            });
+            return;
+        }
+        res.error(error)
+    }
+})
+
 function isAccessDenied(req) {
     const query = req.query;
 
