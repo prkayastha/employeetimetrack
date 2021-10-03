@@ -75,6 +75,18 @@ router.get('/api/getboards', async (req, res) => {
     const jwtToken = req.headers.authorization.split(" ")[1];
     const data = authHelper.data(jwtToken);
     try {
+        let isConnected = await trello.checkConnection(data.id);
+
+        if (!isConnected) {
+            const response = {
+                status: 200,
+                message: 'Trello is not connected',
+                requireConnection: true
+            }
+
+            return res.send(response);
+        }
+
         let result = await trello.getBoard(data.id);
         const response = {
             collection: JSON.parse(result)
