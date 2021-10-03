@@ -161,7 +161,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   isShowTrello() {
-    return this.userModel.role!=='EMPLOYEE';
+    return this.userModel.role==='MANAGER';
   }
 
   openImportDialog(data: any[]) {
