@@ -168,8 +168,10 @@ export class ProjectListComponent implements OnInit {
     this.dialog.open(ProjectImportDialogComponent, {
       autoFocus: false,
       data
-    }).afterClosed().subscribe(() => {
-      throw new Error('Refresh project List')
+    }).afterClosed().subscribe((result) => {
+      if (!!result && !!result.refresh) {
+        this.$filter.next(this.filter);
+      }
     })
   }
 }

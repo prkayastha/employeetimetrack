@@ -10,7 +10,7 @@
     <div *ngIf="!isBusy">
         <div class="project">
             <div *ngFor="let project of data">
-                <button class="btn btn-link">{{project.name}}</button>
+                <button class="btn btn-link" (click)="importProject(project.id)">{{project.name}}</button>
             </div>
         </div>
         <div class="btn-container" fxLayout="row-reverse">

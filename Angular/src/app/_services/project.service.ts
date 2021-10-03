@@ -10,7 +10,6 @@ const baseUrl = environment.apiUrl;
   providedIn: 'root'
 })
 export class ProjectService {
-  
 
   constructor(
     private http: HttpClient
@@ -69,7 +68,7 @@ export class ProjectService {
     );
   }
 
-  startTimer(timer:{taskId:number,action:string}){
+  startTimer(timer: { taskId: number, action: string }) {
     return this.http.post<any>(
       `${baseUrl}/time/update`,
       timer
@@ -96,6 +95,13 @@ export class ProjectService {
     return this.http.post(
       `${baseUrl}/trello/api/oauth/requestToken`,
       { userId }
+    )
+  }
+
+  importProject(id: string): Observable<any> {
+    return this.http.post(
+      `${baseUrl}/trello/sync`,
+      { id }
     )
   }
 }
