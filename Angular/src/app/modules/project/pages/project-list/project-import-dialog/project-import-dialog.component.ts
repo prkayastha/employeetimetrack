@@ -8,6 +8,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 })
 export class ProjectImportDialogComponent implements OnInit {
 
+    isBusy: boolean = false;
+
     constructor(
         private dialog: MatDialogRef<ProjectImportDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
