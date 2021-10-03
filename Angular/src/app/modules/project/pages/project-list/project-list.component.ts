@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material';
+import { MatDialog, PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { debounceTime, takeLast, tap } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { ProjectService } from 'src/app/_services/project.service';
 import { TableHeader } from '../../../../_components/table/model/header.model';
 import { UserDetails } from '../../../../_models/userDetails';
 import { SpinnerService } from '../../../../_services/spinner.service';
+import { ProjectImportDialogComponent } from './project-import-dialog/project-import-dialog.component';
 
 const tableHeader: TableHeader[] = [
   { headerDef: 'id', headerLabel: 'Id', colName: 'id' },
@@ -22,7 +23,8 @@ const filterOption = {
   },
   button: {
     label: 'Create Project'
-  }
+  },
+  trelloCallback: null
 }
 
 @Component({
@@ -50,13 +52,15 @@ export class ProjectListComponent implements OnInit {
     private projectService: ProjectService,
     private router: Router,
     private userModel: UserDetails,
-    private spinner: SpinnerService
+    private spinner: SpinnerService,
+    private dialog: MatDialog
   ) {
   }
 
   ngOnInit() {
     this.spinner.show = true;
     this.setUpHeader();
+    this.filterOption.trelloCallback = this.onTrelloImport.bind(this);
     this.$filter.pipe(
       debounceTime(300)
     ).subscribe(filter => {
@@ -135,5 +139,37 @@ export class ProjectListComponent implements OnInit {
     if (this.userModel.role === 'EMPLOYEE') {
       this.tableHeader.pop();
     }
+  }
+
+  onTrelloImport() {
+    this.projectService.importFromTrello().subscribe((response: any) => {
+      if ( !!response['requireConnection']) {
+        this.connectToTrello();
+        return
+      }
+
+      this.openImportDialog(response['collection']);
+    });
+  }
+
+  connectToTrello() {
+    const userId = this.userModel.id;
+
+    this.projectService.connectTrello(userId).subscribe((response: any) => {
+      window.open(response.url, '_blank');
+    })
+  }
+
+  isShowTrello() {
+    return this.userModel.role!=='EMPLOYEE';
+  }
+
+  openImportDialog(data: any[]) {
+    this.dialog.open(ProjectImportDialogComponent, {
+      autoFocus: false,
+      data
+    }).afterClosed().subscribe(() => {
+      throw new Error('Refresh project List')
+    })
   }
 }

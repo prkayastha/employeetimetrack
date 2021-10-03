@@ -85,4 +85,17 @@ export class ProjectService {
       form
     );
   }
+
+  importFromTrello(): Observable<any> {
+    return this.http.get(
+      `${baseUrl}/trello/api/getboards`
+    )
+  }
+
+  connectTrello(userId: number): Observable<any> {
+    return this.http.post(
+      `${baseUrl}/trello/api/oauth/requestToken`,
+      { userId }
+    )
+  }
 }

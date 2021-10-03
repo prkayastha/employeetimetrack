@@ -8,6 +8,7 @@ import { SharedModule } from "../shared/shared.module";
 import { UserService } from "../user/user.service";
 import { CreateProjectComponent } from "./pages/create-project/create-project.component";
 import { CreateTaskComponent } from "./pages/create-task/create-task.component";
+import { ProjectImportDialogComponent } from "./pages/project-list/project-import-dialog/project-import-dialog.component";
 import { ProjectListComponent } from "./pages/project-list/project-list.component";
 import { TaskListComponent } from "./pages/task-list/task-list.component";
 import { UpdateProjectComponent } from "./pages/update-project/update-project.component";
@@ -22,6 +23,7 @@ import { ProjectRoutingModule } from "./project-routing.module";
         TaskListComponent,
         UpdateTaskComponent,
         CreateTaskComponent,
+        ProjectImportDialogComponent
     ],
     imports: [
         CommonModule,
@@ -34,6 +36,9 @@ import { ProjectRoutingModule } from "./project-routing.module";
         LocalStorageService,
         ProjectService,
         UserService
+    ],
+    entryComponents: [
+        ProjectImportDialogComponent
     ]
 })
 

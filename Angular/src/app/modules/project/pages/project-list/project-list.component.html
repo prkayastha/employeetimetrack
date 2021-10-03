@@ -2,6 +2,7 @@
 <app-filter-options
     *ngIf="!actionCreate"
     [option] = "filterOption"
+    [showTrelloImport]="isShowTrello()"
     (onSearch)="search($event)"></app-filter-options>
 <app-create-project
     [projectId]="actionProjectId"

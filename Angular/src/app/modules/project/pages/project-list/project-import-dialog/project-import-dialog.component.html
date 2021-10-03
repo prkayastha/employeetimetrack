@@ -1,0 +1,16 @@
+<div fxLayout="column">
+    <div class="header">
+        <h5>Import project from trello</h5>
+        <div><p>
+            Click on the project to start import in the app
+        </p></div>
+    </div>
+    <div class="project">
+        <div *ngFor="let project of data">
+            <button class="btn btn-link">{{project.name}}</button>
+        </div>
+    </div>
+    <div class="btn-container" fxLayout="row-reverse">
+        <button type="button" class="btn btn-outline-danger" (click)="dialog.close()">Back</button>
+    </div>
+</div>
