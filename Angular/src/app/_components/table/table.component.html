@@ -32,3 +32,6 @@
         <tr mat-row *matRowDef="let row, columns: displayedColumn"></tr>
     </tbody>
 </table>
+<div *ngIf="!dataSource?.length" class="no-data"fxLayout="row" fxLayoutAlign="center center">
+    <span>No Data to show</span>
+</div>

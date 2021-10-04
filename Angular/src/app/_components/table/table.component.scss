@@ -18,6 +18,10 @@ table {
     
 }
 
+.no-data {
+    min-height: 300px;
+}
+
 ::ng-deep {
     table {
         &.datatable {

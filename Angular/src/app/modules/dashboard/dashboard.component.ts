@@ -87,7 +87,10 @@ export class DashboardComponent implements OnInit {
           name: row.projectName,
           date: row.lastWorkedAt
         }
-      })
+      }).sort((a,b) => {
+        return a.date < b.date ? 1 : -1;
+      });
+
       this.dataSource1 = new MatTableDataSource<PeriodicElement>(workingOnData)
 
       const assignedProject = dashboard.assignedProjects.map(row => {
@@ -104,7 +107,9 @@ export class DashboardComponent implements OnInit {
       }
 
       this.bigChart = dashboard.projectHrByDay;
-      this.areaChart.updateData(this.bigChart);
+      if (!!this.areaChart && !!this.bigChart.length) {
+        this.areaChart.updateData(this.bigChart);
+      }
 
       this.break = dashboard.breaks;
 
@@ -171,7 +176,7 @@ export class DashboardComponent implements OnInit {
       project['percent'] = Math.round(project['inSeconds'] / total * 100);
       return { id: project.projectId, projectName: project.projectName, percentage: project.percent };
     });
-    return mapped.map(project => ({ name: project.projectName, y: project.percentage }));;
+    return mapped.map(project => ({ name: project.projectName, y: project.percentage })).filter(data => data.y > 0);
   }
 
   downloadPdf() {

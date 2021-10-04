@@ -6,7 +6,7 @@
     <div fxLayout="row wrap" fxLayoutGap="20px">
         <div class="row-item card shadow" fxFlex>
             <div class="card-body">
-                <h5 class="card-title"> Working On</h5>
+                <h5 class="card-title"> Worked On</h5>
                 <div class="card-text">
                     <table mat-table [dataSource]="dataSource1">
 
@@ -27,6 +27,9 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
+                    <div *ngIf="!dataSource1?.data.length" class="with-min-height" fxLayout="row" fxLayoutAlign="center center">
+                        <span>No data to show</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,15 +56,20 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
+                    <div *ngIf="!dataSource2?.data.length" class="with-min-height" fxLayout="row" fxLayoutAlign="center center">
+                        <span>No data to show</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="dash-row" fxLayout="row wrap" fxLayoutGap="20px">
         <div class="row-item card shadow" fxFlex>
-            <div class="card-body">
+            <div class="card-body widget">
+                <h5 class="card-title" *ngIf="!bigChart.length">Weekly Spent Hours on Projects per day</h5>
                 <div class="card-text" fxLayout="row" fxLayoutAlign="center center">
-                    <app-widget-area [data]="bigChart" #areaChart></app-widget-area>
+                    <app-widget-area *ngIf="!!bigChart.length" [data]="bigChart" #areaChart></app-widget-area>
+                    <div *ngIf="!bigChart.length">No Data to show</div>
                 </div>
             </div>
         </div>
