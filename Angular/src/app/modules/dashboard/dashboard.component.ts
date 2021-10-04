@@ -31,16 +31,16 @@ export class DashboardComponent implements OnInit {
   dataSource1 = new MatTableDataSource<PeriodicElement>([]);
   dataSource2 = new MatTableDataSource<PeriodicElement>([]);
 
-  break: any = {today: 0, weekly: 0}
-  workingHrs: any = {today: 0, weekly: 0}
+  break: any = { today: 0, weekly: 0 }
+  workingHrs: any = { today: 0, weekly: 0 }
 
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild('pieChart', {static: true}) pieChartComp: PieComponent;
-  @ViewChild('areaChart', {static: true}) areaChart: AreaComponent;
+  @ViewChild('pieChart', { static: false }) pieChartComp: PieComponent;
+  @ViewChild('areaChart', { static: true }) areaChart: AreaComponent;
 
-  constructor(public report: ReportService, 
-    public user: UserDetails, 
+  constructor(public report: ReportService,
+    public user: UserDetails,
     public dialog: MatDialog,
     public spinner: SpinnerService) { }
 
@@ -57,9 +57,9 @@ export class DashboardComponent implements OnInit {
       obs = this.report.dashboard(this.user.id).pipe(
         map(dashboard => {
           dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
-  
+
           dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
-  
+
           dashboard.breaks = this.mapForBreak(dashboard.breaks);
 
           dashboard.workingHrs = this.mapForBreak(dashboard.workingHrs);
@@ -70,9 +70,9 @@ export class DashboardComponent implements OnInit {
       obs = this.report.dashboard(this.userId).pipe(
         map(dashboard => {
           dashboard.projectInvovlement = this.mapForPieChart(dashboard.projectInvovlement);
-  
+
           dashboard.projectHrByDay = this.mapForLineChart(dashboard.projectHrByDay);
-  
+
           dashboard.breaks = this.mapForBreak(dashboard.breaks);
 
           dashboard.workingHrs = this.mapForBreak(dashboard.workingHrs);
@@ -99,7 +99,9 @@ export class DashboardComponent implements OnInit {
       this.dataSource2 = new MatTableDataSource<PeriodicElement>(assignedProject);
 
       this.pieChartData = dashboard.projectInvovlement;
-      this.pieChartComp.updateData(this.pieChartData);
+      if (!!this.pieChartData.length && !!this.pieChartComp) {
+        this.pieChartComp.updateData(this.pieChartData);
+      }
 
       this.bigChart = dashboard.projectHrByDay;
       this.areaChart.updateData(this.bigChart);
@@ -161,19 +163,23 @@ export class DashboardComponent implements OnInit {
       return project;
     })
 
+    if (total == 0) {
+      return [];
+    }
+
     mapped = mapped.map(project => {
       project['percent'] = Math.round(project['inSeconds'] / total * 100);
       return { id: project.projectId, projectName: project.projectName, percentage: project.percent };
     });
-    return mapped.map(project => ({name: project.projectName, y: project.percentage}));;
+    return mapped.map(project => ({ name: project.projectName, y: project.percentage }));;
   }
 
   downloadPdf() {
-    this.dialog.open(PdfreportComponent,{data:{id: this.user.id}});
+    this.dialog.open(PdfreportComponent, { data: { id: this.user.id } });
   }
 
   getPercent(value, total) {
-    return Math.floor((value/total)*100);
+    return Math.floor((value / total) * 100);
   }
 
 }

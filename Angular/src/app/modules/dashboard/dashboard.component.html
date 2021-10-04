@@ -66,9 +66,11 @@
             </div>
         </div>
         <div class="row-item card shadow" fxFlex>
-            <div class="card-body">
+            <div class="card-body widget">
+                <h5 class="card-title" *ngIf="!pieChartData.length">Project Involvement</h5>
                 <div class="card-text" fxLayout="row" fxLayoutAlign="center center">
-                    <app-widget-pie [data]="pieChartData" #pieChart></app-widget-pie>
+                    <app-widget-pie *ngIf="!!pieChartData.length" [data]="pieChartData" #pieChart></app-widget-pie>
+                    <div *ngIf="!pieChartData.length">No Data to show</div>
                 </div>
             </div>
         </div>
