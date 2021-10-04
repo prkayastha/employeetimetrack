@@ -191,7 +191,7 @@ function setTableRow(doc, information, breakInfo) {
 function setActivityTableHeader(doc, y) {
     doc.font('Helvetica-Bold');
     doc.text('Task Description', 80, y, { width: 150 });
-    doc.text('Project Name', 230, y, { width: 100 });
+    doc.text('Project Name', 210, y, { width: 100 });
     doc.text('Started At', 310, y);
     doc.text('Ended At', 380, y);
     doc.text('Duration', 460, y);
@@ -216,8 +216,8 @@ function setActivityTableRows(doc, information) {
         }
         const startedAtDate = moment(row.startedAt).format('YYYY-MM-DD HH:mm:ss Z');
         const endedAtDate = moment(row.endedAt).format('YYYY-MM-DD HH:mm:ss Z');
-        doc.text(trimStr(row.taskDescription, 70), 80, lineCor, { width: 150 });
-        doc.text(trimStr(row.projectName, 25), 230,lineCor , { width: 100 });
+        doc.text(trimStr(row.taskDescription, 50), 80, lineCor, { width: 145 });
+        doc.text(trimStr(row.projectName, 25), 210,lineCor , { width: 95 });
         doc.text(startedAtDate, 310, lineCor, {width: 50});
         doc.text(endedAtDate, 380, lineCor, {width: 50});
         doc.text(row.duration, 460, lineCor);
@@ -234,9 +234,9 @@ function setActivityTableRows(doc, information) {
 function getDates() {
     const formatDate = 'DD/MM/YYYY'
     const today = moment();
-    const weekNo = weekOfMonth(today.clone()) - 1;
+    const weekNo = weekOfMonth(today.clone().subtract(1, 'week'));
     const month = today.clone().subtract(1, 'week').startOf('week').format('MMM');
-    const year = today.clone().format('YYYY');
+    const year = today.clone().subtract(1, 'week').format('YYYY');
     // const startDate = today.clone().startOf('week').add(1, 'days').format(formatDate);
     // const endDate = today.clone().endOf('week').add(1, 'days').format(formatDate);
     const startDate = today.clone().subtract(1, 'week').startOf('week').add(1, 'days').format(formatDate);
