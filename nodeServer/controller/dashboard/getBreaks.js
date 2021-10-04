@@ -10,8 +10,8 @@ module.exports = async function (userId, previousweek = false) {
     if (previousweek) {
         today.subtract(1, 'week');
     }
-    const startDate = today.clone().startOf('week').format('YYYY-MM-DD');
-    const endDate = today.clone().endOf('week').format('YYYY-MM-DD');
+    const startDate = today.clone().startOf('week').add(1, 'day').format('YYYY-MM-DDTHH:mm:ssZ');
+    const endDate = today.clone().endOf('week').add(1, 'day').format('YYYY-MM-DDTHH:mm:ssZ');
     const weeklyBreak = models.sequelize.query(
         weekSQLQuery,
         {
