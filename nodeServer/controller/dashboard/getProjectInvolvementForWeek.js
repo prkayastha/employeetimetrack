@@ -5,7 +5,7 @@ FROM
     (\`timer\`.\`taskId\`),
         \`task\`.\`projectId\`,
         \`project\`.\`projectName\`,
-        TIME_TO_SEC(DURATION(\`timer\`.\`taskId\`, :userId, :offset)) AS durationTask
+        TIME_TO_SEC(DURATION(\`timer\`.\`taskId\`, :userId, :offset, FALSE)) AS durationTask
 FROM
     Timers \`timer\`
 INNER JOIN Tasks \`task\` ON \`timer\`.\`taskId\` = \`task\`.\`id\`
