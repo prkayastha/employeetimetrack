@@ -63,6 +63,7 @@ const list = async function (options, operatorInfo) {
     }
 
     const cpListQuery = {
+        include: listQuery.include,
         where: listQuery.where
     };
     const countUser = models.Users.count(cpListQuery);
