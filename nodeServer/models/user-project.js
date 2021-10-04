@@ -8,9 +8,15 @@ module.exports = (sequelize, DataTypes) => {
         UserId: {
             allowNull: false,
             type: DataTypes.INTEGER
+        },
+        createdAt: {
+            type: DataTypes.DATE
+        },
+        updatedAt: {
+            type: DataTypes.DATE
         }
     }, {
-        timestamps: false,
+        timestamps: true,
         version: false
     });
     UserProject.associate = function (models) {

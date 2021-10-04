@@ -7,6 +7,9 @@ const OptimisticLockError = require('../../prototypes/responses/optimistic-lock-
 const ProjectError = require('../../prototypes/responses/project/project-create.error');
 const UnauthorizedError = require('../../prototypes/responses/authorization/unauthorized');
 
+const momentTz = require('moment-timezone');
+const Op = models.Sequelize.Op;
+
 module.exports = async function (operationInfo, projectInfo) {
     const projectObj = new ProjectModel(projectInfo);
     let operation = projectObj.id == 0 ? 'add' : 'update';
@@ -88,13 +91,35 @@ async function checkUpdatable(operatorInfo, projectInfo) {
 }
 
 async function addAssignment(transaction, assignee, projectId) {
-    assignee = assignee.map(assignee => ({ProjectId: projectId, UserId: assignee}));
+    const now = momentTz(momentTz(), momentTz.tz.guess()).format('YYYY-MM-DDTHH:mm:ssZ');
+
+    assignee = assignee.map(assignee => ({ProjectId: projectId, UserId: assignee, createdAt: now, updatedAt: now}));
+    const assignedRows = await models.UserProject.findAll({
+        where: { ProjectId: projectId },
+        transaction
+    });
+
+    const onlyA = assignee.filter(user => {
+        const hasAssignedRow = assignedRows.find(row => row.UserId == user.UserId);
+        return !hasAssignedRow;
+    });
+    
+    const AintersectB = assignee.filter(user => {
+        const hasAssignedRow = assignedRows.find(row => row.UserId == user.UserId);
+        return hasAssignedRow;
+    });
+
     const deleteResult = await models.UserProject.destroy({
-        where: {ProjectId: projectId },
+        where: {
+            ProjectId: projectId,
+            UserId: {
+                [Op.notIn]: AintersectB.map(user => user.UserId)
+            }
+        },
         transaction: transaction
     });
 
-    const insertOperation = await models.UserProject.bulkCreate(assignee, {transaction})
+    const insertOperation = await models.UserProject.bulkCreate(onlyA, {transaction})
 
     return insertOperation;
 }
