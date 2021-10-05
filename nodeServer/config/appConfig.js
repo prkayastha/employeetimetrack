@@ -2,8 +2,8 @@ const env = process.env.NODE_ENV || 'development'
 const settings = require('./settings.json')[env];
 module.exports = {
     appName: "Employee Time Tracking App",
-    appkey: process.env.employeeTrackKey,
-    appSecret: process.env.employeeTrackSecret,
+    appkey: process.env.EMPLOYEETRACKKEY,
+    appSecret: process.env.EMPLOYEETRACKSECRET,
     callbackUrl: `${settings.apiURL}/trello/oauth/callbackUrl`,
     mailerSetting: {
         type: "OAuth2",
