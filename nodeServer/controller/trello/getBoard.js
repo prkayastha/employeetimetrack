@@ -10,7 +10,7 @@ const getBoard = async function (userId) {
         accToken: userAuth.accessToken,
         accTokenSecret: userAuth.accessTokenSecret
     };
-    const boards = trelloQuery.getUserTrelloBoards(tokenPair);
+    const boards = await trelloQuery.getUserTrelloBoards(tokenPair);
     return boards;
 }
 
