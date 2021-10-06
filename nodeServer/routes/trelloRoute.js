@@ -127,7 +127,8 @@ router.post('/sync', async (req, res) => {
             });
             return;
         }
-        res.error(error)
+        console.log(error);
+        res.status(400).send(error)
     }
 })
 

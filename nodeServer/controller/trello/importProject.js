@@ -43,17 +43,18 @@ async function insertBoardIntoDB(userId, project) {
         where: {trelloBoardId: project.trelloBoardId, isDelete: false}
     });
 
-    if (userId != trelloProject.projectOwnerUserId) {
-        const error = new Error('The project is imported by another user');
-        error.name = 'DuplicateProject'
-        throw error;
-    }
-
     if (!!trelloProject) {
+        if (userId != trelloProject.projectOwnerUserId) {
+            const error = new Error('The project is imported by another user');
+            error.name = 'DuplicateProject'
+            throw error;
+        }
+
         project.id = trelloProject.id;
         trelloProject = await models.Project.update(project, {
             where: {trelloBoardId: project.trelloBoardId, isDelete: false, projectOwnerUserId: userId}
         })
+        
         return project;
     }
 
