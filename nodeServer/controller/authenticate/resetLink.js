@@ -96,7 +96,7 @@ function sendResetLink(data) {
         auth: mailerSetting
     });
 
-    const resetLink = settings.appUrl+'/reset-password?token='+data.link;
+    const resetLink = settings.appUrl+'/auth/reset-password?token='+data.link;
     const body = strings.password.resetLinkEmail;
     const formattedBody = stringUtils.format(body, resetLink);
 
