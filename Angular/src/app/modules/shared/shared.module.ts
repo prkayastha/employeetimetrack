@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatDividerModule, MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule,
-  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule, MatTableModule, MatSortModule, MatPaginatorModule, MatDialogModule, MatProgressSpinnerModule, MatProgressBarModule
+  MatListModule, MatChipsModule, MatFormFieldModule, MatAutocompleteModule, MatTableModule, MatSortModule, MatPaginatorModule, MatDialogModule, MatProgressSpinnerModule, MatProgressBarModule, MAT_DIALOG_DATA
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
@@ -78,6 +78,9 @@ const declareComponent = [
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule
+  ],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} }
   ]
 })
 export class SharedModule { }
