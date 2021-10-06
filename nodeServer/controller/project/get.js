@@ -14,7 +14,7 @@ module.exports = async function (operatorInfo, projectId) {
         const error = new ProjectNotFoundError();
         throw error;
     }
-    if (project.projectOwnerUserId != operatorInfo.id && project.createdByUserId != operatorInfo.id) {
+    if ((project.projectOwnerUserId != operatorInfo.id && project.createdByUserId != operatorInfo.id) && operatorInfo.role !== 'ADMIN') {
         throw new UnauthorizedError("Unauthorized to access the project");
     }
     const projectOwner = {
