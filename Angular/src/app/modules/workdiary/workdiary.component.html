@@ -3,16 +3,16 @@
   <div class="row">
     <div class="col">
       <div *ngIf="role === 'EMPLOYEE'; Else empWorkDiary">Your diary for the day {{date.value | date:
-        'd/M/yyyy'}}</div>
+        'dd/MM/yyyy'}}</div>
       <ng-template #empWorkDiary>
-        <div>{{name}}'s diary for the day {{date.value | date: 'd/M/yyyy'}}</div>
+        <div>{{name}}'s diary for the day {{date.value | date: 'dd/MM/yyyy'}}</div>
       </ng-template>
     </div>
     <div class="d-flex calendar mt-2 form-group">
       <div class="label">Choose a day</div>
       <span>
         <input [formControl]="date" type="text" placeholder="Datepicker" class="form-control" bsDatepicker
-          placement="bottom left" data-date-format='dd/mm/yyyy' [maxDate]="today" [bsConfig]="{showWeekNumbers: false}">
+          placement="bottom left" data-date-format='dd/mm/yyyy' [maxDate]="today" [bsConfig]="{showWeekNumbers: false, dateInputFormat: 'DD/MM/YYYY'}">
       </span>
     </div>
     <div class="mt-4"></div>
