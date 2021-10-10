@@ -27,7 +27,7 @@ export class ReportComponent implements OnInit {
  
 
   openDialog(id: number){
-    this.dialog.open(PdfreportComponent,{data:{id}});
+    this.dialog.open(PdfreportComponent,{width: '400px', data:{id}});
     console.log(id);
 
   }
