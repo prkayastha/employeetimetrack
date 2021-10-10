@@ -6,6 +6,7 @@ UserProjects \`UserProject\`
 Projects \`Project\` ON \`UserProject\`.\`ProjectId\` = \`Project\`.\`id\`
 WHERE
     UserId = ?
+    AND \`Project\`.\`isDelete\` is FALSE
 ORDER BY \`UserProject\`.\`createdAt\` DESC
 LIMIT 5;`
 const models = require('../../models');

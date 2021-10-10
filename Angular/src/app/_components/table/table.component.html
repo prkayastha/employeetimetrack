@@ -7,7 +7,12 @@
                 <a class="btn btn-link" (click)="col.onClick(element)"> {{element[col.headerDef]}} </a>
             </ng-container>
             <ng-template #normalTitle>
-                {{element[col.headerDef]}}
+                <ng-container *ngIf="col.headerDef === 'createdAt'">
+                    {{element[col.headerDef] | date: 'dd/MM/yyyy'}}
+                </ng-container>
+                <ng-container *ngIf="col.headerDef !== 'createdAt'">
+                    {{element[col.headerDef]}}
+                </ng-container>
             </ng-template>
         </td>
     </ng-container>
