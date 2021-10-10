@@ -9,3 +9,17 @@
   .close-icon:hover {
     transform: rotate(180deg);
   }
+
+  .no-data {
+    margin: 20px
+  }
+
+  .spinner-container {
+    text-align: center;
+    width: 100%;
+    margin: 20px;
+
+    mat-progress-spinner {
+      margin: auto;
+    }
+  }

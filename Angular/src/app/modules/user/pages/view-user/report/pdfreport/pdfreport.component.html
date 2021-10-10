@@ -3,7 +3,7 @@
 </button>
 <div class="container">
   <h6>Weekley Reports</h6>
-  <table class="table table-hover">
+  <table *ngIf="!isBusy" class="table table-hover">
     <thead>
       <tr>
         <th>Report Name</th>
@@ -14,6 +14,11 @@
         <td><a href="{{report.url}}" target="_blank">{{report.name }}</a></td>
       </tr>
     </tbody>
+    <div *ngIf="!reports || !reports.length" class="no-data" fxLayout="row" fxLayoutAlign="center center">
+      No reports to show.
+    </div>
   </table>
-
+  <div *ngIf="isBusy" class="spinner-container">
+    <mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
 </div>

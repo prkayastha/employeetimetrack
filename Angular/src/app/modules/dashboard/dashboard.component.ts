@@ -180,7 +180,7 @@ export class DashboardComponent implements OnInit {
   }
 
   downloadPdf() {
-    this.dialog.open(PdfreportComponent, { data: { id: this.user.id } });
+    this.dialog.open(PdfreportComponent, { width: '400px', data: { id: this.user.id } });
   }
 
   getPercent(value, total) {

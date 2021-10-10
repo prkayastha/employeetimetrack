@@ -11,6 +11,7 @@ import { MatDialogRef,MAT_DIALOG_DATA } from '@angular/material';
 export class PdfreportComponent implements OnInit {
   reports=[];
   userID:number;
+  isBusy: boolean = true;
   constructor(public report:ReportService,public route:ActivatedRoute,
     public dialog: MatDialogRef<PdfreportComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
@@ -18,7 +19,10 @@ export class PdfreportComponent implements OnInit {
   ngOnInit() {
     this.userID = this.data.id;
     this.report.getPDFReport(this.userID).subscribe(reports => {
-      this.reports = reports
+      this.reports = reports;
+      this.isBusy = false;
+    }, error => {
+      this.isBusy = false;
     });
   }
 
