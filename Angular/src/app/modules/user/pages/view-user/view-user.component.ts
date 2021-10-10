@@ -24,7 +24,8 @@ export class ViewUserComponent implements OnInit {
         private rotuer: Router,
         private report: ReportService,
         private userService: UserService,
-        private spinner: SpinnerService
+        private spinner: SpinnerService,
+        private user: UserDetails
     ) { }
 
     ngOnInit(): void {
@@ -53,5 +54,9 @@ export class ViewUserComponent implements OnInit {
 
     showViewReport() {
         return this.role === 'EMPLOYEE';
+    }
+
+    showDelete() {
+        return this.user.role === 'ADMIN';
     }
 }
