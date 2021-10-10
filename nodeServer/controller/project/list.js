@@ -37,7 +37,7 @@ module.exports = async function (operatorInfo, options, includeNested = true) {
             ];
         }
 
-        listQuery.attributes = ['id', 'projectName', [models.sequelize.fn('taskCount', models.sequelize.col('Project`.`id')), 'taskCount']];
+        listQuery.attributes = ['id', 'projectName', 'createdAt', [models.sequelize.fn('taskCount', models.sequelize.col('Project`.`id')), 'taskCount']];
 
         if (operatorRole.id == 2) {
             listQuery.where[Op.or] = [
